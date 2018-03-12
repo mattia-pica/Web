@@ -1,10 +1,24 @@
 <%@ page import="java.sql.SQLException" %>
+<%@ page import="Control.Controller" %>
+<%@ page import="java.time.LocalTime" %>
 <%--<%@ page import="Entity.AbstractUser" %>
 <%@ page import="Control.BookingController" %>
 <%@ page import="DAO.Print_Teacher" %>
 <%@ page import="DAO.Print_Secretary" %>--%>
 
 <%
+
+    if (request.getParameter("submit_search") != null){
+        String StartSearch = request.getParameter("start");
+        String EndSearch = request.getParameter("end");
+        String DateSearch = request.getParameter("date");
+
+        LocalTime timeInizio = LocalTime.parse(StartSearch);
+        LocalTime timeFine = LocalTime.parse(EndSearch);
+
+        Controller controller = new Controller();
+        controller.show_p(timeInizio, timeFine, DateSearch);
+    }
     /*String NameQueryInsert = request.getParameter("name");
     String DataQueryInsert = request.getParameter("data");
     String StartQueryInsert = request.getParameter("start");
@@ -95,11 +109,11 @@
             </div>
         </div>
         <form action="" method="post" class="login100-form validate-form">
-            <div class="wrap-input100 validate-input m-b-26" data-validate="Name">
+            <%--<div class="wrap-input100 validate-input m-b-26" data-validate="Name">
                 <span class="label-input100">Name</span>
                 <input class="input100" type="text" name="name" placeholder="Enter Room's Name">
                 <span class="focus-input100"></span>
-            </div>
+            </div>--%>
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Data">
                 <span class="label-input100">Data</span>
@@ -120,15 +134,15 @@
                 <span class="focus-input100"></span>
             </div>
 
-            <div class="wrap-input100 validate-input m-b-18" data-validate ="Type">
+            <%--<div class="wrap-input100 validate-input m-b-18" data-validate ="Type">
                 <span class="label-input100">Type</span>
                 <input class="input100" type="text" name="type" placeholder="Enter Room's type">
                 <span class="focus-input100"></span>
-            </div>
+            </div>--%>
 
             <div class="container-login100-form-btn">
-                <button class="login100-form-btn" type="submit" name="submit_modify" value="Modify">
-                    Modify
+                <button class="login100-form-btn" type="submit" name="submit_search" value="Search">
+                    Search
                 </button>
                 <button class="login100-form-btn" type="submit" name="submit_booking" value="Booking">
                     Book it

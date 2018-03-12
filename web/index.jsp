@@ -21,7 +21,7 @@
       if(loginBean.validate()){
         %>
         <!-- Passa il controllo alla nuova pagina -->
-        <jsp:forward page="loginSuccessPage.jsp"/>
+        <jsp:forward page="searchPage.jsp"/>
         <%
       }
           }
