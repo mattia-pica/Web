@@ -1,7 +1,10 @@
 package DAO;
 
+import Bean.LoginBean;
 import Entity.User;
+import Control.Controller;
 
+import javax.naming.ldap.Control;
 import java.beans.Statement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -38,8 +41,13 @@ public class LoginDB {
                 String usernameLoaded = rs.getString(3);
                 String password = rs.getString(4);
                 String type = rs.getString(5);
+                //System.out.println(type);
                 u = new User(nome, cognome, usernameLoaded, password, type);
+                Controller controller = new Controller();
+                controller.createSingleton(u);
             }
+
+
 
             // STEP 6: Clean-up dell'ambiente
             rs.close();

@@ -4,9 +4,9 @@ import Bean.Disponible_RoomBean;
 import DAO.LoginDB;
 import DAO.ShowDatabase_Prof;
 import Entity.User;
+import Utils.UserSingleton;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
 
 public class Controller {
 
@@ -17,7 +17,7 @@ public class Controller {
 
     }
 
-    public void show_p(LocalTime timeInizio, LocalTime timeFine, String dateSearch) {
+    public Disponible_RoomBean show_p(LocalTime timeInizio, LocalTime timeFine, String dateSearch) {
         //ArrayList<Disponible_RoomBean> R;
         Disponible_RoomBean showDatabase_prof = ShowDatabase_Prof.show_prof(timeInizio, timeFine, dateSearch);
 
@@ -26,5 +26,13 @@ public class Controller {
             showAule_professore.parseRoom(room.getNome());
 
         }*/
+        return showDatabase_prof;
     }
+
+    public void createSingleton(User u){
+        UserSingleton singleton = UserSingleton.getInstance();
+        singleton.setUser(u);
+    }
+
+
 }

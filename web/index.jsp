@@ -1,4 +1,6 @@
-<%--
+<%@ page import="Entity.User" %>
+<%@ page import="Bean.LoginBean" %>
+<%@ page import="Utils.UserSingleton" %><%--
   Created by IntelliJ IDEA.
   User: mattia
   Date: 12/03/18
@@ -19,11 +21,22 @@
   if (request.getParameter("submit_login") != null){
 
       if(loginBean.validate()){
-        %>
-        <!-- Passa il controllo alla nuova pagina -->
-        <jsp:forward page="searchPage.jsp"/>
-        <%
+        User user = UserSingleton.getInstance().getUser();
+        if(user.getType().equals("1")){
+            //@TODO Lancia interfaccia segretaria
+          System.out.println("Segretaria");
+        }else{
+          response.sendRedirect("profPage.jsp");
+        }
+
+        //response.sendRedirect("profPage.jsp");
+
       }
+
+
+
+
+
           }
 %>
 <!DOCTYPE html>

@@ -34,7 +34,7 @@ public class ShowDatabase_Prof {
 
             // STEP 4: creazione ed esecuzione della query
             stmt = conn.createStatement();
-            String query ="SELECT DISTINCT nome FROM Aule WHERE nome NOT IN (SELECT nome FROM Aule.dati WHERE datapr='"
+            String query ="SELECT DISTINCT nome FROM dbEsame.Aule WHERE nome NOT IN (SELECT nome FROM dbEsame.Aule WHERE datapr='"
                     +dateSearch+"' AND ((inizio<='"+timeInizio+"' AND fine>='"+timeInizio+"') "+"OR (fine>='"+timeFine
                     +"' AND inizio<='"+timeFine+"') "+"OR (inizio>='"+timeInizio+"' AND fine<='"+timeFine+"') "+
                     "OR ((inizio<='"+timeInizio+"' AND fine>='"+timeInizio+"') AND (fine>='"+timeFine+"' AND inizio<='"

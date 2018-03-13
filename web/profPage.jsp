@@ -1,43 +1,51 @@
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="Control.Controller" %>
 <%@ page import="java.time.LocalTime" %>
+<%@ page import="Bean.Disponible_RoomBean" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="Bean.LoginBean" %>
+<%@ page import="java.lang.reflect.Method" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <%--<%@ page import="Entity.AbstractUser" %>
 <%@ page import="Control.BookingController" %>
 <%@ page import="DAO.Print_Teacher" %>
 <%@ page import="DAO.Print_Secretary" %>--%>
 
+<%--<jsp:useBean id="loginBean" scope="request"
+             class="Bean.LoginBean"/>--%>
+
+
+
 <%
 
+    /*Disponible_RoomBean r = null;
+    LocalTime timeInizio = null;
+    LocalTime timeFine = null;
+    String DateSearch = null;
     if (request.getParameter("submit_search") != null){
         String StartSearch = request.getParameter("start");
         String EndSearch = request.getParameter("end");
-        String DateSearch = request.getParameter("date");
+        DateSearch = request.getParameter("data");
 
-        LocalTime timeInizio = LocalTime.parse(StartSearch);
-        LocalTime timeFine = LocalTime.parse(EndSearch);
+        timeInizio = LocalTime.parse(StartSearch);
+        timeFine = LocalTime.parse(EndSearch);
 
-        Controller controller = new Controller();
-        controller.show_p(timeInizio, timeFine, DateSearch);
-    }
-    /*String NameQueryInsert = request.getParameter("name");
-    String DataQueryInsert = request.getParameter("data");
-    String StartQueryInsert = request.getParameter("start");
-    String EndQueryInsert = request.getParameter("end");
-    String EventQueryInsert = request.getParameter("type");
+        for (int i = 0; i < r.getNome().size(); i++ ){
+            String c = r.getNome().get(i);
+            System.out.println(c);
 
+            out.print("<tr class=\"row100 body\">");
+            out.print("<td class=\"cell100 column1\">" + c + "</td>");
 
+            out.print("<td class=\"cell100 column2\">" + rs1.getString(3) + "</td>");
+            out.print("<td class=\"cell100 column3\">" + rs1.getString(4) + "</td>");
+            out.print("<td class=\"cell100 column4\">" + rs1.getString(5) + "</td>");
+            out.print("<td class=\"cell100 column5\">" + rs1.getString(6) + "</td>");
+            out.print("<td class=\"cell100 column6\">" + rs1.getString(2) + "</td>");
 
-    AbstractUser u1 = (AbstractUser) session.getAttribute("currentSessionUser");
-    String control = u1.getType().toString();
-
-
-    if (request.getParameter("submit_booking") != null) {
-        BookingController bc = new BookingController();
-        bc.newP(NameQueryInsert,DataQueryInsert,StartQueryInsert,EndQueryInsert,EventQueryInsert,u1.getSurname(), control);
-    }
-
-    if (request.getParameter("submit_modify") != null){
-        response.sendRedirect("ModifyGroupUseCase.jsp"); //logged-in page
+        }
     }*/
 %>
 
@@ -87,11 +95,11 @@
                         <thead>
                         <tr class="row100 head">
                             <th class="cell100 column1">Nome</th>
-                            <th class="cell100 column2">Data</th>
+                            <%--<th class="cell100 column2">Data</th>
                             <th class="cell100 column3">Inizio</th>
                             <th class="cell100 column4">Fine</th>
                             <th class="cell100 column5">Da:</th>
-                            <th class="cell100 column6">Per:</th>
+                            <th class="cell100 column6">Per:</th>--%>
                         </tr>
                         </thead>
                     </table>
@@ -100,24 +108,54 @@
                 <div class="table100-body js-pscroll">
                         <table>
                             <tbody>
-                        <%
-
+                        <%!
+                            /*public void fill(Disponible_RoomBean r, boolean a){
+                                if (a) {
+                                    System.out.println("fermo");
+                                }else{
+                                }
+                            }*/
 		            %>
+                            <%
+
+                                if (request.getParameter("submit_search") != null){
+                                    String c = null;
+                                    Disponible_RoomBean r;
+                                    String StartSearch = request.getParameter("start");
+                                    String EndSearch = request.getParameter("end");
+                                    String Date = request.getParameter("data");
+                                    //@TODO Gestire il valore nullo dei dati inseriti
+                                    String DateSearch = Date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
+                                    LocalTime timeInizio = LocalTime.parse(StartSearch);
+                                    LocalTime timeFine = LocalTime.parse(EndSearch);
+                                    Controller controller = new Controller();
+                                    r = controller.show_p(timeInizio, timeFine, DateSearch);
+                                    for (int i = 0; i < r.getNome().size(); i++ ){
+                                        c = r.getNome().get(i);
+                                        String s = "<td><form><input type=submit name=\"submit_prenota\" value=\"Prenota\" position: absolute;\n" +
+                                                "right: 40%;></form></td>";
+                                        out.print("<tr class=\"row100 body\">");
+
+                                        out.print("<td class=\"cell100 column1\">" + c + s + "</td>");
+                                    }
+                                }
+
+                                if (request.getParameter("submit_prenota") != null){
+                                    //@TODO Poupoup con interfaccia per prenotare aule
+                                    System.out.println("CLiccato");
+                                }
+                            %>
                             </tbody>
                         </table>
                 </div>
             </div>
         </div>
         <form action="" method="post" class="login100-form validate-form">
-            <%--<div class="wrap-input100 validate-input m-b-26" data-validate="Name">
-                <span class="label-input100">Name</span>
-                <input class="input100" type="text" name="name" placeholder="Enter Room's Name">
-                <span class="focus-input100"></span>
-            </div>--%>
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Data">
                 <span class="label-input100">Data</span>
-                <input class="input100" type="text" name="data" placeholder="Enter Room's data">
+                <input class="input100" type="text" name="data" placeholder="Enter Room's data in format dd/MM/yyyy">
                 <span class="focus-input100"></span>
             </div>
 
@@ -144,9 +182,9 @@
                 <button class="login100-form-btn" type="submit" name="submit_search" value="Search">
                     Search
                 </button>
-                <button class="login100-form-btn" type="submit" name="submit_booking" value="Booking">
+                <%--<button class="login100-form-btn" type="submit" name="submit_booking" value="Booking">
                     Book it
-                </button>
+                </button>--%>
             </div>
         </form>
     </div>
