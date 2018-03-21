@@ -1,52 +1,53 @@
-<%@ page import="java.sql.SQLException" %>
 <%@ page import="Control.Controller" %>
 <%@ page import="java.time.LocalTime" %>
 <%@ page import="Bean.Disponible_RoomBean" %>
-<%@ page import="java.util.ArrayList" %>
+<%@ page import="Bean.PrenotationRoom" %>
+
 <%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="Bean.LoginBean" %>
-<%@ page import="java.lang.reflect.Method" %>
+<%@ page import="java.util.Enumeration" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<%--<%@ page import="Entity.AbstractUser" %>
-<%@ page import="Control.BookingController" %>
-<%@ page import="DAO.Print_Teacher" %>
-<%@ page import="DAO.Print_Secretary" %>--%>
+<!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
+<jsp:useBean id="Prenotation_Room" scope="request"
+             class="Bean.PrenotationRoom"/>
 
-<%--<jsp:useBean id="loginBean" scope="request"
-             class="Bean.LoginBean"/>--%>
-
-
+<!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
+<jsp:setProperty name="Prenotation_Room" property="*"/>
 
 <%
+    //Disponible_RoomBean roomBean;
+    int aula = 0;
 
-    /*Disponible_RoomBean r = null;
-    LocalTime timeInizio = null;
-    LocalTime timeFine = null;
-    String DateSearch = null;
-    if (request.getParameter("submit_search") != null){
-        String StartSearch = request.getParameter("start");
-        String EndSearch = request.getParameter("end");
-        DateSearch = request.getParameter("data");
+    if (request.getParameter("aula_" + "") != null){
 
-        timeInizio = LocalTime.parse(StartSearch);
-        timeFine = LocalTime.parse(EndSearch);
+        if(request.getParameter("typePR") == null){
 
-        for (int i = 0; i < r.getNome().size(); i++ ){
-            String c = r.getNome().get(i);
-            System.out.println(c);
+            //@TODO Gestire il valore nullo dei dati inseriti per la prenotazione
+            String typePR = request.getParameter("altroPRtext");
+            String start = request.getParameter("startPR");
+            String end = request.getParameter("endPR");
+            String date = request.getParameter("datePR");
 
-            out.print("<tr class=\"row100 body\">");
-            out.print("<td class=\"cell100 column1\">" + c + "</td>");
+            LocalTime startPR = LocalTime.parse(start);
+            LocalTime endPR = LocalTime.parse(end);
+            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
-            out.print("<td class=\"cell100 column2\">" + rs1.getString(3) + "</td>");
-            out.print("<td class=\"cell100 column3\">" + rs1.getString(4) + "</td>");
-            out.print("<td class=\"cell100 column4\">" + rs1.getString(5) + "</td>");
-            out.print("<td class=\"cell100 column5\">" + rs1.getString(6) + "</td>");
-            out.print("<td class=\"cell100 column6\">" + rs1.getString(2) + "</td>");
+            System.out.println(typePR + " " + start + " " + end + " " + date);
+        }else{
+            String typePR = request.getParameter("typePR");
+            String start = request.getParameter("startPR");
+            String end = request.getParameter("endPR");
+            String date = request.getParameter("datePR");
+
+            LocalTime startPR = LocalTime.parse(start);
+            LocalTime endPR = LocalTime.parse(end);
+            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+
+            System.out.println(typePR + " " + start + " " + end + " " + date);
 
         }
-    }*/
+
+    }
 %>
 
 <!DOCTYPE html>
@@ -77,6 +78,8 @@
     <link rel="stylesheet" type="text/css" href="table/css/util.css">
     <link rel="stylesheet" type="text/css" href="table/css/main.css">
     <link rel="stylesheet" type="text/css" href="login/css/main.css">
+    <link rel="stylesheet" type="text/css" href="login/css/popup.css">
+
     <!--===============================================================================================-->
 </head>
 <body>
@@ -85,6 +88,100 @@
     <div class="container-table100">
         <div class="wrap-table100">
             <div class="login100-form-title" style="background-image: url(login/images/bg-01.jpg);">
+                <%--<!-- The popup -->
+                <div id="myModal" class="modal">
+
+                    <!-- Modal content -->
+                    <div class="modal-content-login">
+                        <span class="close">&times;</span>
+
+
+                        <div class="login-right">
+                            <h2>Prenotazione</h2>
+                            <br>
+                        &lt;%&ndash; <p><b>I'm already an ESHOP user</b><br>Enter your e-mail address and password to log into the website.</p>&ndash;%&gt;
+                            <form action="" method="post" class="login100-form validate-form" >
+                                <div class="wrap-input100 validate-input m-b-18" data-validate ="Start">
+                                    <span class="label-input100">Start</span>
+                                    <input class="input100" type="text" name="startPR" placeholder="Start" onfocus="myFunction(this)">
+                                    <span class="focus-input100"></span>
+                                </div>
+                                <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
+                                    <span class="label-input100">End</span>
+                                    <input class="input100" type="text" name="endPR" placeholder="End" onfocus="myFunction(this)">
+                                    <span class="focus-input100"></span>
+                                </div>
+                                <div class="wrap-input100 validate-input m-b-18" data-validate ="Date">
+                                <span class="label-input100">Date</span>
+                                <input class="input100" type="text" name="datePR" placeholder="Date" onfocus="myFunction(this)">
+                                <span class="focus-input100"></span>
+                            </div>
+                                <div class="wrap-input100 validate-input m-b-18">
+                                        <fieldset>
+                                            <span class="label-input100">Esame</span>
+                                            <input style="margin-top: 15px" type="radio" name="typePR" value="Esame"/>
+                                        </fieldset>
+                                </div>
+                                <div class="wrap-input100 validate-input m-b-18">
+                                    <fieldset>
+                                        <span class="label-input100">Conferenza</span>
+                                        <input  style="margin-top: 15px" type="radio" name="typePR"  value="Conferenza"/>
+
+                                    </fieldset>
+                                </div>
+                                <div class="wrap-input100 validate-input m-b-18" data-validate ="Altro">
+                                    <span class="label-input100">Altro</span>
+                                    <input class="input100" type="text" id="textInput" name="altroPRtext" placeholder="Altro">
+                                    <span class="focus-input100"></span>
+                                </div>
+                                <div class="contact-right">
+                                    <input class="login100-form-btn" type="submit"  name="submit_prenotation" value="Prenota">
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>--%>
+                <script>
+                    // Get the modal
+                    var modal = document.getElementById('myModal');
+
+                    // Get the <span> element that closes the modal
+                    var span = document.getElementsByClassName("close")[0];
+
+                    // When the user clicks on <span> (x), close the modal
+                    span.onclick = function () {
+                        modal.style.display = "none";
+
+                    };
+
+                    function updateQueryStringParameter(url, key, value) {
+
+                        var re = new RegExp("([?&])" + key + "=.*?(&|$)","i");
+                        var separator = url.indexOf('?') !== -1 ? "&" : "?";
+                        if(url.match(re)){
+                            return url.replace(re, '$1' + key + "=" + value + '$2');
+                        }
+                        else {
+                            return url + separator + key + '=' + value;
+                        }
+
+                    }
+
+                    function showDiv() {
+
+                        document.getElementById("foo").value = "some value";
+                        modal.style.display = "block";
+                        //console.log(parameter);
+
+                    }
+                    // When the user clicks anywhere outside of the modal, close it
+                    window.onclick = function (event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                        }
+                    }
+                </script>
 					<span class="login100-form-title-1">
 						University of Tor Vergata
 					</span>
@@ -95,62 +192,57 @@
                         <thead>
                         <tr class="row100 head">
                             <th class="cell100 column1">Nome</th>
-                            <%--<th class="cell100 column2">Data</th>
-                            <th class="cell100 column3">Inizio</th>
-                            <th class="cell100 column4">Fine</th>
-                            <th class="cell100 column5">Da:</th>
-                            <th class="cell100 column6">Per:</th>--%>
                         </tr>
                         </thead>
                     </table>
                 </div>
 
                 <div class="table100-body js-pscroll">
-                        <table>
+                        <table id="table" >
                             <tbody>
-                        <%!
-                            /*public void fill(Disponible_RoomBean r, boolean a){
-                                if (a) {
-                                    System.out.println("fermo");
-                                }else{
-                                }
-                            }*/
-		            %>
+
                             <%
 
+                                if(request.getParameter("submit_prenotation") != null){
+                                    System.out.println("Parameter: " + aula);
+                                }
+
                                 if (request.getParameter("submit_search") != null){
+
                                     String c = null;
                                     Disponible_RoomBean r;
                                     String StartSearch = request.getParameter("start");
                                     String EndSearch = request.getParameter("end");
                                     String Date = request.getParameter("data");
-                                    //@TODO Gestire il valore nullo dei dati inseriti
                                     String DateSearch = Date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-
                                     LocalTime timeInizio = LocalTime.parse(StartSearch);
                                     LocalTime timeFine = LocalTime.parse(EndSearch);
                                     Controller controller = new Controller();
                                     r = controller.show_p(timeInizio, timeFine, DateSearch);
-                                    for (int i = 0; i < r.getNome().size(); i++ ){
-                                        c = r.getNome().get(i);
-                                        String s = "<td><form><input type=submit name=\"submit_prenota\" value=\"Prenota\" position: absolute;\n" +
-                                                "right: 40%;></form></td>";
+                                    int i;
+                                    for (i = 0; i < r.getNome().size(); i++ ){%>
+                                    <tr><td><%=r.getNome().get(i)%></td></tr><td>
+                                    <button name="" type="submit" onclick="window.location.href='/prenotationPage.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td>
+
+                                <%--reply_click(this.id)--%>
+                            <%--/*c = r.getNome().get(i);
+                                        String s = "<td><form><a href=\"javascript:showDiv();\">Prenota</a>\n</form></td>";
                                         out.print("<tr class=\"row100 body\">");
-
-                                        out.print("<td class=\"cell100 column1\">" + c + s + "</td>");
+                                        out.print("<td class=\"cell100 column1\">" + c + s + "</td>");*/--%>
+                            <%
                                     }
+
                                 }
 
-                                if (request.getParameter("submit_prenota") != null){
-                                    //@TODO Poupoup con interfaccia per prenotare aule
-                                    System.out.println("CLiccato");
-                                }
+
                             %>
                             </tbody>
                         </table>
                 </div>
             </div>
+
         </div>
+
         <form action="" method="post" class="login100-form validate-form">
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Data">
@@ -171,20 +263,11 @@
                 <input class="input100" type="text" name="end" placeholder="Enter Room's end hour">
                 <span class="focus-input100"></span>
             </div>
-
-            <%--<div class="wrap-input100 validate-input m-b-18" data-validate ="Type">
-                <span class="label-input100">Type</span>
-                <input class="input100" type="text" name="type" placeholder="Enter Room's type">
-                <span class="focus-input100"></span>
-            </div>--%>
-
             <div class="container-login100-form-btn">
-                <button class="login100-form-btn" type="submit" name="submit_search" value="Search">
+                <button class="login100-form-btn" type="submit"<%-- onclick="showBtn()"--%> name="submit_search" value="Search">
                     Search
                 </button>
-                <%--<button class="login100-form-btn" type="submit" name="submit_booking" value="Booking">
-                    Book it
-                </button>--%>
+
             </div>
         </form>
     </div>
@@ -206,6 +289,57 @@
 <script src="vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 <script src="js/main.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<%--<script>
+    $('#textInput').click(function () {
+        $('input[name=typePR]').prop("checked", false);
+
+    });
+</script>--%>
+
+
+<%--QUANDO SI CLICCA SULLA TEXTFIELD ALTRO VENGONO DISATTIVATI I RADIO BUTTON--%>
+<script>
+    $('#textInput').click(function () {
+        $('input[type=radio]').removeAttr("checked");
+
+    });
+</script>
+<script>function showBtn() {
+    document.getElementById('btnPrenotation').style.display = "block";
+}
+</script>
+<script>
+function reply_click(clicked_id)
+{
+
+alert(clicked_id);
+}
+</script>
+
+<%--<script>
+
+    function f1(objButton){
+        alert(objButton.value);
+        return value;
+    }
+
+
+</script>--%>
+
+<script>$
+    ("#table tr").click(function(){
+        $(this).addClass('selected').siblings().removeClass('selected');
+        var value=$(this).find('td:first').html();
+        console.log(value)
+        //alert(value);
+    });
+
+    /*$('.ok').on('click', function(e){
+        alert($("#table tr.selected td:first").html());
+    });*/
+</script>
+
 
 </body>
 </html>
