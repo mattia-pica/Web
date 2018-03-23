@@ -3,6 +3,7 @@ package DAO;
 import Control.Controller;
 import Utils.UserSingleton;
 
+import java.lang.annotation.Documented;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,10 +13,10 @@ import static DAO.DB_Connection_Users.conn_Users;
 
 public class DBInsert extends DB_Connection_Aule {
 
-        public void insert(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
+        public boolean insert(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
                            LocalTime timeFinePrenota, boolean a) {
 
-
+            boolean Response = true;
             //---------------------PROFESSORE------------------//
 
             if (!a) {
@@ -35,9 +36,13 @@ public class DBInsert extends DB_Connection_Aule {
                         //@TODO Gestione Entry duplicata nel database
                         System.out.println("duplicate");
                     } else {
+
+                        //Se esistono aule con valore nullo (cioè mai prenotate) cancella quell'entry nel db e inserisce quella nuova, altrimenti
+                        //ce ne sarebbero state due nel DB!
+                        String del = "DELETE FROM dbEsame.Aule WHERE nome='" + nameAula + "'AND tipopr IS NULL";
+                        statement.executeUpdate(del);
+
                         UserSingleton userSingleton = UserSingleton.getInstance();
-
-
                         String QUERYprof = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) VALUES " + "('"
                                 + nameAula + "','" + tipoPrenota + "','" + dataPrenota + "','" + timeInizioPrenota +
                                 "','" + timeFinePrenota + "','" + userSingleton.getUser().getUsername() + "')";
@@ -49,7 +54,7 @@ public class DBInsert extends DB_Connection_Aule {
                         //-----------STAMPA FILE CON DATI PRENOTAZIONE-------------\\
 
 
-                        String nameProf = "";
+                        /*String nameProf = "";
                         String surnameProf = "";
 
                         String getProfName = "SELECT users.Name FROM users WHERE Username='" + userSingleton.getUser().getUsername() + "'";
@@ -69,9 +74,10 @@ public class DBInsert extends DB_Connection_Aule {
                             surnameProf = rsSurname.getString("Surname");
                             statement1.close();
                         }
-                        statement1.close();
+                        statement1.close();*/
 
                         //@TODO A prenotazione inserita mostrare un alert con messaggio di successo
+                        return Response;
                     }
                 } catch (Exception ex) {
                     System.err.println(ex);
@@ -133,5 +139,6 @@ public class DBInsert extends DB_Connection_Aule {
                     System.err.println(ex);
                 }
             }
+            return true;
         }
     }

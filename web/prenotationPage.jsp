@@ -10,46 +10,66 @@
 
 
 <%
-    if (request.getParameter("aula") == null) {
+    /*if (request.getParameter("aula") == null) {
         //out.println("Please enter your aula.");
     } else {
         //out.println("Aula: <b>"+request.getParameter("aula")+"</b>!");
-    }
+    }*/
+
+    String name;
 
     if (request.getParameter("submit_prenotation") != null){
-        String name = request.getParameter("aula");
+        name = request.getParameter("aula");
 
         boolean b = false;
+        boolean Response;
+
+        String typePR;
+        LocalTime startPR;
+        LocalTime endPR;
+        String date;
 
         if(request.getParameter("typePR") == null){
 
             //@TODO Gestire il valore nullo dei dati inseriti per la prenotazione
-            String typePR = request.getParameter("altroPRtext");
+            typePR = request.getParameter("altroPRtext");
             String start = request.getParameter("startPR");
             String end = request.getParameter("endPR");
-            String date = request.getParameter("datePR");
+            date = request.getParameter("datePR");
 
-            LocalTime startPR = LocalTime.parse(start);
-            LocalTime endPR = LocalTime.parse(end);
+            startPR = LocalTime.parse(start);
+            endPR = LocalTime.parse(end);
             //String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             Controller controller = new Controller();
-            controller.newP(name, typePR, date, startPR, endPR, b);
-
+            Response = controller.newP(name, typePR, date, startPR, endPR, b);
             System.out.println(typePR + " " + start + " " + end + " " + date);
         }else{
-            String typePR = request.getParameter("typePR");
+            typePR = request.getParameter("typePR");
             String start = request.getParameter("startPR");
             String end = request.getParameter("endPR");
-            String date = request.getParameter("datePR");
+            date = request.getParameter("datePR");
 
-            LocalTime startPR = LocalTime.parse(start);
-            LocalTime endPR = LocalTime.parse(end);
+            startPR = LocalTime.parse(start);
+            endPR = LocalTime.parse(end);
             //String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             Controller controller = new Controller();
-            controller.newP(name, typePR, date, startPR, endPR, b);
-
+            Response = controller.newP(name, typePR, date, startPR, endPR, b);
 
             System.out.println(typePR + " " + start + " " + end + " " + date);
+
+        }
+
+        if (Response) {
+
+            String info = "alert('Prenotata " + name + "');";
+
+
+            out.println("<script type=\"text/javascript\">");
+            out.println(info);
+            //out.println("alert(" + "Aggiunta prenotazione per:" + name + "dalle " + startPR + "alle " + endPR + " per" + typePR +");");
+            out.println("location='profPage.jsp';");
+            out.println("</script>");
+
 
         }
 

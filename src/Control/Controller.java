@@ -35,10 +35,13 @@ public class Controller {
         singleton.setUser(u);
     }
 
-    public void newP(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
+    public boolean newP(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
                      LocalTime timeFinePrenota, boolean a) {
         DBInsert dbInsert = new DBInsert();
-        dbInsert.insert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, a);
+        boolean Response = dbInsert.insert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, a);
+        if (Response){
+            return true;
+        }else return false;
     }
 
 
