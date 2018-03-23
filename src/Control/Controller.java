@@ -1,6 +1,7 @@
 package Control;
 
 import Bean.Disponible_RoomBean;
+import DAO.DBInsert;
 import DAO.LoginDB;
 import DAO.ShowDatabase_Prof;
 import Entity.User;
@@ -32,6 +33,12 @@ public class Controller {
     public void createSingleton(User u){
         UserSingleton singleton = UserSingleton.getInstance();
         singleton.setUser(u);
+    }
+
+    public void newP(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
+                     LocalTime timeFinePrenota, boolean a) {
+        DBInsert dbInsert = new DBInsert();
+        dbInsert.insert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, a);
     }
 
 

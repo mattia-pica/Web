@@ -15,6 +15,46 @@
     } else {
         //out.println("Aula: <b>"+request.getParameter("aula")+"</b>!");
     }
+
+    if (request.getParameter("submit_prenotation") != null){
+        String name = request.getParameter("aula");
+
+        boolean b = false;
+
+        if(request.getParameter("typePR") == null){
+
+            //@TODO Gestire il valore nullo dei dati inseriti per la prenotazione
+            String typePR = request.getParameter("altroPRtext");
+            String start = request.getParameter("startPR");
+            String end = request.getParameter("endPR");
+            String date = request.getParameter("datePR");
+
+            LocalTime startPR = LocalTime.parse(start);
+            LocalTime endPR = LocalTime.parse(end);
+            //String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            Controller controller = new Controller();
+            controller.newP(name, typePR, date, startPR, endPR, b);
+
+            System.out.println(typePR + " " + start + " " + end + " " + date);
+        }else{
+            String typePR = request.getParameter("typePR");
+            String start = request.getParameter("startPR");
+            String end = request.getParameter("endPR");
+            String date = request.getParameter("datePR");
+
+            LocalTime startPR = LocalTime.parse(start);
+            LocalTime endPR = LocalTime.parse(end);
+            //String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            Controller controller = new Controller();
+            controller.newP(name, typePR, date, startPR, endPR, b);
+
+
+            System.out.println(typePR + " " + start + " " + end + " " + date);
+
+        }
+
+    }
+
 %>
 
 <!DOCTYPE html>
@@ -69,12 +109,8 @@
                         </thead>
                     </table>
                 </div>
-
-
             </div>
-
         </div>
-
         <form action="" method="post" class="login100-form validate-form">
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Start">
@@ -117,7 +153,6 @@
                 <div class="contact-right">
                     <input class="login100-form-btn" type="submit" name="submit_prenotation" value="Prenota">
                 </div>
-
             </div>
         </form>
     </div>

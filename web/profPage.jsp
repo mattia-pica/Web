@@ -16,7 +16,6 @@
 
 <%
     //Disponible_RoomBean roomBean;
-    int aula = 0;
 
     if (request.getParameter("aula_" + "") != null){
 
@@ -142,7 +141,7 @@
                         </div>
                     </div>
                 </div>--%>
-                <script>
+                <%--<script>
                     // Get the modal
                     var modal = document.getElementById('myModal');
 
@@ -181,7 +180,7 @@
                             modal.style.display = "none";
                         }
                     }
-                </script>
+                </script>--%>
 					<span class="login100-form-title-1">
 						University of Tor Vergata
 					</span>
@@ -203,9 +202,6 @@
 
                             <%
 
-                                if(request.getParameter("submit_prenotation") != null){
-                                    System.out.println("Parameter: " + aula);
-                                }
 
                                 if (request.getParameter("submit_search") != null){
 
