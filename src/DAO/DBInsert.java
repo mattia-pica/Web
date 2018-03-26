@@ -16,7 +16,7 @@ public class DBInsert extends DB_Connection_Aule {
         public boolean insert(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
                            LocalTime timeFinePrenota, boolean a) {
 
-            boolean Response = true;
+            //boolean Response = true;
             //---------------------PROFESSORE------------------//
 
             if (!a) {
@@ -35,6 +35,7 @@ public class DBInsert extends DB_Connection_Aule {
                         controller.duplicate();*/
                         //@TODO Gestione Entry duplicata nel database
                         System.out.println("duplicate");
+                        return false;
                     } else {
 
                         //Se esistono aule con valore nullo (cioè mai prenotate) cancella quell'entry nel db e inserisce quella nuova, altrimenti
@@ -77,7 +78,7 @@ public class DBInsert extends DB_Connection_Aule {
                         statement1.close();*/
 
                         //@TODO A prenotazione inserita mostrare un alert con messaggio di successo
-                        return Response;
+                        return true;
                     }
                 } catch (Exception ex) {
                     System.err.println(ex);
@@ -103,6 +104,8 @@ public class DBInsert extends DB_Connection_Aule {
                     Statement statement = conn_Aule.createStatement();
                     ResultSet resultSet = statement.executeQuery(controlQuery);
                     if (!resultSet.wasNull()) {
+
+
 
                         //----------------DUPLICATE ENTRY: SI CANCELLANO LE AULE CHE DANNO FASTIDIO ALLA NUOVA
                         //----------------PRENOTAZIONE-----------------------//

@@ -113,7 +113,8 @@
                     </table>
                 </div>
 
-                <div class="table100-body js-pscroll">
+                <div class="table100-body js-pscroll" style="height:300px;overflow:auto;">
+                    <%--style="height:300px;overflow:auto;" Scroll nella table--%>
                     <table id="table" >
                         <tbody>
 

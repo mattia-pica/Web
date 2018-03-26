@@ -16,10 +16,11 @@
         //out.println("Aula: <b>"+request.getParameter("aula")+"</b>!");
     }*/
 
-    String name;
+    String name = request.getParameter("aula");
 
     if (request.getParameter("submit_prenotation") != null){
-        name = request.getParameter("aula");
+
+        System.out.println(name);
 
         boolean b = false;
         boolean Response;
@@ -62,14 +63,17 @@
         if (Response) {
 
             String info = "alert('Prenotata " + name + "');";
-
-
             out.println("<script type=\"text/javascript\">");
             out.println(info);
             out.println("location='profPage.jsp';");
             out.println("</script>");
 
 
+        }else {
+            out.println("<script type=\"text/javascript\">");
+            out.println("alert('Esiste già una prenotazione per i dati inseriti!\nCancellare i conflitti?');");
+            out.println("location='newPrenotationPage.jsp';");
+            out.println("</script>");
         }
 
     }

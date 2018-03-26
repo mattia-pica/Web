@@ -15,30 +15,29 @@
 
 <%
 
-    /*if (request.getParameter("aula_" + "") != null){
+   /* if (request.getParameter("aula_" + "") != null){
 
         if(request.getParameter("typePR") == null){
 
-            //@TODO Gestire il valore nullo dei dati inseriti per la prenotazione
-            *//*String typePR = request.getParameter("altroPRtext");
+            String typePR = request.getParameter("altroPRtext");
             String start = request.getParameter("startPR");
             String end = request.getParameter("endPR");
             String date = request.getParameter("datePR");
 
             LocalTime startPR = LocalTime.parse(start);
             LocalTime endPR = LocalTime.parse(end);
-            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));*//*
+            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
            // System.out.println(typePR + " " + start + " " + end + " " + date);
         }else{
-            *//*String typePR = request.getParameter("typePR");
+            String typePR = request.getParameter("typePR");
             String start = request.getParameter("startPR");
             String end = request.getParameter("endPR");
             String date = request.getParameter("datePR");
 
             LocalTime startPR = LocalTime.parse(start);
             LocalTime endPR = LocalTime.parse(end);
-            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));*//*
+            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
 
            // System.out.println(typePR + " " + start + " " + end + " " + date);
 
@@ -211,7 +210,7 @@
                                     Controller controller = new Controller();
                                     r = controller.show_p(timeInizio, timeFine, DateSearch);
                                     for (int i = 0; i < r.getNome().size(); i++ ){%>
-                            <tr><td><%=r.getNome().get(i)%></td><td><button name="" type="submit" onclick="window.location.href='/newPrenotationPage.jsp'">Prenota <%=r.getNome().get(i)%></button></td></tr>
+                            <tr><td><%=r.getNome().get(i)%></td><td><button name="" type="submit" onclick="window.location.href='/newPrenotationPage.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td></tr>
 
                             <%--
                                     <tr><td><%=r.getNome().get(i)%></td></tr><td><button name="" type="submit" onclick="window.location.href='/newPrenotationPage.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td>
@@ -229,7 +228,6 @@
                                 if(request.getParameter("submit_show") != null){
 
                                     response.sendRedirect("ShowAule_Professore.jsp");
-
 
                                 }
                             %>

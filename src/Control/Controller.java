@@ -48,9 +48,7 @@ public class Controller {
     }
 
     public ArrayList<Room> showCompleteDB_Prof(){
-
         ArrayList<Room> rooms = ShowCompleteDB_Prof.show_completeDB();
-
         return rooms;
     }
 

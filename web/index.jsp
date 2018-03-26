@@ -23,7 +23,7 @@
       if(loginBean.validate()){
         User user = UserSingleton.getInstance().getUser();
         if(user.getType().equals("1")){
-            //@TODO Lancia interfaccia segretaria
+          response.sendRedirect("secretaryPage.jsp");
           System.out.println("Segretaria");
         }else{
           response.sendRedirect("profPage.jsp");
