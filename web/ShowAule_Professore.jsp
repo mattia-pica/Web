@@ -1,80 +1,59 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: mattia
+  Date: 23/03/18
+  Time: 17.42
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page import="Control.Controller" %>
 <%@ page import="java.time.LocalTime" %>
 <%@ page import="Bean.Disponible_RoomBean" %>
-<%@ page import="Bean.PrenotationRoom" %>
 
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.Enumeration" %>
+<%@ page import="Entity.Room" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
+<jsp:useBean id="Prenotation_Room" scope="request"
+             class="Bean.PrenotationRoom"/>
 
+<!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
+<jsp:setProperty name="Prenotation_Room" property="*"/>
 
 <%
-    /*if (request.getParameter("aula") == null) {
-        //out.println("Please enter your aula.");
-    } else {
-        //out.println("Aula: <b>"+request.getParameter("aula")+"</b>!");
-    }*/
 
-    String name;
-
-    if (request.getParameter("submit_prenotation") != null){
-        name = request.getParameter("aula");
-
-        boolean b = false;
-        boolean Response;
-
-        String typePR;
-        LocalTime startPR;
-        LocalTime endPR;
-        String date;
+    /*if (request.getParameter("aula_" + "") != null){
 
         if(request.getParameter("typePR") == null){
 
             //@TODO Gestire il valore nullo dei dati inseriti per la prenotazione
-            typePR = request.getParameter("altroPRtext");
+            *//*String typePR = request.getParameter("altroPRtext");
             String start = request.getParameter("startPR");
             String end = request.getParameter("endPR");
-            date = request.getParameter("datePR");
+            String date = request.getParameter("datePR");
 
-            startPR = LocalTime.parse(start);
-            endPR = LocalTime.parse(end);
-            //String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            Controller controller = new Controller();
-            Response = controller.newP(name, typePR, date, startPR, endPR, b);
-            System.out.println(typePR + " " + start + " " + end + " " + date);
+            LocalTime startPR = LocalTime.parse(start);
+            LocalTime endPR = LocalTime.parse(end);
+            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));*//*
+
+           // System.out.println(typePR + " " + start + " " + end + " " + date);
         }else{
-            typePR = request.getParameter("typePR");
+            *//*String typePR = request.getParameter("typePR");
             String start = request.getParameter("startPR");
             String end = request.getParameter("endPR");
-            date = request.getParameter("datePR");
+            String date = request.getParameter("datePR");
 
-            startPR = LocalTime.parse(start);
-            endPR = LocalTime.parse(end);
-            //String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            Controller controller = new Controller();
-            Response = controller.newP(name, typePR, date, startPR, endPR, b);
+            LocalTime startPR = LocalTime.parse(start);
+            LocalTime endPR = LocalTime.parse(end);
+            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));*//*
 
-            System.out.println(typePR + " " + start + " " + end + " " + date);
+           // System.out.println(typePR + " " + start + " " + end + " " + date);
 
         }
 
-        if (Response) {
-
-            String info = "alert('Prenotata " + name + "');";
-
-
-            out.println("<script type=\"text/javascript\">");
-            out.println(info);
-            //out.println("alert(" + "Aggiunta prenotazione per:" + name + "dalle " + startPR + "alle " + endPR + " per" + typePR +");");
-            out.println("location='profPage.jsp';");
-            out.println("</script>");
-
-
-        }
-
-    }
-
+    }*/
 %>
 
 <!DOCTYPE html>
@@ -124,57 +103,37 @@
                     <table>
                         <thead>
                         <tr class="row100 head">
-                            <th class="cell100 column1">Nuova prenotazione per l' <%=request.getParameter("aula")%></th>
+                            <th class="cell100 column1">Nome</th>
+                            <th class="cell100 column1">Data</th>
+                            <th class="cell100 column1">Inizio</th>
+                            <th class="cell100 column1">Fine</th>
+                            <th class="cell100 column1">Tipo</th>
                         </tr>
                         </thead>
                     </table>
                 </div>
-            </div>
-        </div>
-        <form action="" method="post" class="login100-form validate-form">
 
-            <div class="wrap-input100 validate-input m-b-18" data-validate ="Start">
-                <span class="label-input100">Start</span>
-                <input class="input100" type="text" name="startPR" placeholder="Start" <%--onfocus="myFunction(this)"--%>>
-                <span class="focus-input100"></span>
-            </div>
+                <div class="table100-body js-pscroll">
+                    <table id="table" >
+                        <tbody>
 
+                        <%
+                            //@TODO Centrare i risultati nelle colonne
+                            Controller controller = new Controller();
+                            ArrayList<Room> r = controller.showCompleteDB_Prof();
 
-            <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
-                <span class="label-input100">End</span>
-                <input class="input100" type="text" name="endPR" placeholder="End" <%--onfocus="myFunction(this)"--%>>
-                <span class="focus-input100"></span>
-            </div>
+                            for (int i = 0; i < r.size(); i++){%>
 
-            <div class="wrap-input100 validate-input m-b-18" data-validate ="Date">
-                <span class="label-input100">Date</span>
-                <input class="input100" type="text" name="datePR" placeholder="Date" <%--onfocus="myFunction(this)"--%>>
-                <span class="focus-input100"></span>
-            </div>
-            <div class="wrap-input100 validate-input m-b-18">
-                <fieldset>
-                    <span class="label-input100">Esame</span>
-                    <input style="margin-top: 15px" type="radio" name="typePR" value="Esame"/>
-                </fieldset>
-            </div>
-            <div class="wrap-input100 validate-input m-b-18">
-                <fieldset>
-                    <span class="label-input100">Conferenza</span>
-                    <input  style="margin-top: 15px" type="radio" name="typePR"  value="Conferenza"/>
+                            <tr><td><%=r.get(i).getNome()%></td><td><%=r.get(i).getDatapr()%></td><td><%=r.get(i).getInizio()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getTipopr()%></td></tr>
 
-                </fieldset>
-            </div>
-            <div class="wrap-input100 validate-input m-b-18" data-validate ="Altro">
-                <span class="label-input100">Altro</span>
-                <input class="input100" type="text" id="textInput" name="altroPRtext" placeholder="Altro">
-                <span class="focus-input100"></span>
-            </div>
-            <div class="container-login100-form-btn">
-                <div class="contact-right">
-                    <input class="login100-form-btn" type="submit" name="submit_prenotation" value="Prenota">
+                        <%
+                        }
+                        %>
+                        </tbody>
+                    </table>
                 </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
@@ -210,8 +169,6 @@
 
     });
 </script>
-
-
 <%--<script>
 
     function f1(objButton){
@@ -221,6 +178,5 @@
 
 
 </script>--%>
-
 </body>
 </html>

@@ -1,7 +1,6 @@
 <%@ page import="Control.Controller" %>
 <%@ page import="java.time.LocalTime" %>
 <%@ page import="Bean.Disponible_RoomBean" %>
-<%@ page import="Bean.PrenotationRoom" %>
 
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.Enumeration" %>
@@ -15,38 +14,37 @@
 <jsp:setProperty name="Prenotation_Room" property="*"/>
 
 <%
-    //Disponible_RoomBean roomBean;
 
-    if (request.getParameter("aula_" + "") != null){
+    /*if (request.getParameter("aula_" + "") != null){
 
         if(request.getParameter("typePR") == null){
 
             //@TODO Gestire il valore nullo dei dati inseriti per la prenotazione
-            String typePR = request.getParameter("altroPRtext");
+            *//*String typePR = request.getParameter("altroPRtext");
             String start = request.getParameter("startPR");
             String end = request.getParameter("endPR");
             String date = request.getParameter("datePR");
 
             LocalTime startPR = LocalTime.parse(start);
             LocalTime endPR = LocalTime.parse(end);
-            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));*//*
 
-            System.out.println(typePR + " " + start + " " + end + " " + date);
+           // System.out.println(typePR + " " + start + " " + end + " " + date);
         }else{
-            String typePR = request.getParameter("typePR");
+            *//*String typePR = request.getParameter("typePR");
             String start = request.getParameter("startPR");
             String end = request.getParameter("endPR");
             String date = request.getParameter("datePR");
 
             LocalTime startPR = LocalTime.parse(start);
             LocalTime endPR = LocalTime.parse(end);
-            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));*//*
 
-            System.out.println(typePR + " " + start + " " + end + " " + date);
+           // System.out.println(typePR + " " + start + " " + end + " " + date);
 
         }
 
-    }
+    }*/
 %>
 
 <!DOCTYPE html>
@@ -201,11 +199,8 @@
                             <tbody>
 
                             <%
-
-
                                 if (request.getParameter("submit_search") != null){
 
-                                    String c = null;
                                     Disponible_RoomBean r;
                                     String StartSearch = request.getParameter("start");
                                     String EndSearch = request.getParameter("end");
@@ -215,22 +210,28 @@
                                     LocalTime timeFine = LocalTime.parse(EndSearch);
                                     Controller controller = new Controller();
                                     r = controller.show_p(timeInizio, timeFine, DateSearch);
-                                    int i;
-                                    for (i = 0; i < r.getNome().size(); i++ ){%>
-                                    <tr><td><%=r.getNome().get(i)%></td></tr><td>
-                                    <button name="" type="submit" onclick="window.location.href='/prenotationPage.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td>
+                                    for (int i = 0; i < r.getNome().size(); i++ ){%>
+                            <tr><td><%=r.getNome().get(i)%></td><td><button name="" type="submit" onclick="window.location.href='/newPrenotationPage.jsp'">Prenota <%=r.getNome().get(i)%></button></td></tr>
 
-                                <%--reply_click(this.id)--%>
+                            <%--
+                                    <tr><td><%=r.getNome().get(i)%></td></tr><td><button name="" type="submit" onclick="window.location.href='/newPrenotationPage.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td>
+--%>
+
+                            <%--reply_click(this.id)--%>
                             <%--/*c = r.getNome().get(i);
                                         String s = "<td><form><a href=\"javascript:showDiv();\">Prenota</a>\n</form></td>";
                                         out.print("<tr class=\"row100 body\">");
                                         out.print("<td class=\"cell100 column1\">" + c + s + "</td>");*/--%>
                             <%
                                     }
-
                                 }
 
+                                if(request.getParameter("submit_show") != null){
 
+                                    response.sendRedirect("ShowAule_Professore.jsp");
+
+
+                                }
                             %>
                             </tbody>
                         </table>
@@ -247,7 +248,6 @@
                 <span class="focus-input100"></span>
             </div>
 
-
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Start">
                 <span class="label-input100">Start</span>
                 <input class="input100" type="text" name="start" placeholder="Enter Room's start hour">
@@ -263,8 +263,12 @@
                 <button class="login100-form-btn" type="submit"<%-- onclick="showBtn()"--%> name="submit_search" value="Search">
                     Search
                 </button>
+                    <button class="login100-form-btn" type="submit" name="submit_show" value="Show">
+                        Mostra Mie Prenotazioni
+                    </button>
 
             </div>
+
         </form>
     </div>
 </div>
@@ -312,7 +316,6 @@ function reply_click(clicked_id)
 alert(clicked_id);
 }
 </script>
-
 <%--<script>
 
     function f1(objButton){
@@ -322,7 +325,6 @@ alert(clicked_id);
 
 
 </script>--%>
-
 <script>$
     ("#table tr").click(function(){
         $(this).addClass('selected').siblings().removeClass('selected');
@@ -335,7 +337,5 @@ alert(clicked_id);
         alert($("#table tr.selected td:first").html());
     });*/
 </script>
-
-
 </body>
 </html>

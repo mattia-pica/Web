@@ -3,11 +3,14 @@ package Control;
 import Bean.Disponible_RoomBean;
 import DAO.DBInsert;
 import DAO.LoginDB;
+import DAO.ShowCompleteDB_Prof;
 import DAO.ShowDatabase_Prof;
+import Entity.Room;
 import Entity.User;
 import Utils.UserSingleton;
 
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 public class Controller {
 
@@ -42,6 +45,13 @@ public class Controller {
         if (Response){
             return true;
         }else return false;
+    }
+
+    public ArrayList<Room> showCompleteDB_Prof(){
+
+        ArrayList<Room> rooms = ShowCompleteDB_Prof.show_completeDB();
+
+        return rooms;
     }
 
 
