@@ -20,24 +20,33 @@
 
   if (request.getParameter("submit_login") != null){
 
-      if(loginBean.validate()){
-        User user = UserSingleton.getInstance().getUser();
-        if(user.getType().equals("1")){
-          response.sendRedirect("secretaryPage.jsp");
-          System.out.println("Segretaria");
-        }else{
-          response.sendRedirect("profPage.jsp");
-        }
+      String username = request.getParameter("username");
+      String password = request.getParameter("password");
 
-        //response.sendRedirect("profPage.jsp");
-
-      }
-
-
-
-
-
+      if(username.isEmpty() || password.isEmpty()){
+        String info = "alert('Completare tutti i campi!');";
+        out.println("<script type=\"text/javascript\">");
+        out.println(info);
+        out.println("location='index.jsp';");
+        out.println("</script>");
+      }else {
+        if(loginBean.validate()) {
+          User user = UserSingleton.getInstance().getUser();
+          if(user.getType().equals("1")){
+            response.sendRedirect("secretaryPage.jsp");
+            System.out.println("Segretaria");
+          }else{
+            response.sendRedirect("profPage.jsp");
           }
+        }else {
+          String info = "alert('Username o password incorretti!');";
+          out.println("<script type=\"text/javascript\">");
+          out.println(info);
+          out.println("location='index.jsp';");
+          out.println("</script>");
+        }
+      }
+  }
 %>
 <!DOCTYPE html>
 <html lang="en">
