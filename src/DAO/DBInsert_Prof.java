@@ -11,7 +11,7 @@ import java.time.LocalTime;
 
 import static DAO.DB_Connection_Users.conn_Users;
 
-public class DBInsert extends DB_Connection_Aule {
+public class DBInsert_Prof extends DB_Connection_Aule {
 
         public boolean insert(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
                            LocalTime timeFinePrenota, boolean a) {
@@ -50,34 +50,6 @@ public class DBInsert extends DB_Connection_Aule {
                         DB_Connection_Aule db_connection_aule1 = new DB_Connection_Aule();
                         db_connection_aule1.connect_Aule();
                         statement.executeUpdate(QUERYprof);
-
-
-                        //-----------STAMPA FILE CON DATI PRENOTAZIONE-------------\\
-
-
-                        /*String nameProf = "";
-                        String surnameProf = "";
-
-                        String getProfName = "SELECT users.Name FROM users WHERE Username='" + userSingleton.getUser().getUsername() + "'";
-                        String getProfSurname = "SELECT users.Surname FROM users WHERE Username='" + userSingleton.getUser().getUsername() + "'";
-                        DB_Connection_Users db_connection_users = new DB_Connection_Users();
-                        db_connection_users.connect_Users();
-                        Statement statement3 = conn_Users.createStatement();
-                        ResultSet rsName = statement3.executeQuery(getProfName);
-                        if (rsName.next()) {
-                            nameProf = rsName.getString("Name");
-                        }
-                        statement.close();
-                        statement3.close();
-                        Statement statement1 = conn_Users.createStatement();
-                        ResultSet rsSurname = statement1.executeQuery(getProfSurname);
-                        if (rsSurname.next()) {
-                            surnameProf = rsSurname.getString("Surname");
-                            statement1.close();
-                        }
-                        statement1.close();*/
-
-                        //@TODO A prenotazione inserita mostrare un alert con messaggio di successo
                         return true;
                     }
                 } catch (Exception ex) {

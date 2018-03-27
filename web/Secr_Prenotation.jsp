@@ -1,7 +1,13 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: mattia
+  Date: 27/03/18
+  Time: 15.15
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page import="Control.Controller" %>
 <%@ page import="java.time.LocalTime" %>
 <%@ page import="Bean.Disponible_RoomBean" %>
-<%@ page import="Bean.PrenotationRoom" %>
 
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.Enumeration" %>
@@ -42,7 +48,7 @@
             endPR = LocalTime.parse(end);
             //String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             Controller controller = new Controller();
-            Response = controller.newP(name, typePR, date, startPR, endPR, b);
+            Response = controller.newPrenotationProfessore(name, typePR, date, startPR, endPR, b);
             System.out.println(typePR + " " + start + " " + end + " " + date);
         }else{
             typePR = request.getParameter("typePR");
@@ -54,7 +60,7 @@
             endPR = LocalTime.parse(end);
             //String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
             Controller controller = new Controller();
-            Response = controller.newP(name, typePR, date, startPR, endPR, b);
+            Response = controller.newPrenotationSecretary(name, typePR, date, startPR, endPR, b);
 
             System.out.println(typePR + " " + start + " " + end + " " + date);
 
@@ -69,12 +75,14 @@
             out.println("</script>");
 
 
-        }else {
-            out.println("<script type=\"text/javascript\">");
-            out.println("alert('Esiste già una prenotazione per i dati inseriti!\nCancellare i conflitti?');");
-            out.println("location='newPrenotationPage.jsp';");
-            out.println("</script>");
-        }
+        }else { //@TODO Mostrare il popup quando c'è una entry duplicata
+%>
+<script type="text/javascript">
+    showDiv();
+</script>
+<% } %>
+
+<%
 
     }
 
@@ -118,6 +126,54 @@
     <div class="container-table100">
         <div class="wrap-table100">
             <div class="login100-form-title" style="background-image: url(login/images/bg-01.jpg);">
+                <!-- The popup -->
+                <div id="myModal" class="modal">
+
+                    <!-- Modal content -->
+                    <div class="modal-content-login">
+                        <span class="close">&times;</span>
+
+
+                        <div class="login-right">
+                            <h2>Prenotazione</h2>
+                            <br>
+                            <%-- <p><b>I'm already an ESHOP user</b><br>Enter your e-mail address and password to log into the website.</p>--%>
+                            <form>
+                                <div class="contact-right">
+                                    <input class="login100-form-btn" type="submit"  name="submit_delete" value="Cancella">
+                                </div>
+                                <div class="contact-right">
+                                    <input class="login100-form-btn" type="submit"  name="submit_not_delete" value="Non_cancellare">
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    // Get the modal
+                    var modal = document.getElementById('myModal');
+
+                    // Get the <span> element that closes the modal
+                    var span = document.getElementsByClassName("close")[0];
+
+                    // When the user clicks on <span> (x), close the modal
+                    span.onclick = function () {
+                        modal.style.display = "none";
+
+                    };
+                    function showDiv() {
+                        document.getElementById("foo").value = "some value";
+                        modal.style.display = "block";
+                        //console.log(parameter);
+                    }
+                    // When the user clicks anywhere outside of the modal, close it
+                    window.onclick = function (event) {
+                        if (event.target == modal) {
+                            modal.style.display = "none";
+                        }
+                    }
+                </script>
                 <span class="login100-form-title-1">
 						University of Tor Vergata
 					</span>

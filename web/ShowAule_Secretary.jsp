@@ -23,36 +23,7 @@
 
 <%
 
-    /*if (request.getParameter("aula_" + "") != null){
 
-        if(request.getParameter("typePR") == null){
-
-            //@TODO Gestire il valore nullo dei dati inseriti per la prenotazione
-            *//*String typePR = request.getParameter("altroPRtext");
-            String start = request.getParameter("startPR");
-            String end = request.getParameter("endPR");
-            String date = request.getParameter("datePR");
-
-            LocalTime startPR = LocalTime.parse(start);
-            LocalTime endPR = LocalTime.parse(end);
-            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));*//*
-
-           // System.out.println(typePR + " " + start + " " + end + " " + date);
-        }else{
-            *//*String typePR = request.getParameter("typePR");
-            String start = request.getParameter("startPR");
-            String end = request.getParameter("endPR");
-            String date = request.getParameter("datePR");
-
-            LocalTime startPR = LocalTime.parse(start);
-            LocalTime endPR = LocalTime.parse(end);
-            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));*//*
-
-           // System.out.println(typePR + " " + start + " " + end + " " + date);
-
-        }
-
-    }*/
 %>
 
 <!DOCTYPE html>
@@ -107,6 +78,7 @@
                             <th class="cell100 column1">Inizio</th>
                             <th class="cell100 column1">Fine</th>
                             <th class="cell100 column1">Tipo</th>
+
                         </tr>
                         </thead>
                     </table>
@@ -118,16 +90,15 @@
                         <tbody>
 
                         <%
-                            //@TODO Centrare i risultati nelle colonne
                             Controller controller = new Controller();
-                            ArrayList<Room> r = controller.showCompleteDB_Prof();
+                            ArrayList<Room> r = controller.show_s();
 
                             for (int i = 0; i < r.size(); i++){%>
 
-                            <tr><td><%=r.get(i).getNome()%></td><td><%=r.get(i).getDatapr()%></td><td><%=r.get(i).getInizio()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getTipopr()%></td></tr>
+                        <tr><td><%=r.get(i).getNome()%></td><td><%=r.get(i).getDatapr()%></td><td><%=r.get(i).getInizio()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getTipopr()%></td></tr>
 
                         <%
-                        }
+                            }
                         %>
                         </tbody>
                     </table>
@@ -163,12 +134,12 @@
 
 
 <%--QUANDO SI CLICCA SULLA TEXTFIELD ALTRO VENGONO DISATTIVATI I RADIO BUTTON--%>
-<script>
+<%--<script>
     $('#textInput').click(function () {
         $('input[type=radio]').removeAttr("checked");
 
     });
-</script>
+</script>--%>
 <%--<script>
 
     function f1(objButton){

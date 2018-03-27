@@ -7,11 +7,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
-<jsp:useBean id="Prenotation_Room" scope="request"
-             class="Bean.PrenotationRoom"/>
+
 
 <!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
-<jsp:setProperty name="Prenotation_Room" property="*"/>
+
 
 <%
 
@@ -210,10 +209,10 @@
                                     Controller controller = new Controller();
                                     r = controller.show_p(timeInizio, timeFine, DateSearch);
                                     for (int i = 0; i < r.getNome().size(); i++ ){%>
-                            <tr><td><%=r.getNome().get(i)%></td><td><button name="" type="submit" onclick="window.location.href='/newPrenotationPage.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td></tr>
+                            <tr><td><%=r.getNome().get(i)%></td><td><button name="" type="submit" onclick="window.location.href='/Prof_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td></tr>
 
                             <%--
-                                    <tr><td><%=r.getNome().get(i)%></td></tr><td><button name="" type="submit" onclick="window.location.href='/newPrenotationPage.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td>
+                                    <tr><td><%=r.getNome().get(i)%></td></tr><td><button name="" type="submit" onclick="window.location.href='/Prof_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td>
 --%>
 
                             <%--reply_click(this.id)--%>
@@ -303,17 +302,7 @@
 
     });
 </script>
-<script>function showBtn() {
-    document.getElementById('btnPrenotation').style.display = "block";
-}
-</script>
-<script>
-function reply_click(clicked_id)
-{
 
-alert(clicked_id);
-}
-</script>
 <%--<script>
 
     function f1(objButton){
@@ -323,7 +312,7 @@ alert(clicked_id);
 
 
 </script>--%>
-<script>$
+<%--<script>$
     ("#table tr").click(function(){
         $(this).addClass('selected').siblings().removeClass('selected');
         var value=$(this).find('td:first').html();
@@ -334,6 +323,6 @@ alert(clicked_id);
     /*$('.ok').on('click', function(e){
         alert($("#table tr.selected td:first").html());
     });*/
-</script>
+</script>--%>
 </body>
 </html>
