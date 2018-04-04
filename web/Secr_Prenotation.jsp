@@ -7,86 +7,16 @@
 --%>
 <%@ page import="Control.Controller" %>
 <%@ page import="java.time.LocalTime" %>
-<%@ page import="Bean.Disponible_RoomBean" %>
+<%@ page import="Bean.RoomBean" %>
 
-<%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="java.util.Enumeration" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
+<jsp:useBean id="roomBean" class="Bean.RoomBean" scope="session"/>
 
+<!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
+<jsp:setProperty name="roomBean" property="*"/>
 
-<%
-    /*if (request.getParameter("aula") == null) {
-        //out.println("Please enter your aula.");
-    } else {
-        //out.println("Aula: <b>"+request.getParameter("aula")+"</b>!");
-    }*/
-
-    String name = request.getParameter("aula");
-
-    if (request.getParameter("submit_prenotation") != null){
-
-        System.out.println(name);
-
-        boolean b = false;
-        boolean Response;
-
-        String typePR;
-        LocalTime startPR;
-        LocalTime endPR;
-        String date;
-
-        if(request.getParameter("typePR") == null){
-
-            //@TODO Gestire il valore nullo dei dati inseriti per la prenotazione
-            typePR = request.getParameter("altroPRtext");
-            String start = request.getParameter("startPR");
-            String end = request.getParameter("endPR");
-            date = request.getParameter("datePR");
-
-            startPR = LocalTime.parse(start);
-            endPR = LocalTime.parse(end);
-            //String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            Controller controller = new Controller();
-            Response = controller.newPrenotationProfessore(name, typePR, date, startPR, endPR, b);
-            System.out.println(typePR + " " + start + " " + end + " " + date);
-        }else{
-            typePR = request.getParameter("typePR");
-            String start = request.getParameter("startPR");
-            String end = request.getParameter("endPR");
-            date = request.getParameter("datePR");
-
-            startPR = LocalTime.parse(start);
-            endPR = LocalTime.parse(end);
-            //String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            Controller controller = new Controller();
-            Response = controller.newPrenotationSecretary(name, typePR, date, startPR, endPR, b);
-
-            System.out.println(typePR + " " + start + " " + end + " " + date);
-
-        }
-
-        if (Response) {
-
-            String info = "alert('Prenotata " + name + "');";
-            out.println("<script type=\"text/javascript\">");
-            out.println(info);
-            out.println("location='profPage.jsp';");
-            out.println("</script>");
-
-
-        }else { //@TODO Mostrare il popup quando c'è una entry duplicata
-%>
-<script type="text/javascript">
-    showDiv();
-</script>
-<% } %>
-
-<%
-
-    }
-
-%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -133,19 +63,14 @@
                     <div class="modal-content-login">
                         <span class="close">&times;</span>
 
-
                         <div class="login-right">
-                            <h2>Prenotazione</h2>
+                            <h2>La prenotazione inserita va in conflitto con prenotazioni già inserite!</h2>
                             <br>
-                            <%-- <p><b>I'm already an ESHOP user</b><br>Enter your e-mail address and password to log into the website.</p>--%>
                             <form>
                                 <div class="contact-right">
-                                    <input class="login100-form-btn" type="submit"  name="submit_delete" value="Cancella">
+                                    <input class="login100-form-btn" type="submit" name="submit_delete" value="Cancella">
+                                    <input class="login100-form-btn" type="submit" name="submit_not_delete" value="Non_cancellare">
                                 </div>
-                                <div class="contact-right">
-                                    <input class="login100-form-btn" type="submit"  name="submit_not_delete" value="Non_cancellare">
-                                </div>
-
                             </form>
                         </div>
                     </div>
@@ -160,13 +85,12 @@
                     // When the user clicks on <span> (x), close the modal
                     span.onclick = function () {
                         modal.style.display = "none";
-
                     };
+
                     function showDiv() {
-                        document.getElementById("foo").value = "some value";
                         modal.style.display = "block";
-                        //console.log(parameter);
                     }
+
                     // When the user clicks anywhere outside of the modal, close it
                     window.onclick = function (event) {
                         if (event.target == modal) {
@@ -174,6 +98,117 @@
                         }
                     }
                 </script>
+
+                <%
+                    String name = request.getParameter("aula");
+                    boolean Response;
+                    Controller controller = new Controller();
+
+                    if (request.getParameter("submit_prenotation") != null){
+
+                        boolean b = false;
+                        roomBean.setNome(name);
+
+                        String typePR;
+                        LocalTime startPR;
+                        LocalTime endPR;
+                        String date;
+
+                        if(request.getParameter("typePR") == null){
+
+                            typePR = request.getParameter("altroPRtext");
+                            String start = request.getParameter("startPR");
+                            String end = request.getParameter("endPR");
+                            date = request.getParameter("datePR");
+                            if (start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
+
+                                String info = "alert('Completare tutti i campi!');";
+                                out.println("<script type=\"text/javascript\">");
+                                out.println(info);
+                                out.println("location='Secr_Prenotation.jsp';");
+                                out.println("</script>");
+                            }
+
+                            roomBean.setInizio(start);
+                            roomBean.setFine(end);
+                            roomBean.setDatapr(date);
+                            roomBean.setTipopr(typePR);
+
+                            startPR = LocalTime.parse(start);
+                            endPR = LocalTime.parse(end);
+                            Response = controller.newPrenotationSecretary(name, typePR, date, startPR, endPR);
+                            System.out.println(typePR + " " + start + " " + end + " " + date);
+                        }else{
+                            typePR = request.getParameter("typePR");
+                            String start = request.getParameter("startPR");
+                            String end = request.getParameter("endPR");
+                            date = request.getParameter("datePR");
+
+                            if (start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
+
+                                String info = "alert('Completare tutti i campi!');";
+                                out.println("<script type=\"text/javascript\">");
+                                out.println(info);
+                                out.println("location='Secr_Prenotation.jsp';");
+                                out.println("</script>");
+                            }
+
+                            roomBean.setInizio(start);
+                            roomBean.setFine(end);
+                            roomBean.setDatapr(date);
+                            roomBean.setTipopr(typePR);
+
+                            startPR = LocalTime.parse(start);
+                            endPR = LocalTime.parse(end);
+                            Response = controller.newPrenotationSecretary(name, typePR, date, startPR, endPR);
+
+                            System.out.println(typePR + " " + start + " " + end + " " + date);
+
+                        }
+
+                        if (Response) {
+
+                            String info = "alert('Prenotata " + name + "');";
+                            out.println("<script type=\"text/javascript\">");
+                            out.println(info);
+                            out.println("location='secretaryPage.jsp';");
+                            out.println("</script>");
+                            
+                        }else {
+                %>
+                <script type="text/javascript">
+                    showDiv();
+                </script>
+                <%
+                        }
+                %>
+
+                <%
+                    }
+
+                    if(request.getParameter("submit_delete") != null){
+
+                        System.out.println("arrivato");
+                        System.out.println(roomBean.getTipopr());
+
+                        Response = controller.deleteThenInsert(roomBean.getNome(), roomBean.getTipopr(), roomBean.getDatapr(),
+                                LocalTime.parse(roomBean.getInizio()), LocalTime.parse(roomBean.getFine()));
+                        System.out.println(Response);
+
+                        if (Response){
+
+                        }
+                    }
+                    if(request.getParameter("submit_not_delete") != null){
+
+                        out.println("<script type=\"text/javascript\">");
+                        out.println("alert('Operazione annullata');");
+                        out.println("location=secretaryPage.jsp';");
+                        out.println("</script>");
+
+                    }
+
+                %>
                 <span class="login100-form-title-1">
 						University of Tor Vergata
 					</span>
@@ -254,12 +289,6 @@
 <!--===============================================================================================-->
 <script src="js/main.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<%--<script>
-    $('#textInput').click(function () {
-        $('input[name=typePR]').prop("checked", false);
-
-    });
-</script>--%>
 
 
 <%--QUANDO SI CLICCA SULLA TEXTFIELD ALTRO VENGONO DISATTIVATI I RADIO BUTTON--%>
@@ -269,17 +298,6 @@
 
     });
 </script>
-
-
-<%--<script>
-
-    function f1(objButton){
-        alert(objButton.value);
-        return value;
-    }
-
-
-</script>--%>
 
 </body>
 </html>

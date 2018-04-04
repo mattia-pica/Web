@@ -207,7 +207,7 @@
                                     LocalTime timeInizio = LocalTime.parse(StartSearch);
                                     LocalTime timeFine = LocalTime.parse(EndSearch);
                                     Controller controller = new Controller();
-                                    r = controller.show_p(timeInizio, timeFine, DateSearch);
+                                    r = controller.show(timeInizio, timeFine, DateSearch);
                                     for (int i = 0; i < r.getNome().size(); i++ ){%>
                             <tr><td><%=r.getNome().get(i)%></td><td><button name="" type="submit" onclick="window.location.href='/Prof_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td></tr>
 
@@ -223,11 +223,9 @@
                             <%
                                     }
                                 }
-
                                 if(request.getParameter("submit_show") != null){
 
                                     response.sendRedirect("ShowAule_Professore.jsp");
-
                                 }
                             %>
                             </tbody>

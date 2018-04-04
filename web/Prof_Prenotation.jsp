@@ -1,28 +1,16 @@
 <%@ page import="Control.Controller" %>
 <%@ page import="java.time.LocalTime" %>
-<%@ page import="Bean.Disponible_RoomBean" %>
 
-<%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="java.util.Enumeration" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 
 
 <%
-    /*if (request.getParameter("aula") == null) {
-        //out.println("Please enter your aula.");
-    } else {
-        //out.println("Aula: <b>"+request.getParameter("aula")+"</b>!");
-    }*/
-
     String name = request.getParameter("aula");
 
     if (request.getParameter("submit_prenotation") != null){
 
-        System.out.println(name);
-
-        boolean b = false;
-        boolean Response;
+        boolean Response = false;
 
         String typePR;
         LocalTime startPR;
@@ -31,32 +19,48 @@
 
         if(request.getParameter("typePR") == null){
 
-            //@TODO Gestire il valore nullo dei dati inseriti per la prenotazione
             typePR = request.getParameter("altroPRtext");
             String start = request.getParameter("startPR");
             String end = request.getParameter("endPR");
             date = request.getParameter("datePR");
 
-            startPR = LocalTime.parse(start);
-            endPR = LocalTime.parse(end);
-            //String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            Controller controller = new Controller();
-            Response = controller.newPrenotationProfessore(name, typePR, date, startPR, endPR, b);
-            System.out.println(typePR + " " + start + " " + end + " " + date);
+            if (start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()){
+
+                String info = "alert('Completare tutti i campi!');";
+                out.println("<script type=\"text/javascript\">");
+                out.println(info);
+                out.println("location='Prof_Prenotation.jsp';");
+                out.println("</script>");
+
+            }else{
+
+                startPR = LocalTime.parse(start);
+                endPR = LocalTime.parse(end);
+                Controller controller = new Controller();
+                Response = controller.newPrenotationProfessore(name, typePR, date, startPR, endPR);
+            }
         }else{
+
             typePR = request.getParameter("typePR");
             String start = request.getParameter("startPR");
             String end = request.getParameter("endPR");
             date = request.getParameter("datePR");
 
-            startPR = LocalTime.parse(start);
-            endPR = LocalTime.parse(end);
-            //String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            Controller controller = new Controller();
-            Response = controller.newPrenotationProfessore(name, typePR, date, startPR, endPR, b);
+            if (start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
 
-            System.out.println(typePR + " " + start + " " + end + " " + date);
+                String info = "alert('Completare tutti i campi!');";
+                out.println("<script type=\"text/javascript\">");
+                out.println(info);
+                out.println("location='Prof_Prenotation.jsp';");
+                out.println("</script>");
 
+            }else {
+
+                startPR = LocalTime.parse(start);
+                endPR = LocalTime.parse(end);
+                Controller controller = new Controller();
+                Response = controller.newPrenotationProfessore(name, typePR, date, startPR, endPR);
+            }
         }
 
         if (Response) {
@@ -67,9 +71,15 @@
             out.println("location='profPage.jsp';");
             out.println("</script>");
 
+        }else {
+
+            //@TODO Manca il caso d'uso di gruppo
+            String info = "alert('Ci sono prenotazione già attive con i criteri inseriti!');";
+            out.println("<script type=\"text/javascript\">");
+            out.println(info);
+            out.println("location='profPage.jsp';");
+            out.println("</script>");
         }
-
-
     }
 
 %>
@@ -132,20 +142,20 @@
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Start">
                 <span class="label-input100">Start</span>
-                <input class="input100" type="text" name="startPR" placeholder="Start" <%--onfocus="myFunction(this)"--%>>
+                <input class="input100" type="text" name="startPR" placeholder="Start">
                 <span class="focus-input100"></span>
             </div>
 
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
                 <span class="label-input100">End</span>
-                <input class="input100" type="text" name="endPR" placeholder="End" <%--onfocus="myFunction(this)"--%>>
+                <input class="input100" type="text" name="endPR" placeholder="End">
                 <span class="focus-input100"></span>
             </div>
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Date">
                 <span class="label-input100">Date</span>
-                <input class="input100" type="text" name="datePR" placeholder="Date" <%--onfocus="myFunction(this)"--%>>
+                <input class="input100" type="text" name="datePR" placeholder="Date">
                 <span class="focus-input100"></span>
             </div>
             <div class="wrap-input100 validate-input m-b-18">
@@ -192,13 +202,6 @@
 <!--===============================================================================================-->
 <script src="js/main.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<%--<script>
-    $('#textInput').click(function () {
-        $('input[name=typePR]').prop("checked", false);
-
-    });
-</script>--%>
-
 
 <%--QUANDO SI CLICCA SULLA TEXTFIELD ALTRO VENGONO DISATTIVATI I RADIO BUTTON--%>
 <script>
@@ -206,18 +209,7 @@
         $('input[type=radio]').removeAttr("checked");
 
     });
+
 </script>
-
-
-<%--<script>
-
-    function f1(objButton){
-        alert(objButton.value);
-        return value;
-    }
-
-
-</script>--%>
-
 </body>
 </html>

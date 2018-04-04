@@ -6,11 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="Control.Controller" %>
-<%@ page import="java.time.LocalTime" %>
-<%@ page import="Bean.Disponible_RoomBean" %>
 
-<%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="java.util.Enumeration" %>
 <%@ page import="Entity.Room" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -20,40 +16,6 @@
 
 <!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
 <jsp:setProperty name="Prenotation_Room" property="*"/>
-
-<%
-
-    /*if (request.getParameter("aula_" + "") != null){
-
-        if(request.getParameter("typePR") == null){
-
-            //@TODO Gestire il valore nullo dei dati inseriti per la prenotazione
-            *//*String typePR = request.getParameter("altroPRtext");
-            String start = request.getParameter("startPR");
-            String end = request.getParameter("endPR");
-            String date = request.getParameter("datePR");
-
-            LocalTime startPR = LocalTime.parse(start);
-            LocalTime endPR = LocalTime.parse(end);
-            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));*//*
-
-           // System.out.println(typePR + " " + start + " " + end + " " + date);
-        }else{
-            *//*String typePR = request.getParameter("typePR");
-            String start = request.getParameter("startPR");
-            String end = request.getParameter("endPR");
-            String date = request.getParameter("datePR");
-
-            LocalTime startPR = LocalTime.parse(start);
-            LocalTime endPR = LocalTime.parse(end);
-            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));*//*
-
-           // System.out.println(typePR + " " + start + " " + end + " " + date);
-
-        }
-
-    }*/
-%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -102,11 +64,11 @@
                     <table>
                         <thead>
                         <tr class="row100 head">
-                            <th class="cell100 column1">Nome</th>
-                            <th class="cell100 column1">Data</th>
-                            <th class="cell100 column1">Inizio</th>
-                            <th class="cell100 column1">Fine</th>
-                            <th class="cell100 column1">Tipo</th>
+                            <th class="cell100 column2">Nome</th>
+                            <th class="cell100 column2">Data</th>
+                            <th class="cell100 column2">Inizio</th>
+                            <th class="cell100 column2">Fine</th>
+                            <th class="cell100 column2">Tipo</th>
                         </tr>
                         </thead>
                     </table>
@@ -118,14 +80,10 @@
                         <tbody>
 
                         <%
-                            //@TODO Centrare i risultati nelle colonne
                             Controller controller = new Controller();
                             ArrayList<Room> r = controller.showCompleteDB_Prof();
-
                             for (int i = 0; i < r.size(); i++){%>
-
                             <tr><td><%=r.get(i).getNome()%></td><td><%=r.get(i).getDatapr()%></td><td><%=r.get(i).getInizio()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getTipopr()%></td></tr>
-
                         <%
                         }
                         %>

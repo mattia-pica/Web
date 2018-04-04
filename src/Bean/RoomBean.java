@@ -2,6 +2,22 @@ package Bean;
 
 public class RoomBean {
 
+    private String nome;
+    private String tipopr;
+    private String datapr;
+    private String inizio;
+    private String fine;
+    private String fromp;
+
+    /*public RoomBean(String nome, String tipopr, String datapr, String inizio, String fine, String fromp) {
+        this.nome = "";
+        this.tipopr = "";
+        this.datapr = "";
+        this.inizio = "";
+        this.fine = "";
+        this.fromp = "";
+    }*/
+
     public String getNome() {
         return nome;
     }
@@ -50,20 +66,8 @@ public class RoomBean {
         this.fromp = fromp;
     }
 
-    public RoomBean(String nome, String tipopr, String datapr, String inizio, String fine, String fromp) {
-        this.nome = "";
-        this.tipopr = "";
-        this.datapr = "";
-        this.inizio = "";
-        this.fine = "";
-        this.fromp = "";
-    }
 
-    private String nome;
-    private String tipopr;
-    private String datapr;
-    private String inizio;
-    private String fine;
-    private String fromp;
+
+
 
 }

@@ -73,17 +73,15 @@
                     <table>
                         <thead>
                         <tr class="row100 head">
-                            <th class="cell100 column1">Nome</th>
-                            <th class="cell100 column1">Data</th>
-                            <th class="cell100 column1">Inizio</th>
-                            <th class="cell100 column1">Fine</th>
-                            <th class="cell100 column1">Tipo</th>
-
+                            <th class="cell100 column2">Nome</th>
+                            <th class="cell100 column2">Data</th>
+                            <th class="cell100 column2">Inizio</th>
+                            <th class="cell100 column2">Fine</th>
+                            <th class="cell100 column2">Tipo</th>
                         </tr>
                         </thead>
                     </table>
                 </div>
-
                 <div class="table100-body js-pscroll" style="height:300px;overflow:auto;">
                     <%--style="height:300px;overflow:auto;" Scroll nella table--%>
                     <table id="table" >
@@ -98,11 +96,13 @@
                         <tr><td><%=r.get(i).getNome()%></td><td><%=r.get(i).getDatapr()%></td><td><%=r.get(i).getInizio()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getTipopr()%></td></tr>
 
                         <%
+                                //@TODO MANCA BOTTONE PER TORNARE INDIETRO
                             }
                         %>
                         </tbody>
                     </table>
                 </div>
+
             </div>
         </div>
     </div>

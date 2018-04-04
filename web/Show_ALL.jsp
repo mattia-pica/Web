@@ -1,14 +1,21 @@
 <%--
   Created by IntelliJ IDEA.
   User: mattia
+  Date: 27/03/18
+  Time: 16.36
+  To change this template use File | Settings | File Templates.
+--%>
+<%--
+  Created by IntelliJ IDEA.
+  User: mattia
   Date: 23/03/18
   Time: 10.09
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="Control.Controller" %>
 <%@ page import="java.time.LocalTime" %>
-<%@ page import="Bean.Disponible_RoomBean" %>
-<%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="Entity.Room" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
@@ -16,15 +23,7 @@
 
 <!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
 
-<%
-    Controller controller = new Controller();
 
-    if(request.getParameter("submit_show_aule_secr") != null){
-
-        response.sendRedirect("ShowAule_Secretary.jsp");
-
-    }
-%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -64,7 +63,30 @@
     <div class="container-table100">
         <div class="wrap-table100">
             <div class="login100-form-title" style="background-image: url(login/images/bg-01.jpg);">
+                <!-- The popup -->
+                <div id="myModal" class="modal">
 
+                    <!-- Modal content -->
+                    <div class="modal-content-login">
+                        <span class="close">&times;</span>
+
+
+                        <div class="login-right">
+                            <h2>Prenotazione</h2>
+                            <br>
+                            <%-- <p><b>I'm already an ESHOP user</b><br>Enter your e-mail address and password to log into the website.</p>--%>
+                            <form>
+                                <div class="contact-right">
+                                    <input class="login100-form-btn" type="submit"  name="submit_delete" value="Cancella">
+                                </div>
+                                <div class="contact-right">
+                                    <input class="login100-form-btn" type="submit"  name="submit_not_delete" value="Non_cancellare">
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
                 <span class="login100-form-title-1">
 						University of Tor Vergata
 					</span>
@@ -74,47 +96,29 @@
                     <table>
                         <thead>
                         <tr class="row100 head">
-                            <th class="cell100 column1">Nome</th>
+                            <th class="cell100 column2">Nome</th>
+                            <th class="cell100 column2">Data</th>
+                            <th class="cell100 column2">Inizio</th>
+                            <th class="cell100 column2">Fine</th>
+                            <th class="cell100 column2">Per</th>
+                            <th class="cell100 column2">Da</th>
                         </tr>
                         </thead>
                     </table>
                 </div>
 
-                <div class="table100-body js-pscroll">
+                <div class="table100-body js-pscroll" style="height:300px;overflow:auto;">
                     <table id="table" >
                         <tbody>
 
                         <%
-                            if (request.getParameter("submit_search") != null){
+                        Controller controller = new Controller();
+                        ArrayList<Room> r = controller.allPrenotation();
+                            for (int i = 0; i < r.size(); i++){%>
 
-                                Disponible_RoomBean r;
-                                String StartSearch = request.getParameter("start");
-                                String EndSearch = request.getParameter("end");
-                                String Date = request.getParameter("data");
-                                if (StartSearch.isEmpty() || EndSearch.isEmpty() || Date.isEmpty()) {
+                        <tr><td><%=r.get(i).getNome()%></td><td><%=r.get(i).getDatapr()%></td><td><%=r.get(i).getInizio()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getTipopr()%></td><td><%=r.get(i).getFromp()%></td></tr>
 
-                                    String info = "alert('Completare tutti i campi!');";
-                                    out.println("<script type=\"text/javascript\">");
-                                    out.println(info);
-                                    out.println("location='secretaryPage.jsp';");
-                                    out.println("</script>");
-                                }else {
-
-                                    String DateSearch = Date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-                                    LocalTime timeInizio = LocalTime.parse(StartSearch);
-                                    LocalTime timeFine = LocalTime.parse(EndSearch);
-                                    r = controller.show(timeInizio, timeFine, DateSearch);
-                                    for (int i = 0; i < r.getNome().size(); i++){%>
-                                    <tr><td><%=r.getNome().get(i)%></td><td><button name="" type="submit" onclick="window.location.href='/Secr_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td></tr>
-                                <%
-                                            }
-                                }
-
-                            }
-
-                            if(request.getParameter("submit_show_prenotation") != null){
-
-                                response.sendRedirect("Show_ALL.jsp");
+                        <%
                             }
                         %>
                         </tbody>
@@ -154,10 +158,11 @@
                     Mostra Aule
                 </button>
                 <button class="login100-form-btn" type="submit" name="submit_show_aule_secr" value="Show">
-                Mostra Mie Prenotazioni
-            </button>
+                    Mostra Mie Prenotazioni
+                </button>
 
             </div>
+
         </form>
     </div>
 </div>
@@ -179,14 +184,6 @@
 <!--===============================================================================================-->
 <script src="js/main.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-<%--QUANDO SI CLICCA SULLA TEXTFIELD ALTRO VENGONO DISATTIVATI I RADIO BUTTON--%>
-<script>
-    $('#textInput').click(function () {
-        $('input[type=radio]').removeAttr("checked");
-
-    });
-</script>
 
 </body>
 </html>

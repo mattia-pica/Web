@@ -30,14 +30,20 @@
         out.println("location='index.jsp';");
         out.println("</script>");
       }else {
+
         if(loginBean.validate()) {
+
           User user = UserSingleton.getInstance().getUser();
           if(user.getType().equals("1")){
+
             response.sendRedirect("secretaryPage.jsp");
             System.out.println("Segretaria");
+
           }else{
+
             response.sendRedirect("profPage.jsp");
           }
+
         }else {
           String info = "alert('Username o password incorretti!');";
           out.println("<script type=\"text/javascript\">");
