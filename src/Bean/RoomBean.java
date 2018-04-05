@@ -9,6 +9,16 @@ public class RoomBean {
     private String fine;
     private String fromp;
 
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    private int ID;
+
     /*public RoomBean(String nome, String tipopr, String datapr, String inizio, String fine, String fromp) {
         this.nome = "";
         this.tipopr = "";

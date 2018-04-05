@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ShowCompleteDB_Prof {
+public class ShowCompleteDB {
 
     public static ArrayList<Room> show_completeDB(){
 
@@ -33,6 +33,7 @@ public class ShowCompleteDB_Prof {
                 room.setDatapr(rs.getString("datapr"));
                 room.setInizio(rs.getString("inizio"));
                 room.setFine(rs.getString("fine"));
+                room.setID(rs.getInt("ID"));
                 //room.setFromp(user.getUsername());
 
                 rooms.add(room);

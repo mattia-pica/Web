@@ -8,7 +8,6 @@
 <%@ page import="Control.Controller" %>
 <%@ page import="java.time.LocalTime" %>
 <%@ page import="Bean.Disponible_RoomBean" %>
-<%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
@@ -80,18 +79,20 @@
                     </table>
                 </div>
 
-                <div class="table100-body js-pscroll">
+                <div class="table100-body js-pscroll" style="overflow:auto;">
                     <table id="table" >
                         <tbody>
 
                         <%
                             if (request.getParameter("submit_search") != null){
 
+                                //@TODO aggiungere controllo sui formati dei dati inseriti nelle textfield
+
                                 Disponible_RoomBean r;
                                 String StartSearch = request.getParameter("start");
                                 String EndSearch = request.getParameter("end");
-                                String Date = request.getParameter("data");
-                                if (StartSearch.isEmpty() || EndSearch.isEmpty() || Date.isEmpty()) {
+                                String DateSearch = request.getParameter("data");
+                                if (StartSearch.isEmpty() || EndSearch.isEmpty() || DateSearch.isEmpty()) {
 
                                     String info = "alert('Completare tutti i campi!');";
                                     out.println("<script type=\"text/javascript\">");
@@ -100,22 +101,26 @@
                                     out.println("</script>");
                                 }else {
 
-                                    String DateSearch = Date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                                    //String DateSearch = Date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                                     LocalTime timeInizio = LocalTime.parse(StartSearch);
                                     LocalTime timeFine = LocalTime.parse(EndSearch);
                                     r = controller.show(timeInizio, timeFine, DateSearch);
                                     for (int i = 0; i < r.getNome().size(); i++){%>
-                                    <tr><td><%=r.getNome().get(i)%></td><td><button name="" type="submit" onclick="window.location.href='/Secr_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td></tr>
-                                <%
+                                    <tr><td><%=r.getNome().get(i)%></td><td><button class="login100-form-btn" name="" type="submit" onclick="window.location.href='/Secr_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button>
+
+                        <%
                                             }
                                 }
-
                             }
 
                             if(request.getParameter("submit_show_prenotation") != null){
-
                                 response.sendRedirect("Show_ALL.jsp");
                             }
+
+                            if(request.getParameter("submit_modify") != null){
+                                response.sendRedirect("Modify_Secr.jsp");
+                            }
+
                         %>
                         </tbody>
                     </table>
@@ -144,18 +149,18 @@
                 <span class="focus-input100"></span>
             </div>
             <div class="container-login100-form-btn">
-                <button class="login100-form-btn" type="submit"<%-- onclick="showBtn()"--%> name="submit_search" value="Search">
+                <button class="login100-form-btn" type="submit" name="submit_search" value="Search">
                     Search
                 </button>
                 <button class="login100-form-btn" type="submit" name="submit_show_prenotation" value="Show">
                     Mostra Prenotazioni
                 </button>
-                <button class="login100-form-btn" type="submit" name="submit_show_aule" value="Show">
-                    Mostra Aule
-                </button>
                 <button class="login100-form-btn" type="submit" name="submit_show_aule_secr" value="Show">
                 Mostra Mie Prenotazioni
             </button>
+                <button class="login100-form-btn" type="submit" name="submit_modify" value="Modify">
+                    Modifica Prenotazione
+                </button>
 
             </div>
         </form>
@@ -180,7 +185,7 @@
 <script src="js/main.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
-<%--QUANDO SI CLICCA SULLA TEXTFIELD ALTRO VENGONO DISATTIVATI I RADIO BUTTON--%>
+<%--QUANDO SI CLICCA SULLA TEXTFIELD 'ALTRO' VENGONO DISATTIVATI I RADIO BUTTON--%>
 <script>
     $('#textInput').click(function () {
         $('input[type=radio]').removeAttr("checked");

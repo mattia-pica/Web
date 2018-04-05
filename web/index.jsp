@@ -18,7 +18,7 @@
 
 <%
 
-  if (request.getParameter("submit_login") != null){
+  if (request.getParameter("submit_"+"1") != null){
 
       String username = request.getParameter("username");
       String password = request.getParameter("password");
@@ -111,7 +111,7 @@
         </div>
 
         <div class="container-login100-form-btn">
-          <button class="login100-form-btn" type="submit" style="margin-left: 50px;" name="submit_login" value="Login">
+          <button class="login100-form-btn" type="submit" style="margin-left: 50px;" name="submit_1" value="Login">
             Login
           </button>
         </div>

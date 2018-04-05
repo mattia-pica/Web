@@ -37,8 +37,8 @@ public class Controller {
 
     //--------------PRENOTAZIONI EFFETTUATE PROFESSORE---------------//
 
-    public ArrayList<Room> showCompleteDB_Prof(){
-        ArrayList<Room> rooms = ShowCompleteDB_Prof.show_completeDB();
+    public ArrayList<Room> showComplete_DB(){
+        ArrayList<Room> rooms = ShowCompleteDB.show_completeDB();
         return rooms;
     }
 
@@ -75,6 +75,15 @@ public class Controller {
         deleteThenInsert.deleteThenInsert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota);
 
         return true;
+    }
+
+    //-----------------------MODIFICA PRENOTAZIONE------------------//
+
+    public boolean modify(String ID, LocalTime start, LocalTime end, String date, String type){
+
+        Modify modify = new Modify();
+        return modify.modify(ID, start, end, date, type);
+
     }
 
     //--------------------CREAZIONE SINGLETON--------------------//

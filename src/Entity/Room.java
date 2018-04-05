@@ -10,6 +10,16 @@ public class Room {
     private String fine;
     private String fromp;
 
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    private int ID;
+
     public String getNome() {
         return nome;
     }

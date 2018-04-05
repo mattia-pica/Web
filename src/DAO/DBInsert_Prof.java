@@ -1,11 +1,7 @@
 package DAO;
 
-import Control.Controller;
 import Utils.UserSingleton;
-
-import java.lang.annotation.Documented;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalTime;
 
@@ -29,7 +25,6 @@ public class DBInsert_Prof extends DB_Connection_Aule {
             Statement statement = conn_Aule.createStatement();
             ResultSet rs = statement.executeQuery(controlQuery);
             if (rs.next()) {
-                //@TODO Gestione Entry duplicata nel database
                 System.out.println("duplicate");
                 return false;
             } else {

@@ -69,6 +69,8 @@
                             <th class="cell100 column2">Inizio</th>
                             <th class="cell100 column2">Fine</th>
                             <th class="cell100 column2">Tipo</th>
+                            <th class="cell100 column2">ID</th>
+
                         </tr>
                         </thead>
                     </table>
@@ -81,9 +83,9 @@
 
                         <%
                             Controller controller = new Controller();
-                            ArrayList<Room> r = controller.showCompleteDB_Prof();
+                            ArrayList<Room> r = controller.showComplete_DB();
                             for (int i = 0; i < r.size(); i++){%>
-                            <tr><td><%=r.get(i).getNome()%></td><td><%=r.get(i).getDatapr()%></td><td><%=r.get(i).getInizio()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getTipopr()%></td></tr>
+                            <tr><td><%=r.get(i).getNome()%></td><td><%=r.get(i).getDatapr()%></td><td><%=r.get(i).getInizio()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getTipopr()%></td><td><%=r.get(i).getID()%></td></tr>
                         <%
                         }
                         %>

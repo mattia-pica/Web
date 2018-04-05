@@ -29,6 +29,7 @@ public class All_Prenotation {
                 rooms.setInizio(rs.getString("inizio"));
                 rooms.setFine(rs.getString("fine"));
                 rooms.setFromp(rs.getString("fromp"));
+                rooms.setID(rs.getInt("ID"));
                 room.add(rooms);
             }
             connection2.close();

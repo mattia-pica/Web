@@ -1,22 +1,16 @@
 <%--
   Created by IntelliJ IDEA.
   User: mattia
-  Date: 27/03/18
-  Time: 15.15
+  Date: 05/04/18
+  Time: 12.32
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="Control.Controller" %>
+<%@ page import="Entity.Room" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.time.LocalTime" %>
-<%@ page import="Bean.RoomBean" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-<!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
-<jsp:useBean id="roomBean" class="Bean.RoomBean" scope="session"/>
-
-<!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
-<jsp:setProperty name="roomBean" property="*"/>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -64,12 +58,12 @@
                         <span class="close">&times;</span>
 
                         <div class="login-right">
-                            <h2>La prenotazione inserita va in conflitto con prenotazioni già inserite!</h2>
+                            <h2>I dati inseriti per la modifica vanno in conflitto con prenotazioni già inserite!</h2>
                             <br>
                             <form>
                                 <div class="contact-right">
-                                    <input class="login100-form-btn" type="submit" name="submit_delete" value="Cancella">
-                                    <input class="login100-form-btn" type="submit" name="submit_not_delete" value="Non_cancellare">
+                                    <input class="login100-form-btn" type="submit" name="submit_delete" value="Modifica e cancella prenotazioni ">
+                                    <input class="login100-form-btn" type="submit" name="submit_not_delete" value="Non modificare">
                                 </div>
                             </form>
                         </div>
@@ -99,115 +93,6 @@
                     }
                 </script>
 
-                <%
-                    String name = request.getParameter("aula");
-                    boolean Response;
-                    Controller controller = new Controller();
-
-                    if (request.getParameter("submit_prenotation") != null){
-
-                        roomBean.setNome(name);
-
-                        String typePR;
-                        LocalTime startPR;
-                        LocalTime endPR;
-                        String date;
-
-                        if(request.getParameter("typePR") == null){
-
-                            typePR = request.getParameter("altroPRtext");
-                            String start = request.getParameter("startPR");
-                            String end = request.getParameter("endPR");
-                            date = request.getParameter("datePR");
-                            if (start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
-
-                                String info = "alert('Completare tutti i campi!');";
-                                out.println("<script type=\"text/javascript\">");
-                                out.println(info);
-                                out.println("location='Secr_Prenotation.jsp';");
-                                out.println("</script>");
-                            }
-
-                            roomBean.setInizio(start);
-                            roomBean.setFine(end);
-                            roomBean.setDatapr(date);
-                            roomBean.setTipopr(typePR);
-
-                            startPR = LocalTime.parse(start);
-                            endPR = LocalTime.parse(end);
-                            Response = controller.newPrenotationSecretary(name, typePR, date, startPR, endPR);
-                            System.out.println(typePR + " " + start + " " + end + " " + date);
-                        }else{
-                            typePR = request.getParameter("typePR");
-                            String start = request.getParameter("startPR");
-                            String end = request.getParameter("endPR");
-                            date = request.getParameter("datePR");
-
-                            if (start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
-
-                                String info = "alert('Completare tutti i campi!');";
-                                out.println("<script type=\"text/javascript\">");
-                                out.println(info);
-                                out.println("location='Secr_Prenotation.jsp';");
-                                out.println("</script>");
-                            }
-
-                            roomBean.setInizio(start);
-                            roomBean.setFine(end);
-                            roomBean.setDatapr(date);
-                            roomBean.setTipopr(typePR);
-
-                            startPR = LocalTime.parse(start);
-                            endPR = LocalTime.parse(end);
-                            Response = controller.newPrenotationSecretary(name, typePR, date, startPR, endPR);
-
-                            System.out.println(typePR + " " + start + " " + end + " " + date);
-
-                        }
-
-                        if (Response) {
-
-                            String info = "alert('Prenotata " + name + "');";
-                            out.println("<script type=\"text/javascript\">");
-                            out.println(info);
-                            out.println("location='secretaryPage.jsp';");
-                            out.println("</script>");
-                            
-                        }else {
-                %>
-                <script type="text/javascript">
-                    showDiv();
-                </script>
-                <%
-                        }
-                %>
-
-                <%
-                    }
-
-                    if(request.getParameter("submit_delete") != null){
-
-                        System.out.println("arrivato");
-                        System.out.println(roomBean.getTipopr());
-
-                        Response = controller.deleteThenInsert(roomBean.getNome(), roomBean.getTipopr(), roomBean.getDatapr(),
-                                LocalTime.parse(roomBean.getInizio()), LocalTime.parse(roomBean.getFine()));
-                        System.out.println(Response);
-
-                        if (Response){
-
-                        }
-                    }
-                    if(request.getParameter("submit_not_delete") != null){
-
-                        out.println("<script type=\"text/javascript\">");
-                        out.println("alert('Operazione annullata');");
-                        out.println("location=secretaryPage.jsp';");
-                        out.println("</script>");
-
-                    }
-
-                %>
                 <span class="login100-form-title-1">
 						University of Tor Vergata
 					</span>
@@ -217,31 +102,131 @@
                     <table>
                         <thead>
                         <tr class="row100 head">
-                            <th class="cell100 column1">Nuova prenotazione per l' <%=request.getParameter("aula")%></th>
+                            <th class="cell100 column2">Nome</th>
+                            <th class="cell100 column2">Data</th>
+                            <th class="cell100 column2">Start</th>
+                            <th class="cell100 column2">End</th>
+                            <th class="cell100 column2">Type</th>
                         </tr>
                         </thead>
                     </table>
                 </div>
+
+                <div class="table100-body js-pscroll" style="height:300px;overflow:auto;">
+                    <table id="table" >
+                        <tbody>
+
+                        <%
+                            Controller controller = new Controller();
+                            ArrayList<Room> r = controller.showComplete_DB();
+                            for (int i = 0; i < r.size(); i++){%>
+                        <tr><td><%=r.get(i).getNome()%></td><td><%=r.get(i).getDatapr()%></td><td><%=r.get(i).getInizio()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getTipopr()%></td><td><%=r.get(i).getID()%></td></tr>
+                        <%
+                            }
+
+                            if (request.getParameter("submit_modify") != null) {
+
+                                boolean Response = false;
+
+                                String ID;
+                                String typePR;
+                                LocalTime startPR;
+                                LocalTime endPR;
+                                String date;
+
+                                if (request.getParameter("typePR") == null) {
+
+                                    ID = request.getParameter("ID");
+                                    typePR = request.getParameter("altroPRtext");
+                                    String start = request.getParameter("startPR");
+                                    String end = request.getParameter("endPR");
+                                    date = request.getParameter("datePR");
+
+                                    if (ID.isEmpty() || start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
+
+                                        String info = "alert('Completare tutti i campi!');";
+                                        out.println("<script type=\"text/javascript\">");
+                                        out.println(info);
+                                        out.println("location='Modify_Secr.jsp';");
+                                        out.println("</script>");
+
+                                    } else {
+
+                                        startPR = LocalTime.parse(start);
+                                        endPR = LocalTime.parse(end);
+                                        Response = controller.modify(ID, startPR, endPR, date, typePR);
+                                    }
+                                } else {
+
+                                    ID = request.getParameter("ID");
+                                    typePR = request.getParameter("typePR");
+                                    String start = request.getParameter("startPR");
+                                    String end = request.getParameter("endPR");
+                                    date = request.getParameter("datePR");
+
+                                    if (ID.isEmpty() || start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
+
+                                        String info = "alert('Completare tutti i campi!');";
+                                        out.println("<script type=\"text/javascript\">");
+                                        out.println(info);
+                                        out.println("location='Modify_Secr.jsp';");
+                                        out.println("</script>");
+                                    } else {
+
+                                        startPR = LocalTime.parse(start);
+                                        endPR = LocalTime.parse(end);
+                                        Response = controller.modify(ID, startPR, endPR, date, typePR);
+                                    }
+                                }
+
+                                if (Response) {
+
+                                    out.println("<script type=\"text/javascript\">");
+                                    out.println("alert('Prenotazione Modificata');");
+                                    out.println("location='Modify_Secr.jsp';");
+                                    out.println("</script>");
+
+                                } else {%>
+
+                                    <script type="text/javascript">
+                                        showDiv();
+                                    </script>
+                                <%
+                                }
+
+                            }
+
+                        %>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+
         <form action="" method="post" class="login100-form validate-form">
+
+            <div class="wrap-input100 validate-input m-b-18" data-validate ="id">
+                <span class="label-input100">ID</span>
+                <input class="input100" type="text" name="ID" placeholder="Prenotation ID">
+                <span class="focus-input100"></span>
+            </div>
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Start">
                 <span class="label-input100">Start</span>
-                <input class="input100" type="text" name="startPR" placeholder="Start" <%--onfocus="myFunction(this)"--%>>
+                <input class="input100" type="text" name="startPR" placeholder="Start">
                 <span class="focus-input100"></span>
             </div>
 
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
                 <span class="label-input100">End</span>
-                <input class="input100" type="text" name="endPR" placeholder="End" <%--onfocus="myFunction(this)"--%>>
+                <input class="input100" type="text" name="endPR" placeholder="End">
                 <span class="focus-input100"></span>
             </div>
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Date">
                 <span class="label-input100">Date</span>
-                <input class="input100" type="text" name="datePR" placeholder="Date" <%--onfocus="myFunction(this)"--%>>
+                <input class="input100" type="text" name="datePR" placeholder="Date">
                 <span class="focus-input100"></span>
             </div>
             <div class="wrap-input100 validate-input m-b-18">
@@ -263,10 +248,11 @@
                 <span class="focus-input100"></span>
             </div>
             <div class="container-login100-form-btn">
-                <div class="contact-right">
-                    <input class="login100-form-btn" type="submit" name="submit_prenotation" value="Prenota">
-                </div>
+                <button class="login100-form-btn" type="submit" name="submit_modify" value="Modify">
+                    Modifica Prenotazione
+                </button>
             </div>
+
         </form>
     </div>
 </div>
@@ -288,15 +274,6 @@
 <!--===============================================================================================-->
 <script src="js/main.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-
-<%--QUANDO SI CLICCA SULLA TEXTFIELD ALTRO VENGONO DISATTIVATI I RADIO BUTTON--%>
-<script>
-    $('#textInput').click(function () {
-        $('input[type=radio]').removeAttr("checked");
-
-    });
-</script>
 
 </body>
 </html>

@@ -211,21 +211,16 @@
                                     for (int i = 0; i < r.getNome().size(); i++ ){%>
                             <tr><td><%=r.getNome().get(i)%></td><td><button name="" type="submit" onclick="window.location.href='/Prof_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td></tr>
 
-                            <%--
-                                    <tr><td><%=r.getNome().get(i)%></td></tr><td><button name="" type="submit" onclick="window.location.href='/Prof_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td>
---%>
-
-                            <%--reply_click(this.id)--%>
-                            <%--/*c = r.getNome().get(i);
-                                        String s = "<td><form><a href=\"javascript:showDiv();\">Prenota</a>\n</form></td>";
-                                        out.print("<tr class=\"row100 body\">");
-                                        out.print("<td class=\"cell100 column1\">" + c + s + "</td>");*/--%>
                             <%
                                     }
                                 }
                                 if(request.getParameter("submit_show") != null){
 
                                     response.sendRedirect("ShowAule_Professore.jsp");
+                                }
+
+                                if(request.getParameter("submit_modify") != null){
+                                    response.sendRedirect("Modify_Prof.jsp");
                                 }
                             %>
                             </tbody>
@@ -255,12 +250,15 @@
                 <span class="focus-input100"></span>
             </div>
             <div class="container-login100-form-btn">
-                <button class="login100-form-btn" type="submit"<%-- onclick="showBtn()"--%> name="submit_search" value="Search">
+                <button class="login100-form-btn" type="submit" name="submit_search" value="Search">
                     Search
                 </button>
                     <button class="login100-form-btn" type="submit" name="submit_show" value="Show">
                         Mostra Mie Prenotazioni
                     </button>
+                <button class="login100-form-btn" type="submit" name="submit_modify" value="Modify">
+                    Modifica Prenotazione
+                </button>
 
             </div>
 

@@ -18,6 +18,8 @@ public class ShowDatabase_Prof {
 
     public static Disponible_RoomBean show_prof(LocalTime timeInizio, LocalTime timeFine, String dateSearch){
 
+        System.out.println(timeFine + " " + timeFine + " " + dateSearch);
+
         /*DB_Connection_Aule connection = new DB_Connection_Aule();
         Connection connection1 = connection.connect_Aule();*/
         java.sql.Statement stmt = null;
@@ -47,11 +49,6 @@ public class ShowDatabase_Prof {
             }
 
             disponible_roomBean = new Disponible_RoomBean(rooms);
-
-            /*if(rs.next()){
-                String nome = rs.getString("nome");
-                Classrooms.add(new Disponible_RoomBean(rs.getString(1)));
-            }*/
 
             // STEP 6: Clean-up dell'ambiente
             rs.close();
