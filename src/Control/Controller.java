@@ -5,6 +5,7 @@ import DAO.*;
 import Entity.Room;
 import Entity.User;
 import Utils.UserSingleton;
+import org.omg.CORBA.PUBLIC_MEMBER;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -62,8 +63,7 @@ public class Controller {
                                            LocalTime timeFinePrenota){
         DBInsert_Secretary dbInsert_secretary = new DBInsert_Secretary();
         boolean response = dbInsert_secretary.insert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota);
-        if (response) return true;
-        else return false;
+        return response;
     }
 
     //------------------CANCELLA PRENOTAZIONI GIÀ ESISTENTI CHE DANNO CONFLITTO E POI INSERISCI LA NUOVA PRENOTAZIONE-------------//
@@ -84,6 +84,28 @@ public class Controller {
         Modify modify = new Modify();
         return modify.modify(ID, start, end, date, type);
 
+    }
+
+    //------------------CANCELLA PRENOTAZIONI GIÀ ESISTENTI CHE DANNO CONFLITTO E POI AGGIORNA LA PRENOTAZIONE SELEZIONATA-------------//
+
+    public boolean deleteThenUpdate(String id, LocalTime start, LocalTime end, String date, String type){
+
+        DeleteThenUpdate deleteThenUpdate = new DeleteThenUpdate();
+        return deleteThenUpdate.deletethenUpdate(id, start, end, date, type);
+
+    }
+
+    public boolean duplicateControl(String dataPrenota, LocalTime timeInizioPrenota, LocalTime timeFinePrenota){
+
+        EntryController entryController = new EntryController();
+        return entryController.duplicateController(dataPrenota, timeInizioPrenota, timeFinePrenota);
+
+    }
+
+    public boolean emptyControl(String name){
+
+        EntryController entryController = new EntryController();
+        return entryController.emptyController(name);
     }
 
     //--------------------CREAZIONE SINGLETON--------------------//

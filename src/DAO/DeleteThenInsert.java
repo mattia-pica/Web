@@ -17,6 +17,8 @@ public class DeleteThenInsert {
 
         try {
 
+            Statement statement = conn_Aule.createStatement();
+
             //----------------DUPLICATE ENTRY: SI CANCELLANO LE AULE CHE DANNO FASTIDIO ALLA NUOVA
 
             String deleteSecretary = "DELETE FROM dbEsame.Aule WHERE datapr='" + dataPrenota + "'" +
@@ -26,23 +28,19 @@ public class DeleteThenInsert {
                     "OR ((inizio<='" + timeInizioPrenota + "' AND fine>='" + timeInizioPrenota + "')" +
                     " AND (fine>='" + timeFinePrenota + "' AND inizio<='" + timeFinePrenota + "')))";
 
-            DB_Connection_Aule db_connection_aule1 = new DB_Connection_Aule();
-            db_connection_aule1.connect_Aule();
-            Statement statement1 = conn_Aule.createStatement();
-            statement1.executeUpdate(deleteSecretary);
 
-            //----------------PRENOTAZIONE SEGRETARIA-----------------------//
+            statement.executeUpdate(deleteSecretary);
+
+            //----------------INSERIMENTO PRENOTAZIONE SEGRETARIA-----------------------//
 
             String insertSecretary = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) " +
                     "VALUES " + "('" + nameAula + "','" + tipoPrenota + "','" + dataPrenota + "','"
                     + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";
-            DB_Connection_Aule db_connection_aule2 = new DB_Connection_Aule();
-            db_connection_aule2.connect_Aule();
-            Statement statement2 = conn_Aule.createStatement();
-            statement2.executeUpdate(insertSecretary);
 
-            statement1.close();
-            statement2.close();
+            statement.executeUpdate(insertSecretary);
+
+            statement.close();
+
 
         }catch (Exception e){
             e.printStackTrace();

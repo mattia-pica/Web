@@ -11,6 +11,11 @@
 <%@ page import="java.time.LocalTime" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
+<jsp:useBean id="roomBean" class="Bean.RoomBean" scope="session"/>
+
+<!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
+<jsp:setProperty name="roomBean" property="*"/>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -118,7 +123,7 @@
 
                         <%
                             Controller controller = new Controller();
-                            ArrayList<Room> r = controller.showComplete_DB();
+                            ArrayList<Room> r = controller.allPrenotation();
                             for (int i = 0; i < r.size(); i++){%>
                         <tr><td><%=r.get(i).getNome()%></td><td><%=r.get(i).getDatapr()%></td><td><%=r.get(i).getInizio()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getTipopr()%></td><td><%=r.get(i).getID()%></td></tr>
                         <%
@@ -128,7 +133,7 @@
 
                                 boolean Response = false;
 
-                                String ID;
+                                String ID  = request.getParameter("ID");
                                 String typePR;
                                 LocalTime startPR;
                                 LocalTime endPR;
@@ -136,11 +141,15 @@
 
                                 if (request.getParameter("typePR") == null) {
 
-                                    ID = request.getParameter("ID");
                                     typePR = request.getParameter("altroPRtext");
                                     String start = request.getParameter("startPR");
                                     String end = request.getParameter("endPR");
                                     date = request.getParameter("datePR");
+
+                                    roomBean.setInizio(start);
+                                    roomBean.setFine(end);
+                                    roomBean.setDatapr(date);
+                                    roomBean.setTipopr(typePR);
 
                                     if (ID.isEmpty() || start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
 
@@ -154,15 +163,21 @@
 
                                         startPR = LocalTime.parse(start);
                                         endPR = LocalTime.parse(end);
+
                                         Response = controller.modify(ID, startPR, endPR, date, typePR);
+
                                     }
                                 } else {
 
-                                    ID = request.getParameter("ID");
                                     typePR = request.getParameter("typePR");
                                     String start = request.getParameter("startPR");
                                     String end = request.getParameter("endPR");
                                     date = request.getParameter("datePR");
+
+                                    roomBean.setInizio(start);
+                                    roomBean.setFine(end);
+                                    roomBean.setDatapr(date);
+                                    roomBean.setTipopr(typePR);
 
                                     if (ID.isEmpty() || start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
 
@@ -171,6 +186,7 @@
                                         out.println(info);
                                         out.println("location='Modify_Secr.jsp';");
                                         out.println("</script>");
+
                                     } else {
 
                                         startPR = LocalTime.parse(start);
@@ -186,7 +202,9 @@
                                     out.println("location='Modify_Secr.jsp';");
                                     out.println("</script>");
 
-                                } else {%>
+                                } else {
+
+                        %>
 
                                     <script type="text/javascript">
                                         showDiv();
@@ -194,6 +212,34 @@
                                 <%
                                 }
 
+                                if (request.getParameter("submit_delete") != null ){
+
+                                    //@todo qua dentro non ci entra maiiiiiiiiiiii?!?!?!?!?!?
+
+                                    System.out.println("arrivato");
+
+                                    Response = controller.deleteThenUpdate(ID, LocalTime.parse(roomBean.getInizio()),
+                                            LocalTime.parse(roomBean.getFine()), roomBean.getDatapr(), roomBean.getTipopr());
+
+                                    if (Response){
+
+                                        /*@TODO Completare la cancellazione nel caso d'uso modify
+                                            Quando c'è una prenotazione che va in conflitto, vanno cancellate e aggiornata quella da modificafare
+                                         */
+
+
+                                        out.println("<script type=\"text/javascript\">");
+                                        out.println("alert('Prenotazione Modificata');");
+                                        out.println("location='Modify_Secr.jsp';");
+                                        out.println("</script>");
+
+                                    }else {
+                                        out.println("<script type=\"text/javascript\">");
+                                        out.println("alert('ERRORE');");
+                                        out.println("location='Modify_Secr.jsp';");
+                                        out.println("</script>");
+                                    }
+                                }
                             }
 
                         %>
@@ -274,6 +320,14 @@
 <!--===============================================================================================-->
 <script src="js/main.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<%--QUANDO SI CLICCA SULLA TEXTFIELD ALTRO VENGONO DISATTIVATI I RADIO BUTTON--%>
+<script>
+    $('#textInput').click(function () {
+        $('input[type=radio]').removeAttr("checked");
+
+    });
+</script>
 
 </body>
 </html>

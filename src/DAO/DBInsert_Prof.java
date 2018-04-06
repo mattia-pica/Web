@@ -41,7 +41,7 @@ public class DBInsert_Prof extends DB_Connection_Aule {
                 DB_Connection_Aule db_connection_aule1 = new DB_Connection_Aule();
                 db_connection_aule1.connect_Aule();
                 statement.executeUpdate(QUERYprof);
-                return true;
+                statement.close();
             }
         } catch (Exception ex) {
             System.err.println(ex);

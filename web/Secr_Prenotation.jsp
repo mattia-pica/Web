@@ -167,7 +167,7 @@
 
                         if (Response) {
 
-                            String info = "alert('Prenotata " + name + "');";
+                            String info = "alert('Prenotazione Effettuata con successo');";
                             out.println("<script type=\"text/javascript\">");
                             out.println(info);
                             out.println("location='secretaryPage.jsp';");
@@ -187,14 +187,17 @@
 
                     if(request.getParameter("submit_delete") != null){
 
-                        System.out.println("arrivato");
-                        System.out.println(roomBean.getTipopr());
-
                         Response = controller.deleteThenInsert(roomBean.getNome(), roomBean.getTipopr(), roomBean.getDatapr(),
                                 LocalTime.parse(roomBean.getInizio()), LocalTime.parse(roomBean.getFine()));
                         System.out.println(Response);
 
                         if (Response){
+
+                            String info = "alert('Prenotata " + name + "');";
+                            out.println("<script type=\"text/javascript\">");
+                            out.println(info);
+                            out.println("location='secretaryPage.jsp';");
+                            out.println("</script>");
 
                         }
                     }
@@ -228,20 +231,20 @@
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Start">
                 <span class="label-input100">Start</span>
-                <input class="input100" type="text" name="startPR" placeholder="Start" <%--onfocus="myFunction(this)"--%>>
+                <input class="input100" type="text" name="startPR" placeholder="Start">
                 <span class="focus-input100"></span>
             </div>
 
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
                 <span class="label-input100">End</span>
-                <input class="input100" type="text" name="endPR" placeholder="End" <%--onfocus="myFunction(this)"--%>>
+                <input class="input100" type="text" name="endPR" placeholder="End">
                 <span class="focus-input100"></span>
             </div>
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Date">
                 <span class="label-input100">Date</span>
-                <input class="input100" type="text" name="datePR" placeholder="Date" <%--onfocus="myFunction(this)"--%>>
+                <input class="input100" type="text" name="datePR" placeholder="Date">
                 <span class="focus-input100"></span>
             </div>
             <div class="wrap-input100 validate-input m-b-18">

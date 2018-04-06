@@ -1,8 +1,9 @@
 package DAO;
 
+import Control.Controller;
 import Entity.User;
 import Utils.UserSingleton;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalTime;
@@ -15,38 +16,49 @@ public class DBInsert_Secretary {
                           LocalTime timeFinePrenota){
 
         User user = UserSingleton.getInstance().getUser();
+        Controller controller = new Controller();
 
-        String controlQuery = "SELECT nome FROM dbEsame.Aule " + "WHERE datapr='" + dataPrenota + "'" +  //Controlla se ci sono aule che vanno in conflitto con i criteri inseriti
-                " AND (inizio<='" + timeInizioPrenota + "' AND fine>='" + timeInizioPrenota + "') " +
-                "" + "OR (fine>='" + timeFinePrenota + "' AND inizio<='" + timeFinePrenota + "') " +
-                "OR (inizio>='" + timeInizioPrenota + "' AND fine<='" + timeFinePrenota + "') " +
-                "OR ((inizio<='" + timeInizioPrenota + "' AND fine>='" + timeInizioPrenota + "') " +
-                "AND (fine>='" + timeFinePrenota + "' AND inizio<='" + timeFinePrenota + "'))";
-        try {
-            DB_Connection_Aule db_connection_aule = new DB_Connection_Aule();
-            db_connection_aule.connect_Aule();
-            Statement statement = conn_Aule.createStatement();
-            ResultSet resultSet = statement.executeQuery(controlQuery);
-            if (resultSet.next()){
-                return false;
-            }else {
-                try {
-                    /*DB_Connection_Aule db_connection_aule = new DB_Connection_Aule();
-                    db_connection_aule.connect_Aule();
-                    Statement statement = conn_Aule.createStatement();*/
-                    //ResultSet resultSet = statement.executeQuery(controlQuery);
-                    String insertSecretary = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) " +
-                            "VALUES " + "('" + nameAula + "','" + tipoPrenota + "','" + dataPrenota + "','"
-                            + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";
-                    statement.executeUpdate(insertSecretary);
+        if (controller.emptyControl(nameAula)){
+            try {
 
-                } catch (SQLException ex) {
-                    return false;
-                }
+                Statement statement = conn_Aule.createStatement();
 
+                //Se esistono aule con valore nullo (cioè mai prenotate) cancella quell'entry nel db e
+                // inserisce quella nuova, altrimenti
+                //ce ne sarebbero state due nel DB!
+                String del = "DELETE FROM dbEsame.Aule WHERE nome='" + nameAula + "'AND tipopr IS NULL";
+                statement.executeUpdate(del);
+
+                String insertSecretary = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) " +
+                        "VALUES " + "('" + nameAula + "','" + tipoPrenota + "','" + dataPrenota + "','"
+                        + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";
+                statement.executeUpdate(insertSecretary);
+
+                statement.close();
+
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
-        }catch (SQLException ex1){
-            System.out.println(ex1);
+            return true;
+        }
+        if (!controller.duplicateControl(dataPrenota, timeInizioPrenota, timeFinePrenota)){
+            System.out.println("duplicate");
+            return false;
+
+        }else {
+
+            try {
+                Statement statement = conn_Aule.createStatement();
+
+                String insertSecretary = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) " +
+                        "VALUES " + "('" + nameAula + "','" + tipoPrenota + "','" + dataPrenota + "','"
+                        + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";
+                statement.executeUpdate(insertSecretary);
+                statement.close();
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
         return true;
     }
