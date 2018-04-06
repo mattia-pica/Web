@@ -5,7 +5,6 @@ import DAO.*;
 import Entity.Room;
 import Entity.User;
 import Utils.UserSingleton;
-import org.omg.CORBA.PUBLIC_MEMBER;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -62,8 +61,8 @@ public class Controller {
     public boolean newPrenotationSecretary(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
                                            LocalTime timeFinePrenota){
         DBInsert_Secretary dbInsert_secretary = new DBInsert_Secretary();
-        boolean response = dbInsert_secretary.insert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota);
-        return response;
+        return dbInsert_secretary.insert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota);
+
     }
 
     //------------------CANCELLA PRENOTAZIONI GIÀ ESISTENTI CHE DANNO CONFLITTO E POI INSERISCI LA NUOVA PRENOTAZIONE-------------//

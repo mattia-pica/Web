@@ -24,7 +24,7 @@ public class Modify {
                     + " OR(inizio<='" + start + "'AND fine>='" + end + "'))";
 
             try {
-
+    
                 DB_Connection_Aule db_connection_aule = new DB_Connection_Aule();
                 db_connection_aule.connect_Aule();
                 Statement statement = conn_Aule.createStatement();

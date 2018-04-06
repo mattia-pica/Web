@@ -18,8 +18,6 @@ public class ShowDatabase_Prof {
 
     public static Disponible_RoomBean show_prof(LocalTime timeInizio, LocalTime timeFine, String dateSearch){
 
-        System.out.println(timeFine + " " + timeFine + " " + dateSearch);
-
         /*DB_Connection_Aule connection = new DB_Connection_Aule();
         Connection connection1 = connection.connect_Aule();*/
         java.sql.Statement stmt = null;
@@ -37,10 +35,8 @@ public class ShowDatabase_Prof {
             // STEP 4: creazione ed esecuzione della query
             stmt = conn.createStatement();
             String query ="SELECT DISTINCT nome FROM dbEsame.Aule WHERE nome NOT IN (SELECT nome FROM dbEsame.Aule WHERE datapr='"
-                    +dateSearch+"' AND ((inizio<='"+timeInizio+"' AND fine>='"+timeInizio+"') "+"OR (fine>='"+timeFine
-                    +"' AND inizio<='"+timeFine+"') "+"OR (inizio>='"+timeInizio+"' AND fine<='"+timeFine+"') "+
-                    "OR ((inizio<='"+timeInizio+"' AND fine>='"+timeInizio+"') AND (fine>='"+timeFine+"' AND inizio<='"
-                    +timeFine+"'))))";
+                    +dateSearch+"' AND ((inizio<'"+timeInizio+"' AND fine>'"+timeInizio+"') "+"OR (fine>'"+timeFine
+                    +"' AND inizio<'"+timeFine+"') "+"OR (inizio>'"+timeInizio+"' AND fine<'"+timeFine+"')))";
             ResultSet rs = stmt.executeQuery(query);
 
             ArrayList<String> rooms = new ArrayList<>();
@@ -54,9 +50,6 @@ public class ShowDatabase_Prof {
             rs.close();
             //stmt.close();
             conn.close();
-        } catch (SQLException se) {
-            // Errore durante l'apertura della connessione
-            se.printStackTrace();
         } catch (Exception e) {
             // Errore nel loading del driver
             e.printStackTrace();

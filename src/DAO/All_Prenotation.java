@@ -5,6 +5,7 @@ import Entity.Room;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 
 public class All_Prenotation {
@@ -18,7 +19,11 @@ public class All_Prenotation {
 
         try {
 
-            ResultSet rs = connection2.createStatement().executeQuery("SELECT * FROM dbEsame.Aule");
+            String query = "SELECT * FROM dbEsame.Aule WHERE tipopr IS NOT NULL";
+
+            Statement statement = connection2.createStatement();
+
+            ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
 
                 Room rooms = new Room();

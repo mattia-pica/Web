@@ -24,7 +24,7 @@ public class DBInsert_Secretary {
                 Statement statement = conn_Aule.createStatement();
 
                 //Se esistono aule con valore nullo (cioè mai prenotate) cancella quell'entry nel db e
-                // inserisce quella nuova, altrimenti
+                //inserisce quella nuova, altrimenti
                 //ce ne sarebbero state due nel DB!
                 String del = "DELETE FROM dbEsame.Aule WHERE nome='" + nameAula + "'AND tipopr IS NULL";
                 statement.executeUpdate(del);
