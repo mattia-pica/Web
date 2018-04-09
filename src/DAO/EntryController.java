@@ -1,5 +1,7 @@
 package DAO;
 
+import Utils.Query;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,8 +21,9 @@ public class EntryController {
             Connection connection2 = connection.connect_Aule();
 
             Statement statement = connection2.createStatement();
-            String emptyControl = "SELECT * FROM dbEsame.Aule WHERE nome='" + name + "' AND tipopr IS NULL";
-            ResultSet resultSet = statement.executeQuery(emptyControl);
+            //String emptyControl = "SELECT * FROM dbEsame.Aule WHERE nome='" + name + "' AND tipopr IS NULL";
+
+            ResultSet resultSet = statement.executeQuery(String.format(Query.emptyControl, name));
 
             if (resultSet.next()){
 
@@ -33,16 +36,16 @@ public class EntryController {
         return false;
     }
 
-    public boolean duplicateController(String dataPrenota, LocalTime timeInizioPrenota, LocalTime timeFinePrenota){
+    public boolean duplicateController(String name, String dataPrenota, LocalTime timeInizioPrenota, LocalTime timeFinePrenota){
 
         //Controlla se ci sono aule che vanno in conflitto con i criteri inseriti
 
-        String duplicateControl = "SELECT nome FROM dbEsame.Aule " + "WHERE datapr='" + dataPrenota + "'" +
-                " AND (inizio<='" + timeInizioPrenota + "' AND fine>='" + timeInizioPrenota + "') " +
-                "" + "OR (fine>='" + timeFinePrenota + "' AND inizio<='" + timeFinePrenota + "') " +
-                "OR (inizio>='" + timeInizioPrenota + "' AND fine<='" + timeFinePrenota + "') " +
-                "OR ((inizio<='" + timeInizioPrenota + "' AND fine>='" + timeInizioPrenota + "') " +
-                "AND (fine>='" + timeFinePrenota + "' AND inizio<='" + timeFinePrenota + "'))";
+        String duplicateControl = "SELECT nome FROM dbEsame.Aule " + "WHERE datapr='" + dataPrenota + "' AND (inizio<='"
+                + timeInizioPrenota + "' AND fine>='" + timeInizioPrenota + "' AND nome='" + name + "') " + "" + "OR (fine>='"
+                + timeFinePrenota + "' AND inizio<='" + timeFinePrenota + "'AND nome='" + name + "') " + "OR (inizio>='"
+                + timeInizioPrenota + "' AND fine<='" + timeFinePrenota + "' AND nome='" + name + "') " + "OR ((inizio<='"
+                + timeInizioPrenota + "' AND fine>='" + timeInizioPrenota + "' AND nome='" + name + "') " + "AND (fine>='"
+                + timeFinePrenota + "' AND inizio<='" + timeFinePrenota + "'AND nome='" + name + "'))";
 
         try {
             Statement statement = conn_Aule.createStatement();

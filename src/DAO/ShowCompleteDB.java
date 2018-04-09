@@ -2,6 +2,7 @@ package DAO;
 
 import Entity.Room;
 import Entity.User;
+import Utils.Query;
 import Utils.UserSingleton;
 
 import java.sql.Connection;
@@ -22,8 +23,9 @@ public class ShowCompleteDB {
         //String query ="SELECT Nome,TipoPr,DataPr,Inizio,Fine FROM dati WHERE Aule.dati.FromP='"+professore.getUsername()+"'";
 
         try {
-            ResultSet rs = connection2.createStatement().executeQuery("SELECT * FROM dbEsame.Aule WHERE fromp='"+
-            user.getUsername() + "'");
+            /*ResultSet rs = connection2.createStatement().executeQuery("SELECT * FROM dbEsame.Aule WHERE fromp='"+
+            user.getUsername() + "'");*/
+            ResultSet rs = connection2.createStatement().executeQuery(String.format(Query.completeDB, user.getUsername()));
             while (rs.next()){
 
                 Room room = new Room();

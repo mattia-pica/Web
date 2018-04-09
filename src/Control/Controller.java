@@ -4,6 +4,7 @@ import Bean.Disponible_RoomBean;
 import DAO.*;
 import Entity.Room;
 import Entity.User;
+import Utils.SendMailHTML;
 import Utils.UserSingleton;
 
 import java.time.LocalTime;
@@ -42,7 +43,7 @@ public class Controller {
         return rooms;
     }
 
-    //-------------MOSTRA TUTTE LE PRENOTAZIONI SEGRETARIA-----------//
+    //-------------MOSTRA TUTTE LE PRENOTAZIONI (SEGRETARIA)-----------//
 
     public ArrayList<Room> allPrenotation(){
         ArrayList<Room> rooms = All_Prenotation.showAll();
@@ -94,17 +95,40 @@ public class Controller {
 
     }
 
-    public boolean duplicateControl(String dataPrenota, LocalTime timeInizioPrenota, LocalTime timeFinePrenota){
+    //--------------CANCELLAZIONE PRENOTAZIONE----------//
 
-        EntryController entryController = new EntryController();
-        return entryController.duplicateController(dataPrenota, timeInizioPrenota, timeFinePrenota);
+    public boolean delete(String ID){
+
+        Delete delete = new Delete();
+        return delete.delete(ID);
 
     }
+
+    //-----------CONTROLLO ENTRY DUPLICATE---------//
+
+    public boolean duplicateControl(String name, String dataPrenota, LocalTime timeInizioPrenota, LocalTime timeFinePrenota){
+
+        EntryController entryController = new EntryController();
+        return entryController.duplicateController(name, dataPrenota, timeInizioPrenota, timeFinePrenota);
+
+    }
+
+    //---------------CONTROLLO ENTRY VUOTE-------------//
 
     public boolean emptyControl(String name){
 
         EntryController entryController = new EntryController();
         return entryController.emptyController(name);
+    }
+
+
+    //------------EMAIL DI NOTIFICA CANCELLAZIONE PRENOTQZIONE---------//
+
+    public boolean deletedEmail(String mitt, String dest, String object, String text){
+
+        SendMailHTML sendMailAttachment = new SendMailHTML();
+        return sendMailAttachment.inviaMail(mitt, dest, object, text);
+
     }
 
     //--------------------CREAZIONE SINGLETON--------------------//

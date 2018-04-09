@@ -1,5 +1,7 @@
 package DAO;
 
+import Utils.Query;
+
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalTime;
@@ -18,8 +20,10 @@ public class DeleteThenUpdate {
                     " OR(inizio>='" + start + "' AND fine<='" + end + "'AND ID !='" +id +"')"
                     + " OR(inizio<='" + start + "'AND fine>='" + end + "'AND ID !='" +id +"'))";
 
-            String modify = "UPDATE Aule SET inizio='" + start + "', fine='" + end + "', datapr='" + date + "', tipopr='"
-                    + type + "' WHERE ID='" + id + "'";
+            /*String modify = "UPDATE Aule SET inizio='" + start + "', fine='" + end + "', datapr='" + date + "', tipopr='"
+                    + type + "' WHERE ID='" + id + "'";*/
+
+            String modify = String.format(Query.modify, start, end, date, type, id);
 
             Statement statement = conn_Aule.createStatement();
             statement.executeUpdate(deleteQuery);

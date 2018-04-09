@@ -2,6 +2,7 @@ package DAO;
 
 import Entity.Room;
 import Entity.User;
+import Utils.Query;
 import Utils.UserSingleton;
 
 import java.sql.Connection;
@@ -33,8 +34,10 @@ public class ShowDatabase_Secr {
 
         try {
 
-            ResultSet rs = connection3.createStatement().executeQuery("SELECT * FROM dbEsame.Aule WHERE fromp='"
-            + user.getUsername() + "'");
+            /*ResultSet rs = connection3.createStatement().executeQuery("SELECT * FROM dbEsame.Aule WHERE fromp='"
+            + user.getUsername() + "'");*/
+            String completeDB = String.format(Query.completeDB, user.getUsername());
+            ResultSet rs = connection3.createStatement().executeQuery(completeDB);
             while (rs.next()) {
                 Room room = new Room();
 

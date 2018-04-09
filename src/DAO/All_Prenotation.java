@@ -1,6 +1,7 @@
 package DAO;
 
 import Entity.Room;
+import Utils.Query;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -19,7 +20,7 @@ public class All_Prenotation {
 
         try {
 
-            String query = "SELECT * FROM dbEsame.Aule WHERE tipopr IS NOT NULL";
+            String query = String.format(Query.allPrenotation);
 
             Statement statement = connection2.createStatement();
 

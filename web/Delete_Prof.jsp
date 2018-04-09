@@ -1,29 +1,15 @@
 <%--
   Created by IntelliJ IDEA.
   User: mattia
-  Date: 23/03/18
-  Time: 10.09
+  Date: 07/04/18
+  Time: 17.24
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="Control.Controller" %>
-<%@ page import="java.time.LocalTime" %>
-<%@ page import="Bean.Disponible_RoomBean" %>
+<%@ page import="Entity.Room" %>
+<%@ page import="java.util.ArrayList" %>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-<!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
-
-
-<!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
-
-<%
-    Controller controller = new Controller();
-
-    if(request.getParameter("submit_show_aule_secr") != null){
-
-        response.sendRedirect("ShowAule_Secretary.jsp");
-
-    }
-%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -73,105 +59,88 @@
                     <table>
                         <thead>
                         <tr class="row100 head">
-                            <th class="cell100 column1">Nome</th>
+                            <th class="cell100 column2">Nome</th>
+                            <th class="cell100 column2">Data</th>
+                            <th class="cell100 column2">Start</th>
+                            <th class="cell100 column2">End</th>
+                            <th class="cell100 column2">Type</th>
+                            <th class="cell100 column2">ID</th>
+
                         </tr>
                         </thead>
                     </table>
                 </div>
 
-                <div class="table100-body js-pscroll" style="overflow:auto;">
+                <div class="table100-body js-pscroll" style="height:300px;overflow:auto;">
                     <table id="table" >
                         <tbody>
 
                         <%
-                            if (request.getParameter("submit_search") != null){
+                            Controller controller = new Controller();
+                            ArrayList<Room> r = controller.showComplete_DB();
+                            for (Room aR : r) {%>
+                        <tr>
+                            <td><%=aR.getNome()%>
+                            </td>
+                            <td><%=aR.getDatapr()%>
+                            </td>
+                            <td><%=aR.getInizio()%>
+                            </td>
+                            <td><%=aR.getFine()%>
+                            </td>
+                            <td><%=aR.getTipopr()%>
+                            </td>
+                            <td><%=aR.getID()%>
+                            </td>
+                        </tr>
+                        <%
+                            }
 
-                                //@TODO aggiungere controllo sui formati dei dati inseriti nelle textfield
+                            if ((request.getParameter("submit_Delete") != null)){
 
-                                Disponible_RoomBean r;
-                                String StartSearch = request.getParameter("start");
-                                String EndSearch = request.getParameter("end");
-                                String DateSearch = request.getParameter("data");
-                                if (StartSearch.isEmpty() || EndSearch.isEmpty() || DateSearch.isEmpty()) {
+                                if (request.getParameter("ID") == null){
 
-                                    String info = "alert('Completare tutti i campi!');";
+                                    String info = "alert('Inserire ID prenotazione da eliminare');";
                                     out.println("<script type=\"text/javascript\">");
                                     out.println(info);
-                                    out.println("location='secretaryPage.jsp';");
+                                    out.println("location='Delete_Prof.jsp';");
                                     out.println("</script>");
                                 }else {
 
-                                    //String DateSearch = Date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-                                    LocalTime timeInizio = LocalTime.parse(StartSearch);
-                                    LocalTime timeFine = LocalTime.parse(EndSearch);
-                                    r = controller.show(timeInizio, timeFine, DateSearch);
-                                    for (int i = 0; i < r.getNome().size(); i++){%>
-                                    <tr><td><%=r.getNome().get(i)%></td><td><button class="login100-form-btn" name="" type="submit" onclick="window.location.href='/Secr_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button>
+                                    String id = request.getParameter("ID");
 
-                        <%
-                                            }
+                                    boolean Response = controller.delete(id);
+
+                                    if (Response){
+                                        String info = "alert('Eliminata!');";
+                                        out.println("<script type=\"text/javascript\">");
+                                        out.println(info);
+                                        out.println("location='Delete_Prof.jsp';");
+                                        out.println("</script>");
+                                    }
                                 }
                             }
-
-                            if(request.getParameter("submit_show_prenotation") != null){
-                                response.sendRedirect("Show_ALL.jsp");
-                            }
-
-                            if(request.getParameter("submit_modify") != null){
-                                response.sendRedirect("Modify_Secr.jsp");
-                            }
-
-                            if (request.getParameter("submit_DELETE") != null){
-                                response.sendRedirect("Delete_Secretary.jsp");
-
-                            }
-
-
                         %>
                         </tbody>
                     </table>
                 </div>
             </div>
-
         </div>
 
         <form action="" method="post" class="login100-form validate-form">
 
-            <div class="wrap-input100 validate-input m-b-18" data-validate ="Data">
-                <span class="label-input100">Data</span>
-                <input class="input100" type="text" name="data" placeholder="Enter Room's data in format dd/MM/yyyy">
+            <div class="wrap-input100 validate-input m-b-18" data-validate ="id">
+                <span class="label-input100">ID</span>
+                <input class="input100" type="text" name="ID" placeholder="Prenotation ID">
                 <span class="focus-input100"></span>
             </div>
 
-            <div class="wrap-input100 validate-input m-b-18" data-validate ="Start">
-                <span class="label-input100">Start</span>
-                <input class="input100" type="text" name="start" placeholder="Enter Room's start hour">
-                <span class="focus-input100"></span>
-            </div>
-
-            <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
-                <span class="label-input100">End</span>
-                <input class="input100" type="text" name="end" placeholder="Enter Room's end hour">
-                <span class="focus-input100"></span>
-            </div>
             <div class="container-login100-form-btn">
-                <button class="login100-form-btn" type="submit" name="submit_search" value="Search">
-                    Search
-                </button>
-                <button class="login100-form-btn" type="submit" name="submit_show_prenotation" value="Show">
-                    Mostra Prenotazioni
-                </button>
-                <button class="login100-form-btn" type="submit" name="submit_show_aule_secr" value="Show">
-                Mostra Mie Prenotazioni
-            </button>
-                <button class="login100-form-btn" type="submit" name="submit_modify" value="Modify">
-                    Modifica Prenotazione
-                </button>
-                <button class="login100-form-btn" type="submit" name="submit_DELETE" value="Delete">
+                <button class="login100-form-btn" type="submit" name="submit_Delete" value="Delete">
                     Elimina Prenotazione
                 </button>
-
             </div>
+
         </form>
     </div>
 </div>
@@ -193,14 +162,6 @@
 <!--===============================================================================================-->
 <script src="js/main.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-<%--QUANDO SI CLICCA SULLA TEXTFIELD 'ALTRO' VENGONO DISATTIVATI I RADIO BUTTON--%>
-<script>
-    $('#textInput').click(function () {
-        $('input[type=radio]').removeAttr("checked");
-
-    });
-</script>
 
 </body>
 </html>

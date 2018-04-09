@@ -1,6 +1,6 @@
-package Entity;
+package Bean;
 
-public class User {
+public class UserBean {
 
     public String getName() {
         return Name;
@@ -42,21 +42,12 @@ public class User {
         Type = type;
     }
 
-    public String getMail() {
-        return Mail;
+    public String getEmail() {
+        return Email;
     }
 
-    public void setMail(String mail) {
-        Mail = mail;
-    }
-
-    public User(String name, String surname, String username, String password, String type, String mail) {
-        this.Name = name;
-        this.Surname = surname;
-        this.Username = username;
-        this.Password = password;
-        this.Type = type;
-        this.Mail = mail;
+    public void setEmail(String email) {
+        Email = email;
     }
 
     private String Name;
@@ -64,11 +55,5 @@ public class User {
     private String Username;
     private String Password;
     private String Type;
-    private String Mail;
-
-
-
-
-
-
+    private String Email;
 }

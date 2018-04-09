@@ -1,6 +1,7 @@
 package DAO;
 
 import Entity.User;
+import Utils.Query;
 import Utils.UserSingleton;
 
 import java.sql.Statement;
@@ -33,14 +34,14 @@ public class DeleteThenInsert {
 
             //----------------INSERIMENTO PRENOTAZIONE SEGRETARIA-----------------------//
 
-            String insertSecretary = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) " +
+            /*String insertSecretary = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) " +
                     "VALUES " + "('" + nameAula + "','" + tipoPrenota + "','" + dataPrenota + "','"
-                    + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";
+                    + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";*/
 
+            String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
             statement.executeUpdate(insertSecretary);
 
             statement.close();
-
 
         }catch (Exception e){
             e.printStackTrace();

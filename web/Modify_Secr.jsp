@@ -124,8 +124,21 @@
                         <%
                             Controller controller = new Controller();
                             ArrayList<Room> r = controller.allPrenotation();
-                            for (int i = 0; i < r.size(); i++){%>
-                        <tr><td><%=r.get(i).getNome()%></td><td><%=r.get(i).getDatapr()%></td><td><%=r.get(i).getInizio()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getTipopr()%></td><td><%=r.get(i).getID()%></td></tr>
+                            for (Room aR : r) {%>
+                        <tr>
+                            <td><%=aR.getNome()%>
+                            </td>
+                            <td><%=aR.getDatapr()%>
+                            </td>
+                            <td><%=aR.getInizio()%>
+                            </td>
+                            <td><%=aR.getFine()%>
+                            </td>
+                            <td><%=aR.getTipopr()%>
+                            </td>
+                            <td><%=aR.getID()%>
+                            </td>
+                        </tr>
                         <%
                             }
 
@@ -205,7 +218,6 @@
                                 } else {
 
                         %>
-
                                     <script type="text/javascript">
                                         showDiv();
                                     </script>
@@ -214,19 +226,15 @@
 
                                 if (request.getParameter("submit_delete") != null ){
 
-                                    //@todo qua dentro non ci entra maiiiiiiiiiiii?!?!?!?!?!?
+                                    System.out.println("CISTOOOOOOOOOOO");
 
-                                    System.out.println("arrivato");
+                                    //@TODO qua dentro non ci entra mai
+
 
                                     Response = controller.deleteThenUpdate(ID, LocalTime.parse(roomBean.getInizio()),
                                             LocalTime.parse(roomBean.getFine()), roomBean.getDatapr(), roomBean.getTipopr());
 
                                     if (Response){
-
-                                        /*@TODO Completare la cancellazione nel caso d'uso modify
-                                            Quando c'è una prenotazione che va in conflitto, vanno cancellate e aggiornata quella da modificafare
-                                         */
-
 
                                         out.println("<script type=\"text/javascript\">");
                                         out.println("alert('Prenotazione Modificata');");

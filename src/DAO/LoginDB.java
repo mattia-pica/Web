@@ -3,6 +3,7 @@ package DAO;
 import Bean.LoginBean;
 import Entity.User;
 import Control.Controller;
+import Utils.Query;
 
 import javax.naming.ldap.Control;
 import java.beans.Statement;
@@ -30,8 +31,8 @@ public class LoginDB {
 
             // STEP 4: creazione ed esecuzione della query
             stmt = conn.createStatement();
-            String QUERY = "SELECT * FROM Users.users WHERE Username =" + "'" + u_name + "'" +
-                    " AND Password=" + "'" + p + "'";
+            //String QUERY = "SELECT * FROM Users.users WHERE Username =" + "'" + u_name + "'" + " AND Password=" + "'" + p + "'";
+            String QUERY = String.format(Query.login, u_name, p);
             ResultSet rs = stmt.executeQuery(QUERY);
 
             if(rs.next()){
@@ -41,8 +42,9 @@ public class LoginDB {
                 String usernameLoaded = rs.getString(3);
                 String password = rs.getString(4);
                 String type = rs.getString(5);
+                String mail = rs.getString("Email");
                 //System.out.println(type);
-                u = new User(nome, cognome, usernameLoaded, password, type);
+                u = new User(nome, cognome, usernameLoaded, password, type, mail);
                 Controller controller = new Controller();
                 controller.createSingleton(u);
             }
@@ -53,9 +55,6 @@ public class LoginDB {
             rs.close();
             //stmt.close();
             conn.close();
-        } catch (SQLException se) {
-            // Errore durante l'apertura della connessione
-            se.printStackTrace();
         } catch (Exception e) {
             // Errore nel loading del driver
             e.printStackTrace();
@@ -63,7 +62,7 @@ public class LoginDB {
             try {
                 if (stmt != null)
                     conn.close();
-            } catch (SQLException se2) {
+            } catch (SQLException ignored) {
             }
             try {
                 if (conn != null)

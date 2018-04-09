@@ -7,6 +7,10 @@
         <element id="directory" name="classes">
           <element id="module-output" name="Web" />
         </element>
+        <element id="directory" name="lib">
+          <element id="library" level="application" name="java-mail-1.4.4" />
+          <element id="library" level="project" name="java-mail-1.4.4" />
+        </element>
       </element>
     </root>
   </artifact>

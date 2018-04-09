@@ -180,9 +180,6 @@
                 </script>
                 <%
                         }
-                %>
-
-                <%
                     }
 
                     if(request.getParameter("submit_delete") != null){

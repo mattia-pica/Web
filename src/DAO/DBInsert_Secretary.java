@@ -2,6 +2,7 @@ package DAO;
 
 import Control.Controller;
 import Entity.User;
+import Utils.Query;
 import Utils.UserSingleton;
 
 import java.sql.SQLException;
@@ -26,12 +27,17 @@ public class DBInsert_Secretary {
                 //Se esistono aule con valore nullo (cioè mai prenotate) cancella quell'entry nel db e
                 //inserisce quella nuova, altrimenti
                 //ce ne sarebbero state due nel DB!
-                String del = "DELETE FROM dbEsame.Aule WHERE nome='" + nameAula + "'AND tipopr IS NULL";
+                //String del = "DELETE FROM dbEsame.Aule WHERE nome='" + nameAula + "'AND tipopr IS NULL";
+
+                String del = String.format(Query.deleteEmpty);
                 statement.executeUpdate(del);
 
-                String insertSecretary = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) " +
+                /*String insertSecretary = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) " +
                         "VALUES " + "('" + nameAula + "','" + tipoPrenota + "','" + dataPrenota + "','"
-                        + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";
+                        + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";*/
+
+                String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
+
                 statement.executeUpdate(insertSecretary);
 
                 statement.close();
@@ -41,7 +47,7 @@ public class DBInsert_Secretary {
             }
             return true;
         }
-        if (!controller.duplicateControl(dataPrenota, timeInizioPrenota, timeFinePrenota)){
+        if (!controller.duplicateControl(nameAula, dataPrenota, timeInizioPrenota, timeFinePrenota)){
             System.out.println("duplicate");
             return false;
 
@@ -50,9 +56,12 @@ public class DBInsert_Secretary {
             try {
                 Statement statement = conn_Aule.createStatement();
 
-                String insertSecretary = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) " +
+                /*String insertSecretary = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) " +
                         "VALUES " + "('" + nameAula + "','" + tipoPrenota + "','" + dataPrenota + "','"
-                        + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";
+                        + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";*/
+
+                String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
+
                 statement.executeUpdate(insertSecretary);
                 statement.close();
 
