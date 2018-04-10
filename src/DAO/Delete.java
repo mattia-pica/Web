@@ -3,14 +3,14 @@ package DAO;
 import Bean.UserBean;
 import Control.Controller;
 import Entity.User;
-import Utils.Query;
+import Utils.DATABASE_Utils;
 import Utils.UserSingleton;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static DAO.DB_Connection_Aule.conn_Aule;
+import static DAO.DB_Connection.conn_Aule;
 
 public class Delete {
 
@@ -25,25 +25,23 @@ public class Delete {
         String fine = null;
 
         try {
-            DB_Connection_Aule db_connection_aule = new DB_Connection_Aule();
-            db_connection_aule.connect_Aule();
+
             Statement statement = conn_Aule.createStatement();
 
-            String retrieveEmail = String.format(Query.retrieveEmail);
+            String emailInfo = String.format(DATABASE_Utils.emailInfo); //Recupero i dati dell'utente a cui è stata eliminata la prenotazione
 
-            ResultSet resultSet = statement.executeQuery(retrieveEmail);
+            ResultSet resultSet = statement.executeQuery(emailInfo);
 
             if (resultSet.next()){
 
                 userBean.setName(resultSet.getString("Name"));
                 userBean.setSurname(resultSet.getString("Surname"));
                 userBean.setEmail(resultSet.getString("Email"));
-                //System.out.println(userBean.getEmail());
             }
 
-            String sql = String.format(Query.delete, ID);
-            String classInformation = String.format(Query.classInformation, ID);
-            ResultSet info = statement.executeQuery(classInformation);
+            String sql = String.format(DATABASE_Utils.delete, ID);   //Cancello l'aula
+            String classInformation = String.format(DATABASE_Utils.classInformation, ID);
+            ResultSet info = statement.executeQuery(classInformation); //Recupero i dati dell'aula eliminata
 
             while (info.next()){
                 nome = info.getString("nome");
@@ -64,7 +62,6 @@ public class Delete {
             controller.deletedEmail(user.getMail(), userBean.getEmail(), "Eliminazione effettuata", deleteInformation);
 
             statement.close();
-
 
         } catch (SQLException e) {
             e.printStackTrace();

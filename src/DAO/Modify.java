@@ -1,13 +1,13 @@
 package DAO;
 
-import Utils.Query;
+import Utils.DATABASE_Utils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalTime;
 
-import static DAO.DB_Connection_Aule.conn_Aule;
+import static DAO.DB_Connection.conn_Aule;
 
 public class Modify {
 
@@ -15,7 +15,7 @@ public class Modify {
 
         /*String modify = "UPDATE Aule SET inizio='" + start + "', fine='" + end + "', datapr='" + date + "', tipopr='"
                 + type + "' WHERE ID='" + id + "'";*/
-        String modify = String.format(Query.modify, start, end, date, type, id);
+        String modify = String.format(DATABASE_Utils.modify, start, end, date, type, id);
 
             String controlQuery = "SELECT nome FROM dbEsame.Aule WHERE datapr='" + date + "' AND ID!='" + id +"' AND((inizio<='" + start +
                     "' AND fine>='" + start + "')"
@@ -25,10 +25,11 @@ public class Modify {
 
             try {
     
-                DB_Connection_Aule db_connection_aule = new DB_Connection_Aule();
-                db_connection_aule.connect_Aule();
-                Statement statement = conn_Aule.createStatement();
-                ResultSet control = statement.executeQuery(controlQuery);
+                /*DB_Connection db_connection_ = new DB_Connection();
+                db_connection_.connect_Aule();*/
+                Statement stat = conn_Aule.createStatement();
+                ResultSet control;
+                control = stat.executeQuery(controlQuery);
 
                 if (control.next()) {
                     return false;
@@ -39,8 +40,7 @@ public class Modify {
             }
 
             try {
-                DB_Connection_Aule db_connection_aule = new DB_Connection_Aule();
-                db_connection_aule.connect_Aule();
+
                 Statement statement = conn_Aule.createStatement();
                 statement.executeUpdate(modify);
                 statement.close();

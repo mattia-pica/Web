@@ -1,38 +1,38 @@
 package DAO;
 
-import Bean.LoginBean;
 import Entity.User;
 import Control.Controller;
-import Utils.Query;
+import Utils.DATABASE_Utils;
 
-import javax.naming.ldap.Control;
-import java.beans.Statement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import static DAO.DB_Connection.conn_Aule;
+
 
 public class LoginDB {
-    private static String PASS = "trottola12";
-    private static String USER = "root";
-    private static String DB_URL = "jdbc:mysql://localhost/Users";
 
     public static User findByNameAndPassword(String u_name, String p) {
         // STEP 1: dichiarazioni
-        java.sql.Statement stmt = null;
-        Connection conn = null;
+        java.sql.Statement stmt;
+        //Connection conn = null;
+        DB_Connection connection_aule;
         User u = null;
         try {
+
+            connection_aule= new DB_Connection();
+            Connection connection = connection_aule.connect_Aule();
+
             // STEP 2: loading dinamico del driver mysql
-            Class.forName("com.mysql.jdbc.Driver");
+            //Class.forName("com.mysql.jdbc.Driver");
 
             // STEP 3: apertura connessione
-            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            //conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             // STEP 4: creazione ed esecuzione della query
-            stmt = conn.createStatement();
+            stmt = conn_Aule.createStatement();
             //String QUERY = "SELECT * FROM Users.users WHERE Username =" + "'" + u_name + "'" + " AND Password=" + "'" + p + "'";
-            String QUERY = String.format(Query.login, u_name, p);
+            String QUERY = String.format(DATABASE_Utils.login, u_name, p);
             ResultSet rs = stmt.executeQuery(QUERY);
 
             if(rs.next()){
@@ -43,35 +43,15 @@ public class LoginDB {
                 String password = rs.getString(4);
                 String type = rs.getString(5);
                 String mail = rs.getString("Email");
-                //System.out.println(type);
                 u = new User(nome, cognome, usernameLoaded, password, type, mail);
                 Controller controller = new Controller();
                 controller.createSingleton(u);
             }
 
-
-
-            // STEP 6: Clean-up dell'ambiente
-            rs.close();
-            //stmt.close();
-            conn.close();
         } catch (Exception e) {
             // Errore nel loading del driver
             e.printStackTrace();
-        } finally {
-            try {
-                if (stmt != null)
-                    conn.close();
-            } catch (SQLException ignored) {
-            }
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }
         }
-
         return u;
     }
 

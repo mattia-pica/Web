@@ -1,13 +1,13 @@
 package DAO;
 
 import Entity.User;
-import Utils.Query;
+import Utils.DATABASE_Utils;
 import Utils.UserSingleton;
 
 import java.sql.Statement;
 import java.time.LocalTime;
 
-import static DAO.DB_Connection_Aule.conn_Aule;
+import static DAO.DB_Connection.conn_Aule;
 
 public class DeleteThenInsert {
 
@@ -38,7 +38,7 @@ public class DeleteThenInsert {
                     "VALUES " + "('" + nameAula + "','" + tipoPrenota + "','" + dataPrenota + "','"
                     + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";*/
 
-            String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
+            String insertSecretary = String.format(DATABASE_Utils.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
             statement.executeUpdate(insertSecretary);
 
             statement.close();

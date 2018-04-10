@@ -2,14 +2,14 @@ package DAO;
 
 import Control.Controller;
 import Entity.User;
-import Utils.Query;
+import Utils.DATABASE_Utils;
 import Utils.UserSingleton;
 
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalTime;
 
-import static DAO.DB_Connection_Aule.conn_Aule;
+import static DAO.DB_Connection.conn_Aule;
 
 public class DBInsert_Secretary {
 
@@ -27,16 +27,12 @@ public class DBInsert_Secretary {
                 //Se esistono aule con valore nullo (cioè mai prenotate) cancella quell'entry nel db e
                 //inserisce quella nuova, altrimenti
                 //ce ne sarebbero state due nel DB!
-                //String del = "DELETE FROM dbEsame.Aule WHERE nome='" + nameAula + "'AND tipopr IS NULL";
 
-                String del = String.format(Query.deleteEmpty);
+                String del = String.format(DATABASE_Utils.deleteEmpty);
                 statement.executeUpdate(del);
 
-                /*String insertSecretary = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) " +
-                        "VALUES " + "('" + nameAula + "','" + tipoPrenota + "','" + dataPrenota + "','"
-                        + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";*/
 
-                String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
+                String insertSecretary = String.format(DATABASE_Utils.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
 
                 statement.executeUpdate(insertSecretary);
 
@@ -60,7 +56,7 @@ public class DBInsert_Secretary {
                         "VALUES " + "('" + nameAula + "','" + tipoPrenota + "','" + dataPrenota + "','"
                         + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";*/
 
-                String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
+                String insertSecretary = String.format(DATABASE_Utils.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
 
                 statement.executeUpdate(insertSecretary);
                 statement.close();

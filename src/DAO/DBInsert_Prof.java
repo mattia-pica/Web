@@ -2,13 +2,14 @@ package DAO;
 
 import Control.Controller;
 import Entity.User;
-import Utils.Query;
+import Utils.DATABASE_Utils;
 import Utils.UserSingleton;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalTime;
 
-public class DBInsert_Prof extends DB_Connection_Aule {
+
+public class DBInsert_Prof extends DB_Connection {
 
     public boolean insert(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
                           LocalTime timeFinePrenota) {
@@ -20,21 +21,22 @@ public class DBInsert_Prof extends DB_Connection_Aule {
 
             try {
 
-                /*DB_Connection_Aule db_connection_aule = new DB_Connection_Aule();
+                /*DB_Connection db_connection_aule = new DB_Connection();
                 db_connection_aule.connect_Aule();*/
 
                 Statement statement = conn_Aule.createStatement();
 
-                String del = String.format(Query.deleteEmpty, nameAula);
+                String del = String.format(DATABASE_Utils.deleteEmpty, nameAula);
                 statement.executeUpdate(del);
 
                 /*String QUERYprof = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) VALUES " + "('"
                         + nameAula + "','" + tipoPrenota + "','" + dataPrenota + "','" + timeInizioPrenota +
                         "','" + timeFinePrenota + "','" + user.getUsername() + "')";*/
 
-                String QUERYprof = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
+                String QUERYprof = String.format(DATABASE_Utils.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
 
                 statement.executeUpdate(QUERYprof);
+                statement.close();
 
             } catch (SQLException e) {
                 e.printStackTrace();

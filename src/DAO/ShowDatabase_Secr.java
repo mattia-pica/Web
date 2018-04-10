@@ -2,21 +2,21 @@ package DAO;
 
 import Entity.Room;
 import Entity.User;
-import Utils.Query;
+import Utils.DATABASE_Utils;
 import Utils.UserSingleton;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalTime;
+import java.sql.Statement;
 import java.util.ArrayList;
+
+import static DAO.DB_Connection.conn_Aule;
 
 public class ShowDatabase_Secr {
 
     public static ArrayList<Room> show_secr() {
 
-        DB_Connection_Aule connection = new DB_Connection_Aule();
-        Connection connection3 = connection.connect_Aule();
         ArrayList<Room> Classrooms = new ArrayList<>();
 
         User user = UserSingleton.getInstance().getUser();
@@ -34,10 +34,9 @@ public class ShowDatabase_Secr {
 
         try {
 
-            /*ResultSet rs = connection3.createStatement().executeQuery("SELECT * FROM dbEsame.Aule WHERE fromp='"
-            + user.getUsername() + "'");*/
-            String completeDB = String.format(Query.completeDB, user.getUsername());
-            ResultSet rs = connection3.createStatement().executeQuery(completeDB);
+            String completeDB = String.format(DATABASE_Utils.completeDB, user.getUsername());
+            Statement statement = conn_Aule.createStatement();
+            ResultSet rs = statement.executeQuery(completeDB);
             while (rs.next()) {
                 Room room = new Room();
 
@@ -49,7 +48,7 @@ public class ShowDatabase_Secr {
                 room.setFromp(rs.getString("fromp"));
                 Classrooms.add(room);
             }
-            connection3.close();
+            statement.close();
         } catch (SQLException e) {
             System.err.println("Error" + e);
         }

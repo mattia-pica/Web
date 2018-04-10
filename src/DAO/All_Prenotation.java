@@ -1,28 +1,29 @@
 package DAO;
 
 import Entity.Room;
-import Utils.Query;
+import Utils.DATABASE_Utils;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import static DAO.DB_Connection.conn_Aule;
+
 public class All_Prenotation {
 
     public static ArrayList<Room> showAll(){
 
-        DB_Connection_Aule connection = new DB_Connection_Aule();
-        Connection connection2 = connection.connect_Aule();
+        /*DB_Connection connection = new DB_Connection();
+        Connection connection2 = connection.connect_Aule();*/
 
         ArrayList<Room> room = new ArrayList<>();
 
         try {
 
-            String query = String.format(Query.allPrenotation);
+            String query = String.format(DATABASE_Utils.allPrenotation);
 
-            Statement statement = connection2.createStatement();
+            Statement statement = conn_Aule.createStatement();
 
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
@@ -38,7 +39,7 @@ public class All_Prenotation {
                 rooms.setID(rs.getInt("ID"));
                 room.add(rooms);
             }
-            connection2.close();
+            statement.close();
 
         }catch (SQLException e){
                 System.err.println(e);

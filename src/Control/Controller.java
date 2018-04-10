@@ -24,7 +24,7 @@ public class Controller {
 
     public Disponible_RoomBean show(LocalTime timeInizio, LocalTime timeFine, String dateSearch) {
         //ArrayList<Disponible_RoomBean> R;
-        Disponible_RoomBean showDatabase_prof = ShowDatabase_Prof.show_prof(timeInizio, timeFine, dateSearch);
+        Disponible_RoomBean showDatabase_prof = Prof_DisponibleRooms.show_prof(timeInizio, timeFine, dateSearch);
         return showDatabase_prof;
     }
 

@@ -18,7 +18,7 @@
 <%
     Controller controller = new Controller();
 
-    if(request.getParameter("submit_show_aule_secr") != null){
+    if(request.getParameter("submit_show_aule_secr") != null){  //Mostra prenotazioni segretaria
 
         response.sendRedirect("ShowAule_Secretary.jsp");
 
@@ -113,15 +113,15 @@
                                 }
                             }
 
-                            if(request.getParameter("submit_show_prenotation") != null){
+                            if(request.getParameter("submit_show_prenotation") != null){  //Mostra tutte le prenotazioni
                                 response.sendRedirect("Show_ALL.jsp");
                             }
 
-                            if(request.getParameter("submit_modify") != null){
+                            if(request.getParameter("submit_modify") != null){            //Modifica Prenotazione
                                 response.sendRedirect("Modify_Secr.jsp");
                             }
 
-                            if (request.getParameter("submit_DELETE") != null){
+                            if (request.getParameter("submit_DELETE") != null){           //Elimina Prenotazione
                                 response.sendRedirect("Delete_Secretary.jsp");
 
                             }

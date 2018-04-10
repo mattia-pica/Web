@@ -86,6 +86,16 @@
                         <%
                             Controller controller = new Controller();
                             ArrayList<Room> r = controller.allPrenotation();
+
+                            if (r.isEmpty()){
+
+                                String info = "alert('Non ci sono prenotazioni attive');";
+                                out.println("<script type=\"text/javascript\">");
+                                out.println(info);
+                                out.println("location='secretaryPage.jsp';");
+                                out.println("</script>");
+                            }else {
+
                             for (Room aR : r) {%>
                         <tr>
                             <td><%=aR.getNome()%>
@@ -102,6 +112,7 @@
                             </td>
                         </tr>
                         <%
+                            }
                             }
 
                             if ((request.getParameter("submit_Delete") != null)){

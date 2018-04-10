@@ -1,6 +1,6 @@
 package DAO;
 
-import Utils.Query;
+import Utils.DATABASE_Utils;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalTime;
 
-import static DAO.DB_Connection_Aule.conn_Aule;
+import static DAO.DB_Connection.conn_Aule;
 
 public class EntryController {
 
@@ -17,13 +17,9 @@ public class EntryController {
 
         try {
 
-            DB_Connection_Aule connection = new DB_Connection_Aule();
-            Connection connection2 = connection.connect_Aule();
+            Statement statement = conn_Aule.createStatement();
 
-            Statement statement = connection2.createStatement();
-            //String emptyControl = "SELECT * FROM dbEsame.Aule WHERE nome='" + name + "' AND tipopr IS NULL";
-
-            ResultSet resultSet = statement.executeQuery(String.format(Query.emptyControl, name));
+            ResultSet resultSet = statement.executeQuery(String.format(DATABASE_Utils.emptyControl, name));
 
             if (resultSet.next()){
 

@@ -1,6 +1,11 @@
 package Utils;
 
-public class Query {
+public class DATABASE_Utils {
+
+
+    public static String PASS = "trottola12";
+    public static String USER = "root";
+    public static String DB_URL = "jdbc:mysql://localhost/dbEsame";
 
     public static String login = "SELECT * FROM dbEsame.users WHERE Username='%s' AND Password='%s';";
 
@@ -18,7 +23,7 @@ public class Query {
 
     public static String emptyControl = "SELECT * FROM dbEsame.Aule WHERE nome='%s' AND tipopr IS NULL;";
 
-    public static String retrieveEmail = "SELECT Name,Surname,Email FROM users JOIN Aule ON fromp=Username;";
+    public static String emailInfo = "SELECT Name,Surname,Email FROM users JOIN Aule ON fromp=Username;";
 
     public static String classInformation = "SELECT nome, datapr, inizio, fine FROM Aule WHERE ID='%s';";
 }
