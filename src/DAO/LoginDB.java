@@ -2,7 +2,7 @@ package DAO;
 
 import Entity.User;
 import Control.Controller;
-import Utils.DATABASE_Utils;
+import Utils.Query;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -32,7 +32,7 @@ public class LoginDB {
             // STEP 4: creazione ed esecuzione della query
             stmt = conn_Aule.createStatement();
             //String QUERY = "SELECT * FROM Users.users WHERE Username =" + "'" + u_name + "'" + " AND Password=" + "'" + p + "'";
-            String QUERY = String.format(DATABASE_Utils.login, u_name, p);
+            String QUERY = String.format(Query.login, u_name, p);
             ResultSet rs = stmt.executeQuery(QUERY);
 
             if(rs.next()){

@@ -2,10 +2,9 @@ package DAO;
 
 import Entity.Room;
 import Entity.User;
-import Utils.DATABASE_Utils;
+import Utils.Query;
 import Utils.UserSingleton;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -34,7 +33,7 @@ public class ShowDatabase_Secr {
 
         try {
 
-            String completeDB = String.format(DATABASE_Utils.completeDB, user.getUsername());
+            String completeDB = String.format(Query.completeDB, user.getUsername());
             Statement statement = conn_Aule.createStatement();
             ResultSet rs = statement.executeQuery(completeDB);
             while (rs.next()) {

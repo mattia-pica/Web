@@ -10,6 +10,7 @@
         <element id="directory" name="lib">
           <element id="library" level="application" name="java-mail-1.4.4" />
           <element id="library" level="project" name="java-mail-1.4.4" />
+          <element id="library" level="project" name="activation" />
         </element>
       </element>
     </root>

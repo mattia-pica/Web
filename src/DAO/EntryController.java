@@ -1,8 +1,8 @@
 package DAO;
 
-import Utils.DATABASE_Utils;
+import Utils.Query;
 
-import java.sql.Connection;
+import javax.sound.midi.Soundbank;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -19,7 +19,7 @@ public class EntryController {
 
             Statement statement = conn_Aule.createStatement();
 
-            ResultSet resultSet = statement.executeQuery(String.format(DATABASE_Utils.emptyControl, name));
+            ResultSet resultSet = statement.executeQuery(String.format(Query.emptyControl, name));
 
             if (resultSet.next()){
 
@@ -34,6 +34,8 @@ public class EntryController {
 
     public boolean duplicateController(String name, String dataPrenota, LocalTime timeInizioPrenota, LocalTime timeFinePrenota){
 
+        System.out.println(name + " " + dataPrenota + " " + timeInizioPrenota + " " + timeFinePrenota);
+
         //Controlla se ci sono aule che vanno in conflitto con i criteri inseriti
 
         String duplicateControl = "SELECT nome FROM dbEsame.Aule " + "WHERE datapr='" + dataPrenota + "' AND (inizio<='"
@@ -42,6 +44,11 @@ public class EntryController {
                 + timeInizioPrenota + "' AND fine<='" + timeFinePrenota + "' AND nome='" + name + "') " + "OR ((inizio<='"
                 + timeInizioPrenota + "' AND fine>='" + timeInizioPrenota + "' AND nome='" + name + "') " + "AND (fine>='"
                 + timeFinePrenota + "' AND inizio<='" + timeFinePrenota + "'AND nome='" + name + "'))";
+
+        /*String duplicateControl = "SELECT DISTINCT nome FROM dbEsame.Aule WHERE nome NOT IN (SELECT nome FROM dbEsame.Aule WHERE datapr='"
+                +dataPrenota+"' AND ((inizio<'"+timeInizioPrenota+"' AND fine>'"+timeInizioPrenota+"') "+"" +
+                "OR (fine>'"+timeFinePrenota
+                +"' AND inizio<'"+timeFinePrenota+"') "+"OR (inizio>'"+timeInizioPrenota+"' AND fine<'"+timeFinePrenota+"')))";*/
 
         try {
             Statement statement = conn_Aule.createStatement();

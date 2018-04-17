@@ -2,7 +2,7 @@ package DAO;
 
 import Entity.Room;
 import Entity.User;
-import Utils.DATABASE_Utils;
+import Utils.Query;
 import Utils.UserSingleton;
 
 import java.sql.ResultSet;
@@ -26,7 +26,7 @@ public class ShowCompleteDB {
         try {
 
             Statement statement = conn_Aule.createStatement();
-            ResultSet rs = statement.executeQuery(String.format(DATABASE_Utils.completeDB, user.getUsername()));
+            ResultSet rs = statement.executeQuery(String.format(Query.completeDB, user.getUsername()));
             while (rs.next()){
 
                 Room room = new Room();

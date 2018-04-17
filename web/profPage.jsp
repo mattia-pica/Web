@@ -203,11 +203,11 @@
                                     String StartSearch = request.getParameter("start");
                                     String EndSearch = request.getParameter("end");
                                     String Date = request.getParameter("data");
-                                    String DateSearch = Date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                                    //String DateSearch = Date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                                     LocalTime timeInizio = LocalTime.parse(StartSearch);
                                     LocalTime timeFine = LocalTime.parse(EndSearch);
                                     Controller controller = new Controller();
-                                    r = controller.show(timeInizio, timeFine, DateSearch);
+                                    r = controller.show(timeInizio, timeFine, Date);
                                     for (int i = 0; i < r.getNome().size(); i++ ){%>
                             <tr><td><%=r.getNome().get(i)%></td><td><button name="" type="submit" onclick="window.location.href='/Prof_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td></tr>
 
@@ -222,6 +222,19 @@
                                 if(request.getParameter("submit_modify") != null){
                                     response.sendRedirect("Modify_Prof.jsp");
                                 }
+
+                                if (request.getParameter("submit_active") != null){
+                                    response.sendRedirect("Active Prenotation.jsp");
+                                }
+
+                                if(request.getParameter("submit_modify") != null){
+
+                                    //response.sendRedirect("Modify_Prof.jsp");
+
+                                    //@TODO da errore quando si clicca su bottone
+
+                                }
+
                             %>
                             </tbody>
                         </table>
@@ -251,13 +264,16 @@
             </div>
             <div class="container-login100-form-btn">
                 <button class="login100-form-btn" type="submit" name="submit_search" value="Search">
-                    Search
+                    Cerca
                 </button>
                     <button class="login100-form-btn" type="submit" name="submit_show" value="Show">
-                        Mostra Mie Prenotazioni
+                        Mie Prenotazioni
                     </button>
                 <button class="login100-form-btn" type="submit" name="submit_modify" value="Modify">
                     Modifica Prenotazione
+                </button>
+                <button class="login100-form-btn" type="submit" name="submit_active" value="Modify">
+                    Prenotazioni Attive
                 </button>
 
             </div>

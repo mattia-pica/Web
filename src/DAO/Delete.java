@@ -3,9 +3,10 @@ package DAO;
 import Bean.UserBean;
 import Control.Controller;
 import Entity.User;
-import Utils.DATABASE_Utils;
+import Utils.Query;
 import Utils.UserSingleton;
 
+import javax.xml.bind.SchemaOutputResolver;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,7 +29,7 @@ public class Delete {
 
             Statement statement = conn_Aule.createStatement();
 
-            String emailInfo = String.format(DATABASE_Utils.emailInfo); //Recupero i dati dell'utente a cui è stata eliminata la prenotazione
+            String emailInfo = String.format(Query.emailInfo, ID); //Recupero i dati dell'utente a cui è stata eliminata la prenotazione
 
             ResultSet resultSet = statement.executeQuery(emailInfo);
 
@@ -39,8 +40,8 @@ public class Delete {
                 userBean.setEmail(resultSet.getString("Email"));
             }
 
-            String sql = String.format(DATABASE_Utils.delete, ID);   //Cancello l'aula
-            String classInformation = String.format(DATABASE_Utils.classInformation, ID);
+            String sql = String.format(Query.delete, ID);   //Cancello l'aula
+            String classInformation = String.format(Query.classInformation, ID);
             ResultSet info = statement.executeQuery(classInformation); //Recupero i dati dell'aula eliminata
 
             while (info.next()){
@@ -58,8 +59,9 @@ public class Delete {
                     "lei inserita per l'" + nome + " nel giorno " + data +
                     " dalle ore " + inizio + " alle ore " + fine + " è stata " +
                     " eliminata da " + user.getName() + " " + user.getSurname();
+            System.out.println(user.getMail() + "    " + userBean.getEmail());
 
-            controller.deletedEmail(user.getMail(), userBean.getEmail(), "Eliminazione effettuata", deleteInformation);
+            controller.deletedEmail(userBean.getEmail(), "Eliminazione Effettuata", deleteInformation);
 
             statement.close();
 

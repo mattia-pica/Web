@@ -2,7 +2,7 @@ package DAO;
 
 import Control.Controller;
 import Entity.User;
-import Utils.DATABASE_Utils;
+import Utils.Query;
 import Utils.UserSingleton;
 
 import java.sql.SQLException;
@@ -11,7 +11,7 @@ import java.time.LocalTime;
 
 import static DAO.DB_Connection.conn_Aule;
 
-public class DBInsert_Secretary {
+public class Insert_Secretary {
 
     public boolean insert(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
                           LocalTime timeFinePrenota){
@@ -28,18 +28,23 @@ public class DBInsert_Secretary {
                 //inserisce quella nuova, altrimenti
                 //ce ne sarebbero state due nel DB!
 
-                String del = String.format(DATABASE_Utils.deleteEmpty);
+                String del = String.format(Query.deleteEmpty);
                 statement.executeUpdate(del);
 
-
-                String insertSecretary = String.format(DATABASE_Utils.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
+                String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
 
                 statement.executeUpdate(insertSecretary);
+                String PrenotationInfo = "Signor " + user.getName() + " " + user.getSurname() +  " la prenotazione da " +
+                        "lei inserita per l'" + nameAula + " nel giorno " + dataPrenota +
+                        " dalle ore " + timeInizioPrenota + " alle ore " + timeFinePrenota + " è stata " +
+                        " inserita con successo! ";
 
+                controller.deletedEmail(user.getMail(), "Prenotazione effettuata", PrenotationInfo);
                 statement.close();
 
             } catch (SQLException ex) {
                 ex.printStackTrace();
+                return false;
             }
             return true;
         }
@@ -52,13 +57,15 @@ public class DBInsert_Secretary {
             try {
                 Statement statement = conn_Aule.createStatement();
 
-                /*String insertSecretary = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) " +
-                        "VALUES " + "('" + nameAula + "','" + tipoPrenota + "','" + dataPrenota + "','"
-                        + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";*/
-
-                String insertSecretary = String.format(DATABASE_Utils.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
+                String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
 
                 statement.executeUpdate(insertSecretary);
+                String PrenotationInfo = "Signor " + user.getName() + " " + user.getSurname() +  " la prenotazione da " +
+                        "lei inserita per l'" + nameAula + " nel giorno " + dataPrenota +
+                        " dalle ore " + timeInizioPrenota + " alle ore " + timeFinePrenota + " è stata " +
+                        " inserita con successo! ";
+
+                controller.deletedEmail(user.getMail(), "Prenotazione effettuata", PrenotationInfo);
                 statement.close();
 
             } catch (SQLException e) {

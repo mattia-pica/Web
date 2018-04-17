@@ -4,7 +4,7 @@ import Bean.Disponible_RoomBean;
 import DAO.*;
 import Entity.Room;
 import Entity.User;
-import Utils.SendMailHTML;
+import Utils.SendMail;
 import Utils.UserSingleton;
 
 import java.time.LocalTime;
@@ -20,12 +20,19 @@ public class Controller {
         return u;
     }
 
-    //------AULE DISPONIBILI PROFESSORE-------------//
+    //------AULE DISPONIBILI-------------//
 
     public Disponible_RoomBean show(LocalTime timeInizio, LocalTime timeFine, String dateSearch) {
         //ArrayList<Disponible_RoomBean> R;
-        Disponible_RoomBean showDatabase_prof = Prof_DisponibleRooms.show_prof(timeInizio, timeFine, dateSearch);
-        return showDatabase_prof;
+        Disponible_RoomBean showDatabase = DisponibleRooms.show(timeInizio, timeFine, dateSearch);
+        return showDatabase;
+    }
+
+    //-------PRENOTAZIONI ATTIVE----------//
+
+    public ArrayList<Room> active(){
+        ArrayList<Room> rooms = ActivePrenotation.show();
+        return rooms;
     }
 
     //-----------PRENOTAZIONI EFFETUATE SEGRETARIA----------------//
@@ -53,7 +60,7 @@ public class Controller {
     //----------------NUOVA PRENOTAZIONE PROFESSORE--------------//
     public boolean newPrenotationProfessore(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
                                             LocalTime timeFinePrenota) {
-        DBInsert_Prof dbInsertProf = new DBInsert_Prof();
+        Insert_Prof dbInsertProf = new Insert_Prof();
         return dbInsertProf.insert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota);
     }
 
@@ -61,8 +68,8 @@ public class Controller {
 
     public boolean newPrenotationSecretary(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
                                            LocalTime timeFinePrenota){
-        DBInsert_Secretary dbInsert_secretary = new DBInsert_Secretary();
-        return dbInsert_secretary.insert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota);
+        Insert_Secretary insert_secretary = new Insert_Secretary();
+        return insert_secretary.insert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota);
 
     }
 
@@ -124,10 +131,10 @@ public class Controller {
 
     //------------EMAIL DI NOTIFICA CANCELLAZIONE PRENOTQZIONE---------//
 
-    public boolean deletedEmail(String mitt, String dest, String object, String text){
+    public boolean deletedEmail(String dest, String object, String text){
 
-        SendMailHTML sendMailAttachment = new SendMailHTML();
-        return sendMailAttachment.inviaMail(mitt, dest, object, text);
+        SendMail sendMail = new SendMail();
+        return sendMail.inviaMail(dest, object, text);
 
     }
 

@@ -1,7 +1,7 @@
 package DAO;
 
 import Entity.Room;
-import Utils.DATABASE_Utils;
+import Utils.Query;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +21,7 @@ public class All_Prenotation {
 
         try {
 
-            String query = String.format(DATABASE_Utils.allPrenotation);
+            String query = String.format(Query.allPrenotation);
 
             Statement statement = conn_Aule.createStatement();
 

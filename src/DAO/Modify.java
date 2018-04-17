@@ -1,6 +1,6 @@
 package DAO;
 
-import Utils.DATABASE_Utils;
+import Utils.Query;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +15,7 @@ public class Modify {
 
         /*String modify = "UPDATE Aule SET inizio='" + start + "', fine='" + end + "', datapr='" + date + "', tipopr='"
                 + type + "' WHERE ID='" + id + "'";*/
-        String modify = String.format(DATABASE_Utils.modify, start, end, date, type, id);
+        String modify = String.format(Query.modify, start, end, date, type, id);
 
             String controlQuery = "SELECT nome FROM dbEsame.Aule WHERE datapr='" + date + "' AND ID!='" + id +"' AND((inizio<='" + start +
                     "' AND fine>='" + start + "')"

@@ -1,6 +1,6 @@
 package DAO;
 
-import Utils.DATABASE_Utils;
+import Utils.Query;
 
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -23,7 +23,7 @@ public class DeleteThenUpdate {
             /*String modify = "UPDATE Aule SET inizio='" + start + "', fine='" + end + "', datapr='" + date + "', tipopr='"
                     + type + "' WHERE ID='" + id + "'";*/
 
-            String modify = String.format(DATABASE_Utils.modify, start, end, date, type, id);
+            String modify = String.format(Query.modify, start, end, date, type, id);
 
             Statement statement = conn_Aule.createStatement();
             statement.executeUpdate(deleteQuery);

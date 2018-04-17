@@ -76,12 +76,25 @@
                         <%
                             Controller controller = new Controller();
                             ArrayList<Room> r = controller.showComplete_DB();
-                            for (int i = 0; i < r.size(); i++){%>
-                        <tr><td><%=r.get(i).getNome()%></td><td><%=r.get(i).getDatapr()%></td><td><%=r.get(i).getInizio()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getTipopr()%></td><td><%=r.get(i).getID()%></td></tr>
+                            for (Room aR : r) {%>
+                        <tr>
+                            <td><%=aR.getNome()%>
+                            </td>
+                            <td><%=aR.getDatapr()%>
+                            </td>
+                            <td><%=aR.getInizio()%>
+                            </td>
+                            <td><%=aR.getFine()%>
+                            </td>
+                            <td><%=aR.getTipopr()%>
+                            </td>
+                            <td><%=aR.getID()%>
+                            </td>
+                        </tr>
                         <%
                             }
 
-                            if (request.getParameter("submit_modify") != null) {
+                            if (request.getParameter("submit_mod") != null) {
 
                                 boolean Response = false;
 
@@ -205,8 +218,8 @@
                 <span class="focus-input100"></span>
             </div>
             <div class="container-login100-form-btn">
-                <button class="login100-form-btn" type="submit" name="submit_modify" value="Modify">
-                    Modifica Prenotazione
+                <button class="login100-form-btn" type="submit" name="submit_mod" value="Modify">
+                    Modifica
                 </button>
             </div>
 
