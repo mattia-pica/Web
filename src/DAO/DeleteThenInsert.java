@@ -4,10 +4,10 @@ import Entity.User;
 import Utils.Query;
 import Utils.UserSingleton;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.Statement;
 import java.time.LocalTime;
-
-import static DAO.DB_Connection.conn_Aule;
 
 public class DeleteThenInsert {
 
@@ -16,9 +16,14 @@ public class DeleteThenInsert {
 
         User user = UserSingleton.getInstance().getUser();
 
+        Statement stmt = null;
+        Connection conn = null;
+
         try {
 
-            Statement statement = conn_Aule.createStatement();
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(Query.DB_URL, Query.USER, Query.PASS);
+            stmt = conn.createStatement();
 
             //----------------DUPLICATE ENTRY: SI CANCELLANO LE AULE CHE DANNO FASTIDIO ALLA NUOVA
 
@@ -30,18 +35,14 @@ public class DeleteThenInsert {
                     " AND (fine>='" + timeFinePrenota + "' AND inizio<='" + timeFinePrenota + "')))";
 
 
-            statement.executeUpdate(deleteSecretary);
+            stmt.executeUpdate(deleteSecretary);
 
             //----------------INSERIMENTO PRENOTAZIONE SEGRETARIA-----------------------//
 
-            /*String insertSecretary = "INSERT INTO dbEsame.Aule (nome, tipopr, datapr, inizio, fine, fromp) " +
-                    "VALUES " + "('" + nameAula + "','" + tipoPrenota + "','" + dataPrenota + "','"
-                    + timeInizioPrenota + "','" + timeFinePrenota + "','" + user.getUsername() + "')";*/
-
             String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
-            statement.executeUpdate(insertSecretary);
+            stmt.executeUpdate(insertSecretary);
 
-            statement.close();
+            stmt.close();
 
         }catch (Exception e){
             e.printStackTrace();

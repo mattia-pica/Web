@@ -1,7 +1,7 @@
 package DAO;
 
-import Entity.User;
 import Control.Controller;
+import Entity.User;
 import Utils.Query;
 
 import java.sql.Connection;

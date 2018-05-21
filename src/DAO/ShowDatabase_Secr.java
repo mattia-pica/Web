@@ -5,12 +5,8 @@ import Entity.User;
 import Utils.Query;
 import Utils.UserSingleton;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
-
-import static DAO.DB_Connection.conn_Aule;
 
 public class ShowDatabase_Secr {
 
@@ -19,6 +15,9 @@ public class ShowDatabase_Secr {
         ArrayList<Room> Classrooms = new ArrayList<>();
 
         User user = UserSingleton.getInstance().getUser();
+
+        Statement stmt = null;
+        Connection conn = null;
 
 
         //-----------------MODIFICABILITÀ DELLE CELLE
@@ -33,9 +32,14 @@ public class ShowDatabase_Secr {
 
         try {
 
+            Class.forName("com.mysql.jdbc.Driver");
+
+            conn = DriverManager.getConnection(Query.DB_URL, Query.USER, Query.PASS);
+
+            stmt = conn.createStatement();
+
             String completeDB = String.format(Query.completeDB, user.getUsername());
-            Statement statement = conn_Aule.createStatement();
-            ResultSet rs = statement.executeQuery(completeDB);
+            ResultSet rs = stmt.executeQuery(completeDB);
             while (rs.next()) {
                 Room room = new Room();
 
@@ -47,8 +51,8 @@ public class ShowDatabase_Secr {
                 room.setFromp(rs.getString("fromp"));
                 Classrooms.add(room);
             }
-            statement.close();
-        } catch (SQLException e) {
+            stmt.close();
+        } catch (Exception e) {
             System.err.println("Error" + e);
         }
 

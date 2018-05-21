@@ -3,9 +3,7 @@ package DAO;
 import Entity.Room;
 import Utils.Query;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
 import static DAO.DB_Connection.conn_Aule;
@@ -18,14 +16,20 @@ public class All_Prenotation {
         Connection connection2 = connection.connect_Aule();*/
 
         ArrayList<Room> room = new ArrayList<>();
+        Statement stmt = null;
+        Connection conn = null;
 
         try {
 
+            Class.forName("com.mysql.jdbc.Driver");
+
+            conn = DriverManager.getConnection(Query.DB_URL, Query.USER, Query.PASS);
+
+            stmt = conn.createStatement();
+
             String query = String.format(Query.allPrenotation);
 
-            Statement statement = conn_Aule.createStatement();
-
-            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
 
                 Room rooms = new Room();
@@ -39,9 +43,9 @@ public class All_Prenotation {
                 rooms.setID(rs.getInt("ID"));
                 room.add(rooms);
             }
-            statement.close();
+            stmt.close();
 
-        }catch (SQLException e){
+        }catch (Exception e){
                 System.err.println(e);
             }
 

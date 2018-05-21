@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 public class Disponible_RoomBean {
 
-
     public Disponible_RoomBean(ArrayList<String> nome) {
         this.nome = nome;
     }

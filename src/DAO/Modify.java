@@ -2,12 +2,8 @@ package DAO;
 
 import Utils.Query;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalTime;
-
-import static DAO.DB_Connection.conn_Aule;
 
 public class Modify {
 
@@ -24,28 +20,27 @@ public class Modify {
                     + " OR(inizio<='" + start + "'AND fine>='" + end + "'))";
 
             try {
+
+                Statement stmt = null;
+                Connection conn = null;
+
+                Class.forName("com.mysql.jdbc.Driver");
+
+                conn = DriverManager.getConnection(Query.DB_URL, Query.USER, Query.PASS);
+
+                stmt = conn.createStatement();
     
-                /*DB_Connection db_connection_ = new DB_Connection();
-                db_connection_.connect_Aule();*/
-                Statement stat = conn_Aule.createStatement();
+
                 ResultSet control;
-                control = stat.executeQuery(controlQuery);
+                control = stmt.executeQuery(controlQuery);
 
                 if (control.next()) {
                     return false;
                 }
+                                stmt.executeUpdate(modify);
+                stmt.close();
 
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            try {
-
-                Statement statement = conn_Aule.createStatement();
-                statement.executeUpdate(modify);
-                statement.close();
-
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 return false;
             }

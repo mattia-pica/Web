@@ -3,9 +3,7 @@ package DAO;
 import Utils.Query;
 
 import javax.sound.midi.Soundbank;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalTime;
 
 import static DAO.DB_Connection.conn_Aule;
@@ -15,18 +13,23 @@ public class EntryController {
 
     public boolean emptyController(String name){
 
+        Statement stmt = null;
+        Connection conn = null;
+
         try {
 
-            Statement statement = conn_Aule.createStatement();
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(Query.DB_URL, Query.USER, Query.PASS);
+            stmt = conn.createStatement();
 
-            ResultSet resultSet = statement.executeQuery(String.format(Query.emptyControl, name));
+            ResultSet resultSet = stmt.executeQuery(String.format(Query.emptyControl, name));
 
             if (resultSet.next()){
 
                 return true;
 
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;
@@ -34,7 +37,8 @@ public class EntryController {
 
     public boolean duplicateController(String name, String dataPrenota, LocalTime timeInizioPrenota, LocalTime timeFinePrenota){
 
-        System.out.println(name + " " + dataPrenota + " " + timeInizioPrenota + " " + timeFinePrenota);
+        Statement stmt = null;
+        Connection conn = null;
 
         //Controlla se ci sono aule che vanno in conflitto con i criteri inseriti
 
@@ -51,13 +55,15 @@ public class EntryController {
                 +"' AND inizio<'"+timeFinePrenota+"') "+"OR (inizio>'"+timeInizioPrenota+"' AND fine<'"+timeFinePrenota+"')))";*/
 
         try {
-            Statement statement = conn_Aule.createStatement();
-            ResultSet resultSet = statement.executeQuery(duplicateControl);
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(Query.DB_URL, Query.USER, Query.PASS);
+            stmt = conn.createStatement();
+            ResultSet resultSet = stmt.executeQuery(duplicateControl);
             if (resultSet.next()){
                 return false;
             }
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

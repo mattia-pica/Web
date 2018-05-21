@@ -4,12 +4,15 @@ import Control.Controller;
 import Entity.User;
 import Utils.Query;
 import Utils.UserSingleton;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalTime;
 
 
-public class Insert_Prof extends DB_Connection {
+public class Insert_Prof{
 
     public boolean insert(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
                           LocalTime timeFinePrenota) {
@@ -17,59 +20,55 @@ public class Insert_Prof extends DB_Connection {
         User user = UserSingleton.getInstance().getUser();
         Controller controller = new Controller();
 
-        if (!controller.duplicateControl(nameAula, dataPrenota, timeInizioPrenota, timeFinePrenota)){
+        if (!controller.duplicateControl(nameAula, dataPrenota, timeInizioPrenota, timeFinePrenota)) {
             System.out.println("duplicate");
             return false;
         }
 
-        if (controller.emptyControl(nameAula)) {
+        try {
 
-            try {
+            Statement stmt = null;
+            Connection conn = null;
 
-                Statement statement = conn_Aule.createStatement();
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(Query.DB_URL, Query.USER, Query.PASS);
+            stmt = conn.createStatement();
+
+
+            if (controller.emptyControl(nameAula)) {
 
                 String del = String.format(Query.deleteEmpty, nameAula);
-                statement.executeUpdate(del);
+                stmt.executeUpdate(del);
 
                 String QUERYprof = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
 
-                statement.executeUpdate(QUERYprof);
+                stmt.executeUpdate(QUERYprof);
 
-                String PrenotationInfo = "Signor " + user.getName() + " " + user.getSurname() +  " la prenotazione da " +
+                String PrenotationInfo = "Signor " + user.getName() + " " + user.getSurname() + " la prenotazione da " +
                         "lei inserita per l'" + nameAula + " nel giorno " + dataPrenota +
                         " dalle ore " + timeInizioPrenota + " alle ore " + timeFinePrenota + " è stata " +
                         " inserita con successo! ";
 
                 controller.deletedEmail(user.getMail(), "Prenotazione effettuata", PrenotationInfo);
-                statement.close();
 
-
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-                return false;
-            }
-        }else {
-
-            try {
-                Statement statement = conn_Aule.createStatement();
+            } else {
 
                 String insertProf = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
 
-                String PrenotationInfo = "Signor " + user.getName() + " " + user.getSurname() +  " la prenotazione da " +
+                String PrenotationInfo = "Signor " + user.getName() + " " + user.getSurname() + " la prenotazione da " +
                         "lei inserita per l'" + nameAula + " nel giorno " + dataPrenota +
                         " dalle ore " + timeInizioPrenota + " alle ore " + timeFinePrenota + " è stata " +
                         " inserita con successo! ";
 
                 controller.deletedEmail(user.getMail(), "Prenotazione effettuata", PrenotationInfo);
-                statement.executeUpdate(insertProf);
-                statement.close();
+                stmt.executeUpdate(insertProf);
+                stmt.close();
 
-            } catch (SQLException e) {
-                e.printStackTrace();
+
             }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return true;
-
     }
-}    
+}

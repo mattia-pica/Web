@@ -14,12 +14,10 @@ public class DisponibleRooms {
 
     public static Disponible_RoomBean show(LocalTime timeInizio, LocalTime timeFine, String dateSearch){
 
-        /*DB_Connection connection = new DB_Connection();
-        Connection connection1 = connection.connect_Aule();*/
         java.sql.Statement stmt = null;
         Connection conn = null;
 
-        ArrayList<Disponible_RoomBean> Classrooms = new ArrayList<Disponible_RoomBean>();
+        ArrayList<Disponible_RoomBean> Classrooms = new ArrayList<>();
         Disponible_RoomBean disponible_roomBean = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
@@ -29,9 +27,11 @@ public class DisponibleRooms {
             stmt = conn.createStatement();
 
 
-            String query ="SELECT DISTINCT nome FROM dbEsame.Aule WHERE nome NOT IN (SELECT nome FROM dbEsame.Aule WHERE datapr='"
+            /*String query ="SELECT DISTINCT nome FROM dbEsame.Aule WHERE nome NOT IN (SELECT nome FROM dbEsame.Aule WHERE datapr='"
                     +dateSearch+"' AND ((inizio<='"+timeInizio+"' AND fine>='"+timeInizio+"') "+"OR (fine>='"+timeFine
-                    +"' AND inizio<='"+timeFine+"') "+"OR (inizio>='"+timeInizio+"' AND fine<='"+timeFine+"')))";
+                    +"' AND inizio<='"+timeFine+"') "+"OR (inizio>='"+timeInizio+"' AND fine<='"+timeFine+"')))";*/
+
+            String query = String.format(Query.disponibleRooms, dateSearch, timeInizio, timeInizio, timeFine, timeFine, timeInizio, timeFine);
             ResultSet rs = stmt.executeQuery(query);
 
             ArrayList<String> rooms = new ArrayList<>();

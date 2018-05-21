@@ -5,9 +5,7 @@ import Entity.User;
 import Utils.Query;
 import Utils.UserSingleton;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -28,13 +26,21 @@ public class ActivePrenotation {
 
         String date = dtf.format(localDate);
 
+        Statement stmt = null;
+        Connection conn = null;
+
         try {
+
+            Class.forName("com.mysql.jdbc.Driver");
+
+            conn = DriverManager.getConnection(Query.DB_URL, Query.USER, Query.PASS);
+
+            stmt = conn.createStatement();
 
             String query = String.format(Query.activePrenotation, user.getUsername(), date);
 
-            Statement statement = conn_Aule.createStatement();
 
-            ResultSet rs = statement.executeQuery(query);
+            ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
 
                 Room rooms = new Room();
@@ -48,9 +54,9 @@ public class ActivePrenotation {
                 rooms.setID(rs.getInt("ID"));
                 room.add(rooms);
             }
-            statement.close();
+            stmt.close();
 
-        }catch (SQLException e){
+        }catch (Exception e){
             System.err.println(e);
         }
 

@@ -5,13 +5,8 @@ import Entity.User;
 import Utils.Query;
 import Utils.UserSingleton;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
-
-import static DAO.DB_Connection.conn_Aule;
-
 
 public class ShowCompleteDB {
 
@@ -19,14 +14,21 @@ public class ShowCompleteDB {
 
         User user = UserSingleton.getInstance().getUser();
 
+        Statement stmt = null;
+        Connection conn = null;
 
         ArrayList<Room> rooms = new ArrayList<>();
 
 
         try {
 
-            Statement statement = conn_Aule.createStatement();
-            ResultSet rs = statement.executeQuery(String.format(Query.completeDB, user.getUsername()));
+            Class.forName("com.mysql.jdbc.Driver");
+
+            conn = DriverManager.getConnection(Query.DB_URL, Query.USER, Query.PASS);
+
+            stmt = conn.createStatement();
+
+            ResultSet rs = stmt.executeQuery(String.format(Query.completeDB, user.getUsername()));
             while (rs.next()){
 
                 Room room = new Room();
@@ -41,8 +43,8 @@ public class ShowCompleteDB {
                 rooms.add(room);
             }
 
-            statement.close();
-            }catch (SQLException e) {
+            stmt.close();
+            }catch (Exception e) {
             System.err.println("Error" + e);
         }
 

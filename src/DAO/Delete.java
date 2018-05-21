@@ -6,12 +6,10 @@ import Entity.User;
 import Utils.Query;
 import Utils.UserSingleton;
 
-import javax.xml.bind.SchemaOutputResolver;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
-
-import static DAO.DB_Connection.conn_Aule;
 
 public class Delete {
 
@@ -25,13 +23,21 @@ public class Delete {
         String inizio = null;
         String fine = null;
 
+        Statement stmt = null;
+        Connection conn = null;
+
         try {
 
-            Statement statement = conn_Aule.createStatement();
+            Class.forName("com.mysql.jdbc.Driver");
+
+            conn = DriverManager.getConnection(Query.DB_URL, Query.USER, Query.PASS);
+
+            stmt = conn.createStatement();
+
 
             String emailInfo = String.format(Query.emailInfo, ID); //Recupero i dati dell'utente a cui è stata eliminata la prenotazione
 
-            ResultSet resultSet = statement.executeQuery(emailInfo);
+            ResultSet resultSet = stmt.executeQuery(emailInfo);
 
             if (resultSet.next()){
 
@@ -42,7 +48,7 @@ public class Delete {
 
             String sql = String.format(Query.delete, ID);   //Cancello l'aula
             String classInformation = String.format(Query.classInformation, ID);
-            ResultSet info = statement.executeQuery(classInformation); //Recupero i dati dell'aula eliminata
+            ResultSet info = stmt.executeQuery(classInformation); //Recupero i dati dell'aula eliminata
 
             while (info.next()){
                 nome = info.getString("nome");
@@ -53,7 +59,7 @@ public class Delete {
                 System.out.println(nome + data + inizio + fine);
             }
 
-            statement.executeUpdate(sql);
+            stmt.executeUpdate(sql);
 
             String deleteInformation = "Signor " + userBean.getName() + " " + userBean.getSurname() +  " la prenotazione da " +
                     "lei inserita per l'" + nome + " nel giorno " + data +
@@ -63,9 +69,9 @@ public class Delete {
 
             controller.deletedEmail(userBean.getEmail(), "Eliminazione Effettuata", deleteInformation);
 
-            statement.close();
+            stmt.close();
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return true;
