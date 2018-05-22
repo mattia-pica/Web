@@ -2,7 +2,6 @@ package Utils;
 
 public class Query {
 
-
     public static String PASS = "trottola12";
     public static String USER = "root";
     public static String DB_URL = "jdbc:mysql://localhost/dbEsame";
@@ -30,5 +29,9 @@ public class Query {
     public static String activePrenotation = "SELECT nome, datapr, inizio, fine, tipopr FROM Aule WHERE fromp='%s' AND datapr>='%s';";
 
     public static String retrieveName = "SELECT DISTINCT nome FROM Aule WHERE ID='%s';";
+
+    public static String disponibleRooms = "SELECT DISTINCT nome FROM dbEsame.Aule WHERE nome NOT IN (" +
+            "SELECT nome FROM dbEsame WHERE datapr='%s' AND ((inizio<='%s' AND fine>='%s') OR (fine>='%s' AND " +
+            "inizio<='%s') OR (inizio>='%s' AND fine <='%s')))";
 
 }
