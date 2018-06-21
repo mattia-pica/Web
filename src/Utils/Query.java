@@ -31,7 +31,7 @@ public class Query {
     public static String retrieveName = "SELECT DISTINCT nome FROM Aule WHERE ID='%s';";
 
     public static String disponibleRooms = "SELECT DISTINCT nome FROM dbEsame.Aule WHERE nome NOT IN (" +
-            "SELECT nome FROM dbEsame WHERE datapr='%s' AND ((inizio<='%s' AND fine>='%s') OR (fine>='%s' AND " +
+            "SELECT nome FROM dbEsame.Aule WHERE datapr='%s' AND ((inizio<='%s' AND fine>='%s') OR (fine>='%s' AND " +
             "inizio<='%s') OR (inizio>='%s' AND fine <='%s')))";
 
 }

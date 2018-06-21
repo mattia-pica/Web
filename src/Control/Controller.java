@@ -1,9 +1,11 @@
 package Control;
 
 import Bean.Disponible_RoomBean;
+import Bean.Prenotation_Bean;
 import DAO.*;
 import Entity.Room;
 import Entity.User;
+import Utils.PrenotationBeanSingleton;
 import Utils.SendMail;
 import Utils.UserSingleton;
 
@@ -144,4 +146,27 @@ public class Controller {
         UserSingleton singleton = UserSingleton.getInstance();
         singleton.setUser(u);
     }
+
+    //-----------------BEAN----------------------//
+
+    public void createPrenotationBean(LocalTime inizio, LocalTime fine, String date){
+
+        Prenotation_Bean prenotation_bean = new Prenotation_Bean(inizio, fine, date);
+        PrenotationBeanSingleton.getInstance().setPrenotation_bean(prenotation_bean);
+
+
+    }
+
+    /*public void createPrenotationBean(String nome, LocalTime inizio, LocalTime fine, String date, String tipo){
+
+        Prenotation_Bean prenotation_bean = new Prenotation_Bean(nome, inizio, fine, date, tipo);
+
+    }*/
+
+    /*public void createPrenotationSingleton(String nome, LocalTime inizio, LocalTime fine, String date, String tipo){
+
+        Prenotation_Bean prenotation_bean = new Prenotation_Bean(nome, inizio, fine, date, tipo);
+        PrenotationBeanSingleton.getInstance().setPrenotation_bean(prenotation_bean);
+
+    }*/
 }

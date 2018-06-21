@@ -8,14 +8,18 @@
 <%@ page import="Control.Controller" %>
 <%@ page import="java.time.LocalTime" %>
 <%@ page import="Bean.RoomBean" %>
+<%@ page import="Utils.PrenotationBeanSingleton" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
 <jsp:useBean id="roomBean" class="Bean.RoomBean" scope="session"/>
 
+
 <!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
 <jsp:setProperty name="roomBean" property="*"/>
+
+
 
 
 <!DOCTYPE html>
@@ -228,20 +232,20 @@
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Start">
                 <span class="label-input100">Start</span>
-                <input class="input100" type="text" name="startPR" placeholder="Start">
+                <input class="input100" type="text" name="startPR" placeholder="<%=PrenotationBeanSingleton.getInstance().getPrenotation_bean().getInizio()%>" disabled="disabled">
                 <span class="focus-input100"></span>
             </div>
 
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
                 <span class="label-input100">End</span>
-                <input class="input100" type="text" name="endPR" placeholder="End">
+                <input class="input100" type="text" name="endPR" placeholder="<%=PrenotationBeanSingleton.getInstance().getPrenotation_bean().getFine()%>" disabled="disabled">
                 <span class="focus-input100"></span>
             </div>
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Date">
                 <span class="label-input100">Date</span>
-                <input class="input100" type="text" name="datePR" placeholder="Date">
+                <input class="input100" type="text" name="datePR" placeholder="<%=PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate()%>" disabled="disabled">
                 <span class="focus-input100"></span>
             </div>
             <div class="wrap-input100 validate-input m-b-18">
@@ -253,7 +257,7 @@
             <div class="wrap-input100 validate-input m-b-18">
                 <fieldset>
                     <span class="label-input100">Conferenza</span>
-                    <input  style="margin-top: 15px" type="radio" name="typePR"  value="Conferenza"/>
+                    <input style="margin-top: 15px" type="radio" name="typePR" value="Conferenza"/>
 
                 </fieldset>
             </div>

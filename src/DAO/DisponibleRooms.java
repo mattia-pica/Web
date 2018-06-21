@@ -27,11 +27,11 @@ public class DisponibleRooms {
             stmt = conn.createStatement();
 
 
-            String query ="SELECT DISTINCT nome FROM dbEsame.Aule WHERE nome NOT IN (SELECT nome FROM dbEsame.Aule WHERE datapr='"
+            /*String query ="SELECT DISTINCT nome FROM dbEsame.Aule WHERE nome NOT IN (SELECT nome FROM dbEsame.Aule WHERE datapr='"
                     +dateSearch+"' AND ((inizio<='"+timeInizio+"' AND fine>='"+timeInizio+"') "+"OR (fine>='"+timeFine
-                    +"' AND inizio<='"+timeFine+"') "+"OR (inizio>='"+timeInizio+"' AND fine<='"+timeFine+"')))";
+                    +"' AND inizio<='"+timeFine+"') "+"OR (inizio>='"+timeInizio+"' AND fine<='"+timeFine+"')))";*/
 
-            //String query = String.format(Query.disponibleRooms, dateSearch, timeInizio, timeInizio, timeFine, timeFine, timeInizio, timeFine);
+            String query = String.format(Query.disponibleRooms, dateSearch, timeInizio, timeInizio, timeFine, timeFine, timeInizio, timeFine);
             ResultSet rs = stmt.executeQuery(query);
 
             ArrayList<String> rooms = new ArrayList<>();

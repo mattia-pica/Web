@@ -105,6 +105,7 @@
                                     LocalTime timeInizio = LocalTime.parse(StartSearch);
                                     LocalTime timeFine = LocalTime.parse(EndSearch);
                                     r = controller.show(timeInizio, timeFine, DateSearch);
+                                    controller.createPrenotationBean(timeInizio, timeFine, DateSearch);
                                     for (int i = 0; i < r.getNome().size(); i++){%>
                                     <tr><td><%=r.getNome().get(i)%></td><td><button class="login100-form-btn" name="" type="submit" onclick="window.location.href='/Secr_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button>
 
