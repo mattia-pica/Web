@@ -104,130 +104,82 @@
                 </script>
 
                 <%
-                    String name = request.getParameter("aula");
+
                     boolean Response;
                     Controller controller = new Controller();
 
                     if (request.getParameter("submit_prenotation") != null){
 
-                        roomBean.setNome(name);
+                        if (request.getParameter("startPR") == null ||
+                                request.getParameter("endPR") == null || request.getParameter("datePR") == null ||
+                                (request.getParameter("typePR")  == null && request.getParameter("altroPRtext") == null)){
 
-                        String typePR;
-                        /*LocalTime startPR = null;
-                        LocalTime endPR = null;*/
-                        String date;
-
-                        if(request.getParameter("typePR") == null){
-
-                            typePR = request.getParameter("altroPRtext");
-                            LocalTime start = PrenotationBeanSingleton.getInstance().getPrenotation_bean().getInizio();
-                            LocalTime end = PrenotationBeanSingleton.getInstance().getPrenotation_bean().getFine();
-                            date = request.getParameter("datePR");
-                            /*if (start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
-
-                                String info = "alert('Completare tutti i campi!');";
-                                out.println("<script type=\"text/javascript\">");
-                                out.println(info);
-                                out.println("location='Secr_Prenotation.jsp';");
-                                out.println("</script>");
-                            }*/
-
-                            System.out.println(start);
-
-                            roomBean.setInizio(start);
-                            roomBean.setFine(end);
-                            roomBean.setDatapr(date);
-                            roomBean.setTipopr(typePR);
-
-                            /*startPR = LocalTime.parse(start);
-                            endPR = LocalTime.parse(end);*/
-                            Response = controller.newPrenotationSecretary(name, typePR, date, start, end);
-                            System.out.println(typePR + " " + start + " " + end + " " + date);
-                        }else{
-
-                            typePR = request.getParameter("typePR");
-                            LocalTime start = PrenotationBeanSingleton.getInstance().getPrenotation_bean().getInizio();
-                            LocalTime end = PrenotationBeanSingleton.getInstance().getPrenotation_bean().getFine();
-                            date = PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate();
-                            /*typePR = request.getParameter("typePR");
-                            String start = request.getParameter("startPR");
-                            String end = request.getParameter("endPR");
-                            date = request.getParameter("datePR");*/
-
-                            /*if (start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
-
-                                String info = "alert('Completare tutti i campi!');";
-                                out.println("<script type=\"text/javascript\">");
-                                out.println(info);
-                                out.println("location='Secr_Prenotation.jsp';");
-                                out.println("</script>");
-                            }*/
-
-                            roomBean.setInizio(start);
-                            roomBean.setFine(end);
-                            roomBean.setDatapr(date);
-                            roomBean.setTipopr(typePR);
-
-                            /*startPR = LocalTime.parse(start);
-                            endPR = LocalTime.parse(end);*/
-                            Response = controller.newPrenotationSecretary(name, typePR, date, start, end);
-
-                            System.out.println(typePR + " " + start + " " + end + " " + date);
-
-                        }
-
-                        if (Response) {
-
-                            String info = "alert('Prenotazione Effettuata con successo');";
+                            String info = "alert('Completare tutti i campi!');";
                             out.println("<script type=\"text/javascript\">");
                             out.println(info);
-                            out.println("location='secretaryPage.jsp';");
+                            out.println("location='Forced_Prenotation.jsp';");
                             out.println("</script>");
-                            
+
                         }else {
+
+                            roomBean.setNome(request.getParameter("aula"));
+                            roomBean.setInizio(LocalTime.parse(request.getParameter("startPR")));
+                            roomBean.setFine(LocalTime.parse(request.getParameter("endPR")));
+                            roomBean.setDatapr(request.getParameter("datePR"));
+
+                            if (request.getParameter("typePR") == null){
+                                roomBean.setTipopr(request.getParameter("altroPRtext"));
+                            }else {
+                                roomBean.setTipopr(request.getParameter("typePR"));
+                            }
+
+                            Response = controller.newPrenotationSecretary(roomBean.getNome(), roomBean.getTipopr(),
+                                    roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine());
+
+                            if (Response){
+
+                                String info = "alert('Prenotazione effettuata con successo!');";
+                                out.println("<script type=\"text/javascript\">");
+                                out.println(info);
+                                out.println("location='secretaryPage.jsp';");
+                                out.println("</script>");
+
+                            }else {
                 %>
                 <script type="text/javascript">
                     showDiv();
                 </script>
                 <%
+                               }
+                            }
                         }
-                    }
 
-                    if(request.getParameter("submit_delete") != null){
+                        if (request.getParameter("submit_delete") != null){
 
-                        Response = controller.deleteThenInsert(roomBean.getNome(), roomBean.getTipopr(),
-                                roomBean.getDatapr(),roomBean.getInizio(), roomBean.getFine());
+                            Response = controller.deleteThenInsert(roomBean.getNome(), roomBean.getTipopr(),
+                                    roomBean.getDatapr(),roomBean.getInizio(), roomBean.getFine());
 
-                        /*Response = controller.deleteThenInsert(roomBean.getNome(), roomBean.getTipopr(), roomBean.getDatapr(),
-                                LocalTime.parse(roomBean.getInizio()), LocalTime.parse(roomBean.getFine()));*/
-                        System.out.println(Response);
+                            if (Response){
 
-                        if (Response){
+                                String info = "alert('Prenotata " + roomBean.getNome() + "');";
+                                out.println("<script type=\"text/javascript\">");
+                                out.println(info);
+                                out.println("location='secretaryPage.jsp';");
+                                out.println("</script>");
 
-                            String info = "alert('Prenotata " + name + "');";
+                            }
+
+                        }
+                        if(request.getParameter("submit_not_delete") != null){
+
                             out.println("<script type=\"text/javascript\">");
-                            out.println(info);
-                            out.println("location='secretaryPage.jsp';");
+                            out.println("alert('Operazione annullata');");
+                            out.println("location=secretaryPage.jsp';");
                             out.println("</script>");
 
                         }
-                    }
-                    if(request.getParameter("submit_not_delete") != null){
 
-                        out.println("<script type=\"text/javascript\">");
-                        out.println("alert('Operazione annullata');");
-                        out.println("location=secretaryPage.jsp';");
-                        out.println("</script>");
-
-                    }
-
-                    /*todo
-                    * Vanno cancellati tutti gli altri if perchè facevano riferimento al fatto che un utente può scegliere di cambiare
-                    * i dati di prenotazione dopo aver fatto la ricerca, adesso vengono mantenuti da quando si effetua la ricerca
-                    * quindi non servono più i controlli (se si è arrivati a questa pagina non ci sono errori
-                    * */
-
-                %>
+                                %>
                 <span class="login100-form-title-1">
 						University of Tor Vergata
 					</span>
@@ -248,20 +200,20 @@
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Start">
                 <span class="label-input100">Start</span>
-                <input class="input100" type="text" name="startPR" placeholder="<%=PrenotationBeanSingleton.getInstance().getPrenotation_bean().getInizio()%>" disabled="disabled">
+                <input class="input100" type="text" name="startPR" placeholder="Start">
                 <span class="focus-input100"></span>
             </div>
 
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
                 <span class="label-input100">End</span>
-                <input class="input100" type="text" name="endPR" placeholder="<%=PrenotationBeanSingleton.getInstance().getPrenotation_bean().getFine()%>" disabled="disabled">
+                <input class="input100" type="text" name="endPR" placeholder="End">
                 <span class="focus-input100"></span>
             </div>
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Date">
                 <span class="label-input100">Date</span>
-                <input class="input100" type="text" name="datePR" placeholder="<%=PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate()%>" disabled="disabled">
+                <input class="input100" type="text" name="datePR" placeholder="Date">
                 <span class="focus-input100"></span>
             </div>
             <div class="wrap-input100 validate-input m-b-18">

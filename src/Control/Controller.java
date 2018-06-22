@@ -2,6 +2,7 @@ package Control;
 
 import Bean.Disponible_RoomBean;
 import Bean.Prenotation_Bean;
+import Bean.RoomBean;
 import DAO.*;
 import Entity.Room;
 import Entity.User;
@@ -59,6 +60,13 @@ public class Controller {
         return rooms;
     }
 
+    //-----------------TUTTE LE AULE-----------------------------------//
+
+    public ArrayList<RoomBean> allRooms(){
+        ArrayList<RoomBean> rooms = All_Rooms.AllRooms();
+        return rooms;
+    }
+
     //----------------NUOVA PRENOTAZIONE PROFESSORE--------------//
     public boolean newPrenotationProfessore(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
                                             LocalTime timeFinePrenota) {
@@ -104,6 +112,8 @@ public class Controller {
 
     }
 
+
+
     //--------------CANCELLAZIONE PRENOTAZIONE----------//
 
     public boolean delete(String ID){
@@ -133,10 +143,10 @@ public class Controller {
 
     //------------EMAIL DI NOTIFICA CANCELLAZIONE PRENOTQZIONE---------//
 
-    public boolean deletedEmail(String dest, String object, String text){
+    public void deletedEmail(String dest, String object, String text){
 
         SendMail sendMail = new SendMail();
-        return sendMail.inviaMail(dest, object, text);
+        sendMail.inviaMail(dest, object, text);
 
     }
 

@@ -2,25 +2,21 @@
   Created by IntelliJ IDEA.
   User: mattia
   Date: 27/03/18
-  Time: 16.36
-  To change this template use File | Settings | File Templates.
---%>
-<%--
-  Created by IntelliJ IDEA.
-  User: mattia
-  Date: 23/03/18
-  Time: 10.09
+  Time: 15.15
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="Control.Controller" %>
-<%@ page import="Entity.Room" %>
+<%@ page import="Bean.RoomBean" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
+<jsp:useBean id="roomBean" class="Bean.RoomBean" scope="session"/>
 
 
 <!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
+<jsp:setProperty name="roomBean" property="*"/>
+
 
 
 
@@ -62,30 +58,6 @@
     <div class="container-table100">
         <div class="wrap-table100">
             <div class="login100-form-title" style="background-image: url(login/images/bg-01.jpg);">
-                <!-- The popup -->
-                <div id="myModal" class="modal">
-
-                    <!-- Modal content -->
-                    <div class="modal-content-login">
-                        <span class="close">&times;</span>
-
-
-                        <div class="login-right">
-                            <h2>Prenotazione</h2>
-                            <br>
-                            <%-- <p><b>I'm already an ESHOP user</b><br>Enter your e-mail address and password to log into the website.</p>--%>
-                            <form>
-                                <div class="contact-right">
-                                    <input class="login100-form-btn" type="submit"  name="submit_delete" value="Cancella">
-                                </div>
-                                <div class="contact-right">
-                                    <input class="login100-form-btn" type="submit"  name="submit_not_delete" value="Non_cancellare">
-                                </div>
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
                 <span class="login100-form-title-1">
 						University of Tor Vergata
 					</span>
@@ -95,14 +67,7 @@
                     <table>
                         <thead>
                         <tr class="row100 head">
-                            <th class="cell100 column2">Nome</th>
-                            <th class="cell100 column2">Data</th>
-                            <th class="cell100 column2">Inizio</th>
-                            <th class="cell100 column2">Fine</th>
-                            <th class="cell100 column2">Per</th>
-                            <th class="cell100 column2">Da</th>
-                            <th class="cell100 column2">ID</th>
-
+                            <th class="cell100 column1">Nome Aula</th>
                         </tr>
                         </thead>
                     </table>
@@ -113,11 +78,11 @@
                         <tbody>
 
                         <%
-                        Controller controller = new Controller();
-                        ArrayList<Room> r = controller.allPrenotation();
+                            Controller controller = new Controller();
+                            ArrayList<RoomBean> r = controller.allRooms();
                             for (int i = 0; i < r.size(); i++){%>
 
-                        <tr><td><%=r.get(i).getNome()%></td><td><%=r.get(i).getDatapr()%></td><td><%=r.get(i).getInizio()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getTipopr()%></td><td><%=r.get(i).getFromp()%></td><td><%=r.get(i).getID()%></td></tr>
+                        <tr><td><%=r.get(i).getNome()%></td><td><button class="login100-form-btn" name="" type="submit" onclick="window.location.href='/Forced_Prenotation.jsp?aula=<%=r.get(i).getNome()%>'">Prenota <%=r.get(i).getNome()%></button>
 
                         <%
                             }
@@ -125,6 +90,7 @@
                         </tbody>
                     </table>
                 </div>
+
             </div>
         </div>
     </div>

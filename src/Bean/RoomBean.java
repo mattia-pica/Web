@@ -1,12 +1,14 @@
 package Bean;
 
+import java.time.LocalTime;
+
 public class RoomBean {
 
     private String nome;
     private String tipopr;
     private String datapr;
-    private String inizio;
-    private String fine;
+    private LocalTime inizio;
+    private LocalTime fine;
     private String fromp;
 
     public int getID() {
@@ -52,19 +54,19 @@ public class RoomBean {
         this.datapr = datapr;
     }
 
-    public String getInizio() {
+    public LocalTime getInizio() {
         return inizio;
     }
 
-    public void setInizio(String inizio) {
+    public void setInizio(LocalTime inizio) {
         this.inizio = inizio;
     }
 
-    public String getFine() {
+    public LocalTime getFine() {
         return fine;
     }
 
-    public void setFine(String fine) {
+    public void setFine(LocalTime fine) {
         this.fine = fine;
     }
 

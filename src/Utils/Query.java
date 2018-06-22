@@ -1,5 +1,7 @@
 package Utils;
 
+import javax.swing.plaf.PanelUI;
+
 public class Query {
 
     public static String PASS = "trottola12";
@@ -28,7 +30,15 @@ public class Query {
 
     public static String activePrenotation = "SELECT nome, datapr, inizio, fine, tipopr FROM Aule WHERE fromp='%s' AND datapr>='%s';";
 
-    public static String retrieveName = "SELECT DISTINCT nome FROM Aule WHERE ID='%s';";
+    public static String allRooms = "SELECT nome FROM dbEsame.Aule";
+
+    public static String deleteSecretary = "DELETE FROM dbEsame.Aule WHERE ((datapr='%s' AND nome='%s') AND " +
+            "((inizio<='%s' AND fine>='%s') OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";
+
+    public static String emailInfo_deleteThenInsert = "SELECT DISTINCT Name,Surname,Email,nome,datapr,inizio,fine FROM users JOIN Aule ON fromp=Username WHERE " +
+            "((datapr='%s' AND nome='%s') AND ((inizio<='%s' AND fine>='%s') OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine<='%s')));";
+
+    //public static String retrieveName = "SELECT DISTINCT nome FROM Aule WHERE ID='%s';";
 
     public static String disponibleRooms = "SELECT DISTINCT nome FROM dbEsame.Aule WHERE nome NOT IN (" +
             "SELECT nome FROM dbEsame.Aule WHERE datapr='%s' AND ((inizio<='%s' AND fine>='%s') OR (fine>='%s' AND " +

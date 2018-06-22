@@ -2,11 +2,8 @@ package DAO;
 
 import Utils.Query;
 
-import javax.sound.midi.Soundbank;
 import java.sql.*;
 import java.time.LocalTime;
-
-import static DAO.DB_Connection.conn_Aule;
 
 public class EntryController {
 

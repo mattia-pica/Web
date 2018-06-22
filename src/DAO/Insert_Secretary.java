@@ -36,7 +36,7 @@ public class Insert_Secretary {
                 //inserisce quella nuova, altrimenti
                 //ce ne sarebbero state due nel DB!
 
-                String del = String.format(Query.deleteEmpty);
+                String del = String.format(Query.deleteEmpty, nameAula);
                 stmt.executeUpdate(del);
 
                 String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());

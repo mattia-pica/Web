@@ -127,6 +127,11 @@
 
                             }
 
+                            if (request.getParameter("submit_forced") != null){           //Prenotazione Forzata  todo da finire
+                                response.sendRedirect("All_Rooms.jsp");
+
+                            }
+
 
                         %>
                         </tbody>
@@ -157,13 +162,16 @@
             </div>
             <div class="container-login100-form-btn">
                 <button class="login100-form-btn" type="submit" name="submit_search" value="Search">
-                    Search
+                    Cerca
+                </button>
+                <button class="login100-form-btn" type="submit" name="submit_forced" value="Forced">
+                    Inserisci
                 </button>
                 <button class="login100-form-btn" type="submit" name="submit_show_prenotation" value="Show">
                     Mostra Prenotazioni
                 </button>
                 <button class="login100-form-btn" type="submit" name="submit_show_aule_secr" value="Show">
-                Mostra Mie Prenotazioni
+                Mie Prenotazioni
             </button>
                 <button class="login100-form-btn" type="submit" name="submit_modify" value="Modify">
                     Modifica Prenotazione

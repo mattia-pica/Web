@@ -12,7 +12,7 @@ import javax.mail.internet.MimeMessage;
 
 public class SendMail {
 
-    public boolean inviaMail(/*String mitt, */String dest, String object, String text){
+    public void inviaMail(/*String mitt, */String dest, String object, String text){
         final String username = "segreteria.classrooms@gmail.com";
         final String password = "trottola123";
 
@@ -47,6 +47,5 @@ public class SendMail {
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
-        return true;
     }
 }
