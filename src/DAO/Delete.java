@@ -44,6 +44,7 @@ public class Delete {
                 userBean.setName(resultSet.getString("Name"));
                 userBean.setSurname(resultSet.getString("Surname"));
                 userBean.setEmail(resultSet.getString("Email"));
+                userBean.setUsername(resultSet.getString("Username"));
             }
 
             String sql = String.format(Query.delete, ID);   //Cancello l'aula
@@ -56,15 +57,26 @@ public class Delete {
                 inizio = info.getString("inizio");
                 fine = info.getString("fine");
 
-                System.out.println(nome + data + inizio + fine);
             }
 
             stmt.executeUpdate(sql);
 
-            String deleteInformation = "Signor " + userBean.getName() + " " + userBean.getSurname() +  " la prenotazione da " +
+            String deleteInformation = null;
+
+
+            if (userBean.getUsername().equals(user.getUsername())){
+
+                deleteInformation = "Signor " + user.getName() + " " + user.getSurname() + " la richiesta di eliminazione " +
+                        "della sua prenotazione per l'" + nome + " nel giorno " + data + "dalle ore " + inizio +
+                        " alle ore " + fine + " è stata effettuata con successo";
+                controller.deletedEmail(userBean.getEmail(), "Eliminazione Effettuata", deleteInformation);
+                return true;
+            }
+            deleteInformation = "Signor " + userBean.getName() + " " + userBean.getSurname() +  " la prenotazione da " +
                     "lei inserita per l'" + nome + " nel giorno " + data +
                     " dalle ore " + inizio + " alle ore " + fine + " è stata " +
                     " eliminata da " + user.getName() + " " + user.getSurname();
+
             System.out.println(user.getMail() + "    " + userBean.getEmail());
 
             controller.deletedEmail(userBean.getEmail(), "Eliminazione Effettuata", deleteInformation);
@@ -73,6 +85,7 @@ public class Delete {
 
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
         return true;
     }

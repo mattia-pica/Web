@@ -13,12 +13,6 @@ public class Modify {
                 + type + "' WHERE ID='" + id + "'";*/
         String modify = String.format(Query.modify, start, end, date, type, id);
 
-            String controlQuery = "SELECT nome FROM dbEsame.Aule WHERE datapr='" + date + "' AND ID!='" + id +"' AND((inizio<='" + start +
-                    "' AND fine>='" + start + "')"
-                    + " OR(fine>='" + end + "' AND inizio<='" + end + "') " +
-                    " OR(inizio>='" + start + "' AND fine<='" + end + "')"
-                    + " OR(inizio<='" + start + "'AND fine>='" + end + "'))";
-
             try {
 
                 Statement stmt = null;
@@ -29,15 +23,19 @@ public class Modify {
                 conn = DriverManager.getConnection(Query.DB_URL, Query.USER, Query.PASS);
 
                 stmt = conn.createStatement();
-    
 
-                ResultSet control;
-                control = stmt.executeQuery(controlQuery);
+                String controlQuery = String.format(Query.duplicateControl_Modify, date, id, start, start,
+                        end, end, start, end);
+
+                System.out.println(controlQuery);
+
+                ResultSet control = stmt.executeQuery(controlQuery);
 
                 if (control.next()) {
                     return false;
                 }
-                                stmt.executeUpdate(modify);
+
+                stmt.executeUpdate(modify);
                 stmt.close();
 
             } catch (Exception e) {

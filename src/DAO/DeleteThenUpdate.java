@@ -26,14 +26,19 @@ public class DeleteThenUpdate {
             stmt = conn.createStatement();
 
 
-            String deleteQuery = "DELETE FROM dbEsame.Aule WHERE datapr='" + date + "' AND((inizio<='" + start +
+            /*String deleteQuery = "DELETE FROM dbEsame.Aule WHERE datapr='" + date + "' AND((inizio<='" + start +
                     "' AND fine>='" + start + "' AND ID !='" + id + "')"
                     + " OR(fine>='" + end + "' AND inizio<='" + end + "'AND ID !='" +id +"') " +
                     " OR(inizio>='" + start + "' AND fine<='" + end + "'AND ID !='" +id +"')"
-                    + " OR(inizio<='" + start + "'AND fine>='" + end + "'AND ID !='" +id +"'))";
+                    + " OR(inizio<='" + start + "'AND fine>='" + end + "'AND ID !='" +id +"'))";*/
 
-            String modify = "UPDATE Aule SET inizio='" + start + "', fine='" + end + "', datapr='" + date + "', tipopr='"
-                    + type + "' WHERE ID='" + id + "'";
+            String deleteQuery = String.format(Query.delete_deleteThenUpdate, date, id, start, start,
+                    end, end, start, end);
+
+            /*String modify = "UPDATE Aule SET inizio='" + start + "', fine='" + end + "', datapr='" + date + "', tipopr='"
+                    + type + "' WHERE ID='" + id + "'";*/
+
+            String modify = String.format(Query.modify, start, end, date, type, id);
 
             /*String modify = String.format(Query.modify, start, end, date, type, id);*/
 

@@ -9,6 +9,7 @@
 <%@ page import="Entity.Room" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.time.LocalTime" %>
+<%@ page import="java.time.format.DateTimeParseException" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
@@ -144,110 +145,96 @@
 
                             if (request.getParameter("submit_modify") != null) {
 
-                                boolean Response = false;
-
                                 String ID  = request.getParameter("ID");
-                                String typePR;
+                                /*String typePR;
                                 LocalTime startPR;
                                 LocalTime endPR;
-                                String date;
+                                String date;*/
 
-                                if (request.getParameter("typePR") == null) {
+                                if (request.getParameter("startPR") == null || request.getParameter("ID") == null ||
+                                        request.getParameter("endPR") == null || request.getParameter("datePR") == null ||
+                                        (request.getParameter("typePR")  == null && request.getParameter("altroPRtext") == null)){
 
-                                    typePR = request.getParameter("altroPRtext");
-                                    String start = request.getParameter("startPR");
-                                    String end = request.getParameter("endPR");
-                                    date = request.getParameter("datePR");
-
-                                    roomBean.setInizio(start);
-                                    roomBean.setFine(end);
-                                    roomBean.setDatapr(date);
-                                    roomBean.setTipopr(typePR);
-
-                                    if (ID.isEmpty() || start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
-
-                                        String info = "alert('Completare tutti i campi!');";
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println(info);
-                                        out.println("location='Modify_Secr.jsp';");
-                                        out.println("</script>");
-
-                                    } else {
-
-                                        startPR = LocalTime.parse(start);
-                                        endPR = LocalTime.parse(end);
-
-                                        Response = controller.modify(ID, startPR, endPR, date, typePR);
-
-                                    }
-                                } else {
-
-                                    typePR = request.getParameter("typePR");
-                                    String start = request.getParameter("startPR");
-                                    String end = request.getParameter("endPR");
-                                    date = request.getParameter("datePR");
-
-                                    roomBean.setInizio(start);
-                                    roomBean.setFine(end);
-                                    roomBean.setDatapr(date);
-                                    roomBean.setTipopr(typePR);
-
-                                    if (ID.isEmpty() || start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
-
-                                        String info = "alert('Completare tutti i campi!');";
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println(info);
-                                        out.println("location='Modify_Secr.jsp';");
-                                        out.println("</script>");
-
-                                    } else {
-
-                                        startPR = LocalTime.parse(start);
-                                        endPR = LocalTime.parse(end);
-                                        Response = controller.modify(ID, startPR, endPR, date, typePR);
-                                    }
-                                }
-
-                                if (Response) {
-
+                                    String info = "alert('Completare tutti i campi!');";
                                     out.println("<script type=\"text/javascript\">");
-                                    out.println("alert('Prenotazione Modificata');");
+                                    out.println(info);
                                     out.println("location='Modify_Secr.jsp';");
                                     out.println("</script>");
-
-                                } else {
-
-                        %>
-                                    <script type="text/javascript">
-                                        showDiv();
-                                    </script>
-                                <%
-                                }
-
-                                if (request.getParameter("submit_delete") != null ){
-
-                                    System.out.println("CISTOOOOOOOOOOO");
-
-                                    //@TODO qua dentro non ci entra mai
+                                }else {
 
 
-                                    Response = controller.deleteThenUpdate(ID, LocalTime.parse(roomBean.getInizio()),
-                                            LocalTime.parse(roomBean.getFine()), roomBean.getDatapr(), roomBean.getTipopr());
+                                    try {
+                                        roomBean.setID(request.getParameter("ID"));
+                                        roomBean.setInizio(LocalTime.parse(request.getParameter("startPR")));
+                                        roomBean.setFine(LocalTime.parse(request.getParameter("endPR")));
+                                        roomBean.setDatapr(request.getParameter("datePR"));
 
-                                    if (Response){
+                                    }catch (DateTimeParseException e){  //Controllo formato dei dati inseriti
+
+                                        String info = "alert('I campi inseriti non sono corretti');";
+                                        out.println("<script type=\"text/javascript\">");
+                                        out.println(info);
+                                        out.println("location='Modify_Secr.jsp';");
+                                        out.println("</script>");
+                                        return;
+
+                                        //@Todo questo metodo di controllo dei dati funziona! Bisogna copiarlo negli altri casi d'uso
+                                    }
+
+
+                                    if (request.getParameter("typePR") == null){
+                                        roomBean.setTipopr(request.getParameter("altroPRtext"));
+                                    }else {
+                                        roomBean.setTipopr(request.getParameter("typePR"));
+                                    }
+
+                                    if (controller.modify(roomBean.getID(), roomBean.getInizio(), roomBean.getFine(),
+                                            roomBean.getDatapr(), roomBean.getTipopr())){
 
                                         out.println("<script type=\"text/javascript\">");
                                         out.println("alert('Prenotazione Modificata');");
-                                        out.println("location='Modify_Secr.jsp';");
+                                        out.println("location='secretaryPage.jsp';");
                                         out.println("</script>");
 
-                                    }else {
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println("alert('ERRORE');");
-                                        out.println("location='Modify_Secr.jsp';");
-                                        out.println("</script>");
+                                    }else { %>
+
+                        <script type="text/javascript">
+                            showDiv();
+                        </script>
+
+                        <%
+
+                                    if (request.getParameter("submit_delete") != null ){
+
+                                        if (controller.deleteThenUpdate(ID, roomBean.getInizio(),
+                                                roomBean.getFine(), roomBean.getDatapr(), roomBean.getTipopr())){
+
+                                            out.println("<script type=\"text/javascript\">");
+                                            out.println("alert('Prenotazione Modificata');");
+                                            out.println("location='secretaryPage.jsp';");
+                                            out.println("</script>");
+
+                                        }else {
+                                            out.println("<script type=\"text/javascript\">");
+                                            out.println("alert('ERRORE');");
+                                            out.println("location='secretaryPage.jsp';");
+                                            out.println("</script>");
+                                        }
+
                                     }
+                                        if(request.getParameter("submit_not_delete") != null){
+
+                                            out.println("<script type=\"text/javascript\">");
+                                            out.println("alert('Operazione annullata');");
+                                            out.println("location=secretaryPage.jsp';");
+                                            out.println("</script>");
+
+                                        }
+
+                                    }
+
                                 }
+
                             }
 
                         %>

@@ -10,16 +10,9 @@ public class RoomBean {
     private LocalTime inizio;
     private LocalTime fine;
     private String fromp;
+    private String ID;
 
-    public int getID() {
-        return ID;
-    }
 
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    private int ID;
 
     /*public RoomBean(String nome, String tipopr, String datapr, String inizio, String fine, String fromp) {
         this.nome = "";
@@ -68,6 +61,14 @@ public class RoomBean {
 
     public void setFine(LocalTime fine) {
         this.fine = fine;
+    }
+
+    public String getID() {
+        return ID;
+    }
+
+    public void setID(String ID) {
+        this.ID = ID;
     }
 
     public String getFromp() {
