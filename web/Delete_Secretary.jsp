@@ -119,24 +119,32 @@
 
                                 if (request.getParameter("ID") == null){
 
-                                    String info = "alert('Inserire ID prenotazione da eliminare');";
+                                    String info = "alert('Inserire l'ID della prenotazione da eliminare');";
+                                    out.println("<script type=\"text/javascript\">");
+                                    out.println(info);
+                                    out.println("location='Delete_Secretary.jsp';");
+                                    out.println("</script>");
+                                    return;
+                                }
+
+
+
+                                String id = request.getParameter("ID");
+
+                                if (controller.delete(request.getParameter("ID"))){
+                                    String info = "alert('Eliminata!');";
                                     out.println("<script type=\"text/javascript\">");
                                     out.println(info);
                                     out.println("location='Delete_Secretary.jsp';");
                                     out.println("</script>");
                                 }else {
 
-                                    String id = request.getParameter("ID");
+                                    String info = "alert('C'è stato un errore imprevisto, contattare la segreteria');";
+                                    out.println("<script type=\"text/javascript\">");
+                                    out.println(info);
+                                    out.println("location='Delete_Secretary.jsp';");
+                                    out.println("</script>");
 
-                                    boolean Response = controller.delete(id);
-
-                                    if (Response){
-                                        String info = "alert('Eliminata!');";
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println(info);
-                                        out.println("location='Delete_Secretary.jsp';");
-                                        out.println("</script>");
-                                        }
                                 }
                             }
 

@@ -73,16 +73,29 @@
 
                 <div class="table100-body js-pscroll" style="height:300px;overflow:auto;">
                     <%--style="height:300px;overflow:auto;" Scroll nella table--%>
-                    <table id="table" >
+                    <table id="table" style="table-layout: fixed">
                         <tbody>
 
                         <%
                             Controller controller = new Controller();
                             ArrayList<Room> r = controller.showComplete_DB();
-                            for (int i = 0; i < r.size(); i++){%>
-                            <tr><td><%=r.get(i).getNome()%></td><td><%=r.get(i).getDatapr()%></td><td><%=r.get(i).getInizio()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getFine()%></td><td><%=r.get(i).getTipopr()%></td><td><%=r.get(i).getID()%></td></tr>
+                            for (Room aR : r) {%>
+                        <tr>
+                            <td><%=aR.getNome()%>
+                            </td>
+                            <td><%=aR.getDatapr()%>
+                            </td>
+                            <td><%=aR.getInizio()%>
+                            </td>
+                            <td><%=aR.getFine()%>
+                            </td>
+                            <td><%=aR.getTipopr()%>
+                            </td>
+                            <td><%=aR.getID()%>
+                            </td>
+                        </tr>
                         <%
-                        }
+                            }
                         %>
                         </tbody>
                     </table>
@@ -109,13 +122,6 @@
 <!--===============================================================================================-->
 <script src="js/main.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<%--<script>
-    $('#textInput').click(function () {
-        $('input[name=typePR]').prop("checked", false);
-
-    });
-</script>--%>
-
 
 <%--QUANDO SI CLICCA SULLA TEXTFIELD ALTRO VENGONO DISATTIVATI I RADIO BUTTON--%>
 <script>
@@ -124,14 +130,6 @@
 
     });
 </script>
-<%--<script>
 
-    function f1(objButton){
-        alert(objButton.value);
-        return value;
-    }
-
-
-</script>--%>
 </body>
 </html>

@@ -4,46 +4,13 @@
 
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <%@ page import="java.util.Enumeration" %>
+<%@ page import="java.time.format.DateTimeParseException" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
 
 
 <!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
-
-
-<%
-
-   /* if (request.getParameter("aula_" + "") != null){
-
-        if(request.getParameter("typePR") == null){
-
-            String typePR = request.getParameter("altroPRtext");
-            String start = request.getParameter("startPR");
-            String end = request.getParameter("endPR");
-            String date = request.getParameter("datePR");
-
-            LocalTime startPR = LocalTime.parse(start);
-            LocalTime endPR = LocalTime.parse(end);
-            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-
-           // System.out.println(typePR + " " + start + " " + end + " " + date);
-        }else{
-            String typePR = request.getParameter("typePR");
-            String start = request.getParameter("startPR");
-            String end = request.getParameter("endPR");
-            String date = request.getParameter("datePR");
-
-            LocalTime startPR = LocalTime.parse(start);
-            LocalTime endPR = LocalTime.parse(end);
-            String datePR = date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-
-           // System.out.println(typePR + " " + start + " " + end + " " + date);
-
-        }
-
-    }*/
-%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -83,100 +50,7 @@
     <div class="container-table100">
         <div class="wrap-table100">
             <div class="login100-form-title" style="background-image: url(login/images/bg-01.jpg);">
-                <%--<!-- The popup -->
-                <div id="myModal" class="modal">
 
-                    <!-- Modal content -->
-                    <div class="modal-content-login">
-                        <span class="close">&times;</span>
-
-
-                        <div class="login-right">
-                            <h2>Prenotazione</h2>
-                            <br>
-                        &lt;%&ndash; <p><b>I'm already an ESHOP user</b><br>Enter your e-mail address and password to log into the website.</p>&ndash;%&gt;
-                            <form action="" method="post" class="login100-form validate-form" >
-                                <div class="wrap-input100 validate-input m-b-18" data-validate ="Start">
-                                    <span class="label-input100">Start</span>
-                                    <input class="input100" type="text" name="startPR" placeholder="Start" onfocus="myFunction(this)">
-                                    <span class="focus-input100"></span>
-                                </div>
-                                <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
-                                    <span class="label-input100">End</span>
-                                    <input class="input100" type="text" name="endPR" placeholder="End" onfocus="myFunction(this)">
-                                    <span class="focus-input100"></span>
-                                </div>
-                                <div class="wrap-input100 validate-input m-b-18" data-validate ="Date">
-                                <span class="label-input100">Date</span>
-                                <input class="input100" type="text" name="datePR" placeholder="Date" onfocus="myFunction(this)">
-                                <span class="focus-input100"></span>
-                            </div>
-                                <div class="wrap-input100 validate-input m-b-18">
-                                        <fieldset>
-                                            <span class="label-input100">Esame</span>
-                                            <input style="margin-top: 15px" type="radio" name="typePR" value="Esame"/>
-                                        </fieldset>
-                                </div>
-                                <div class="wrap-input100 validate-input m-b-18">
-                                    <fieldset>
-                                        <span class="label-input100">Conferenza</span>
-                                        <input  style="margin-top: 15px" type="radio" name="typePR"  value="Conferenza"/>
-
-                                    </fieldset>
-                                </div>
-                                <div class="wrap-input100 validate-input m-b-18" data-validate ="Altro">
-                                    <span class="label-input100">Altro</span>
-                                    <input class="input100" type="text" id="textInput" name="altroPRtext" placeholder="Altro">
-                                    <span class="focus-input100"></span>
-                                </div>
-                                <div class="contact-right">
-                                    <input class="login100-form-btn" type="submit"  name="submit_prenotation" value="Prenota">
-                                </div>
-
-                            </form>
-                        </div>
-                    </div>
-                </div>--%>
-                <%--<script>
-                    // Get the modal
-                    var modal = document.getElementById('myModal');
-
-                    // Get the <span> element that closes the modal
-                    var span = document.getElementsByClassName("close")[0];
-
-                    // When the user clicks on <span> (x), close the modal
-                    span.onclick = function () {
-                        modal.style.display = "none";
-
-                    };
-
-                    function updateQueryStringParameter(url, key, value) {
-
-                        var re = new RegExp("([?&])" + key + "=.*?(&|$)","i");
-                        var separator = url.indexOf('?') !== -1 ? "&" : "?";
-                        if(url.match(re)){
-                            return url.replace(re, '$1' + key + "=" + value + '$2');
-                        }
-                        else {
-                            return url + separator + key + '=' + value;
-                        }
-
-                    }
-
-                    function showDiv() {
-
-                        document.getElementById("foo").value = "some value";
-                        modal.style.display = "block";
-                        //console.log(parameter);
-
-                    }
-                    // When the user clicks anywhere outside of the modal, close it
-                    window.onclick = function (event) {
-                        if (event.target == modal) {
-                            modal.style.display = "none";
-                        }
-                    }
-                </script>--%>
 					<span class="login100-form-title-1">
 						University of Tor Vergata
 					</span>
@@ -202,28 +76,57 @@
                                     Disponible_RoomBean r;
                                     String StartSearch = request.getParameter("start");
                                     String EndSearch = request.getParameter("end");
-                                    String Date = request.getParameter("data");
-                                    //String DateSearch = Date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-                                    LocalTime timeInizio = LocalTime.parse(StartSearch);
-                                    LocalTime timeFine = LocalTime.parse(EndSearch);
+                                    String DateSearch = request.getParameter("data");
+
+                                    if (StartSearch.isEmpty() || EndSearch.isEmpty() || DateSearch.isEmpty()){
+                                        String info = "alert('Completare tutti i campi!');";
+                                        out.println("<script type=\"text/javascript\">");
+                                        out.println(info);
+                                        out.println("location='profPage.jsp';");
+                                        out.println("</script>");
+                                    }
+
+                                    try {
+                                        LocalTime timeInizio = LocalTime.parse(StartSearch);
+                                        LocalTime timeFine = LocalTime.parse(EndSearch);
+
+
                                     Controller controller = new Controller();
-                                    r = controller.show(timeInizio, timeFine, Date);
+                                    r = controller.show(timeInizio, timeFine, DateSearch);
+                                    if (r.getNome().isEmpty()){
+                                        String info = "alert('Non ci sono aule prenotabili');";
+                                        out.println("<script type=\"text/javascript\">");
+                                        out.println(info);
+                                        out.println("location='profPage.jsp';");
+                                        out.println("</script>");
+                                        return;
+                                    }
+                                    controller.createPrenotationBean(timeInizio, timeFine, DateSearch);
                                     for (int i = 0; i < r.getNome().size(); i++ ){%>
-                            <tr><td><%=r.getNome().get(i)%></td><td><button name="" type="submit" onclick="window.location.href='/Prof_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td></tr>
+                            <tr><td><%=r.getNome().get(i)%></td><td><button class="login100-form-btn" name="" type="submit" type="submit" onclick="window.location.href='/Prof_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td></tr>
 
                             <%
                                     }
+                                    }catch (DateTimeParseException e){
+
+                                        String info = "alert('Dati ricerca errati!');";
+                                        out.println("<script type=\"text/javascript\">");
+                                        out.println(info);
+                                        out.println("location='profPage.jsp';");
+                                        out.println("</script>");
+
+                                    }
                                 }
-                                if(request.getParameter("submit_show") != null){
+                                if(request.getParameter("submit_show") != null){  // Prenotazioni Professore
 
                                     response.sendRedirect("ShowAule_Professore.jsp");
                                 }
 
-                                if(request.getParameter("submit_modify") != null){
+                                if(request.getParameter("submit_modify") != null){  //Modifica propria prenotazione
                                     response.sendRedirect("Modify_Prof.jsp");
                                 }
 
-                                if (request.getParameter("submit_active") != null){
+                                if (request.getParameter("submit_active") != null){ //Prenotazioni attive
                                     response.sendRedirect("Active Prenotation.jsp");
                                 }
 

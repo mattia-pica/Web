@@ -9,6 +9,7 @@
 <%@ page import="java.time.LocalTime" %>
 <%@ page import="Bean.RoomBean" %>
 <%@ page import="Utils.PrenotationBeanSingleton" %>
+<%@ page import="java.time.format.DateTimeParseException" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -122,10 +123,26 @@
 
                         }else {
 
-                            roomBean.setNome(request.getParameter("aula"));
+                            try {
+                                roomBean.setNome(request.getParameter("aula"));
+                                roomBean.setInizio(LocalTime.parse(request.getParameter("startPR")));
+                                roomBean.setFine(LocalTime.parse(request.getParameter("endPR")));
+                                roomBean.setDatapr(request.getParameter("datePR"));
+
+                            }catch (DateTimeParseException e){ //Controllo formato dei dati inseriti
+
+                                String info = "alert('I campi inseriti non sono corretti');";
+                                out.println("<script type=\"text/javascript\">");
+                                out.println(info);
+                                out.println("location='secretaryPage.jsp';");
+                                out.println("</script>");
+                                return;
+                            }
+
+                            /*roomBean.setNome("Aula " + request.getParameter("aula");
                             roomBean.setInizio(LocalTime.parse(request.getParameter("startPR")));
                             roomBean.setFine(LocalTime.parse(request.getParameter("endPR")));
-                            roomBean.setDatapr(request.getParameter("datePR"));
+                            roomBean.setDatapr(request.getParameter("datePR"));*/
 
                             if (request.getParameter("typePR") == null){
                                 roomBean.setTipopr(request.getParameter("altroPRtext"));

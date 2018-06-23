@@ -51,25 +51,9 @@ public class Insert_Secretary {
                 stmt.close();
                 return true;
             }
-            if (!controller.duplicateControl(nameAula, dataPrenota, timeInizioPrenota, timeFinePrenota)) {
-                System.out.println("duplicate");
-                return false;
-
-            } else {
-
-                String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
-
-                stmt.executeUpdate(insertSecretary);
-                String PrenotationInfo = "Signor " + user.getName() + " " + user.getSurname() + " la prenotazione da " +
-                        "lei inserita per l'" + nameAula + " nel giorno " + dataPrenota +
-                        " dalle ore " + timeInizioPrenota + " alle ore " + timeFinePrenota + " è stata " +
-                        " inserita con successo! ";
-
-                controller.deletedEmail(user.getMail(), "Prenotazione effettuata", PrenotationInfo);
-                stmt.close();
-            }
         }catch (Exception e){
             e.printStackTrace();
+            return false;
         }
         return true;
     }

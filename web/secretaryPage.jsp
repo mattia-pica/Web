@@ -8,6 +8,7 @@
 <%@ page import="Control.Controller" %>
 <%@ page import="java.time.LocalTime" %>
 <%@ page import="Bean.Disponible_RoomBean" %>
+<%@ page import="java.time.format.DateTimeParseException" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
@@ -101,16 +102,39 @@
                                     out.println("</script>");
                                 }else {
 
+                                    try {
+
+
+
                                     //String DateSearch = Date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                                     LocalTime timeInizio = LocalTime.parse(StartSearch);
                                     LocalTime timeFine = LocalTime.parse(EndSearch);
                                     r = controller.show(timeInizio, timeFine, DateSearch);
+
+                                    if (r.getNome().isEmpty()){
+                                        String info = "alert('Non ci sono aule prenotabili');";
+                                        out.println("<script type=\"text/javascript\">");
+                                        out.println(info);
+                                        out.println("location='secretaryPage.jsp';");
+                                        out.println("</script>");
+                                        return;
+                                    }
+
                                     controller.createPrenotationBean(timeInizio, timeFine, DateSearch);
                                     for (int i = 0; i < r.getNome().size(); i++){%>
                                     <tr><td><%=r.getNome().get(i)%></td><td><button class="login100-form-btn" name="" type="submit" onclick="window.location.href='/Secr_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button>
 
                         <%
-                                            }
+                                        }
+                                    }catch (DateTimeParseException e){
+
+                                        String info = "alert('Dati di ricerca errati!');";
+                                        out.println("<script type=\"text/javascript\">");
+                                        out.println(info);
+                                        out.println("location='secretaryPage.jsp';");
+                                        out.println("</script>");
+
+                                    }
                                 }
                             }
 
@@ -127,7 +151,7 @@
 
                             }
 
-                            if (request.getParameter("submit_forced") != null){           //Prenotazione Forzata  todo da finire
+                            if (request.getParameter("submit_forced") != null){           //Prenotazione Forzata
                                 response.sendRedirect("All_Rooms.jsp");
 
                             }

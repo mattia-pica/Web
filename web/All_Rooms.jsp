@@ -80,6 +80,16 @@
                         <%
                             Controller controller = new Controller();
                             ArrayList<RoomBean> r = controller.allRooms();
+
+                            if (r.isEmpty()){
+                                String info = "alert('Non ci sono aule disponibili per i criteri inseriti');";
+                                out.println("<script type=\"text/javascript\">");
+                                out.println(info);
+                                out.println("location='secretaryPage.jsp';");
+                                out.println("</script>");
+                                return;
+                            }
+
                             for (int i = 0; i < r.size(); i++){%>
 
                         <tr><td><%=r.get(i).getNome()%></td><td><button class="login100-form-btn" name="" type="submit" onclick="window.location.href='/Forced_Prenotation.jsp?aula=<%=r.get(i).getNome()%>'">Prenota <%=r.get(i).getNome()%></button>

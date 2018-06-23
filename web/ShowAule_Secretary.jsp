@@ -13,6 +13,7 @@
 <%@ page import="java.util.Enumeration" %>
 <%@ page import="Entity.Room" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="com.sun.org.apache.bcel.internal.generic.IF_ACMPEQ" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
@@ -71,6 +72,7 @@
             <div class="table100 ver1 m-b-110">
                 <div class="table100-head">
                     <table>
+
                         <thead>
                         <tr class="row100 head">
                             <th class="cell100 column2">Nome</th>
@@ -86,30 +88,31 @@
                 </div>
                 <div class="table100-body js-pscroll" style="height:300px;overflow:auto;">
                     <%--style="height:300px;overflow:auto;" Scroll nella table--%>
-                    <table id="table" >
+                    <table id="table" style="table-layout: fixed"> <%-- TODO style="table-layout: fixed" SERVE A CENTRAREEEEE--%>
                         <tbody>
 
                         <%
                             Controller controller = new Controller();
                             ArrayList<Room> r = controller.show_s();
 
+                            if (r.isEmpty()){
+                                String info = "alert('Non hai prenotazioni');";
+                                out.println("<script type=\"text/javascript\">");
+                                out.println(info);
+                                out.println("location='secretaryPage.jsp';");
+                                out.println("</script>");
+                                return;
+                            }
+
                             for (Room aR : r) {%>
 
                         <tr>
-                            <td><%=aR.getNome()%>
-                            </td>
-                            <td><%=aR.getDatapr()%>
-                            </td>
-                            <td><%=aR.getInizio()%>
-                            </td>
-                            <td><%=aR.getFine()%>
-                            </td>
-                            <td><%=aR.getFine()%>
-                            </td>
-                            <td><%=aR.getTipopr()%>
-                            </td>
-                            <td><%=aR.getID()%>
-                            </td>
+                            <td><%=aR.getNome()%></td>
+                            <td><%=aR.getDatapr()%></td>
+                            <td><%=aR.getInizio()%></td>
+                            <td><%=aR.getFine()%></td>
+                            <td><%=aR.getTipopr()%></td>
+                            <td><%=aR.getID()%></td>
                         </tr>
 
                         <%
