@@ -72,12 +72,21 @@
                 </div>
 
                 <div class="table100-body js-pscroll" style="height:300px;overflow:auto;">
-                    <table id="table" >
+                    <table id="table" style="table-layout: fixed">
                         <tbody>
 
                         <%
                             Controller controller = new Controller();
                             ArrayList<Room> r = controller.showComplete_DB();
+
+                            if (r.isEmpty()){
+                                String info = "alert('Non ci sono prenotazioni attive');";
+                                out.println("<script type=\"text/javascript\">");
+                                out.println(info);
+                                out.println("location='profPage.jsp';");
+                                out.println("</script>");
+                            }else {
+
                             for (Room aR : r) {%>
                         <tr>
                             <td><%=aR.getNome()%>
@@ -95,6 +104,7 @@
                         </tr>
                         <%
                             }
+                            }
 
                             if ((request.getParameter("submit_Delete") != null)){
 
@@ -105,21 +115,25 @@
                                     out.println(info);
                                     out.println("location='Delete_Prof.jsp';");
                                     out.println("</script>");
+                                    return;
+                                }
+                                if (controller.delete(request.getParameter("ID"))){
+                                    String info = "alert('Eliminata!');";
+                                    out.println("<script type=\"text/javascript\">");
+                                    out.println(info);
+                                    out.println("location='Delete_Prof.jsp';");
+                                    out.println("</script>");
                                 }else {
 
-                                    String id = request.getParameter("ID");
+                                    String info = "alert('C'è stato un errore imprevisto, contattare la segreteria');";
+                                    out.println("<script type=\"text/javascript\">");
+                                    out.println(info);
+                                    out.println("location='Delete_Prof.jsp';");
+                                    out.println("</script>");
 
-                                    boolean Response = controller.delete(id);
-
-                                    if (Response){
-                                        String info = "alert('Eliminata!');";
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println(info);
-                                        out.println("location='Delete_Prof.jsp';");
-                                        out.println("</script>");
-                                    }
                                 }
                             }
+
                         %>
                         </tbody>
                     </table>

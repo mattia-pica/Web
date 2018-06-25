@@ -130,15 +130,14 @@
                                     response.sendRedirect("Active Prenotation.jsp");
                                 }
 
-                                if(request.getParameter("submit_modify") != null){
-
-                                    //response.sendRedirect("Modify_Prof.jsp");
-
-                                    //@TODO da errore quando si clicca su bottone
+                                if (request.getParameter("submit_delete") != null){ //Elimina Prenotazione
+                                    response.sendRedirect("Delete_Prof.jsp");
 
                                 }
 
                             %>
+
+
                             </tbody>
                         </table>
                 </div>
@@ -177,6 +176,9 @@
                 </button>
                 <button class="login100-form-btn" type="submit" name="submit_active" value="Modify">
                     Prenotazioni Attive
+                </button>
+                <button class="login100-form-btn" type="submit" name="submit_delete" value="Delete">
+                    Elimina Prenotazione
                 </button>
 
             </div>

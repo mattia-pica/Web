@@ -17,6 +17,10 @@ public class Query {
     public static String emailInfo_deleteThenInsert = "SELECT DISTINCT Name,Surname,Email,nome,datapr,inizio,fine FROM users JOIN Aule ON fromp=Username WHERE " +
             "((datapr='%s' AND nome='%s') AND ((inizio<='%s' AND fine>='%s') OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine<='%s')));";
 
+
+    public static String newAccYear = "INSERT INTO dbEsame.anni_accademici (DataInizio,DataFine,Nome) VALUES ('%s','%s','%s')";
+
+
     //----------------PROFESSORE-------------------//
 
 
@@ -55,5 +59,10 @@ public class Query {
     public static String disponibleRooms = "SELECT DISTINCT nome FROM dbEsame.Aule WHERE nome NOT IN (" +
             "SELECT nome FROM dbEsame.Aule WHERE datapr='%s' AND ((inizio<='%s' AND fine>='%s') OR (fine>='%s' AND " +
             "inizio<='%s') OR (inizio>='%s' AND fine <='%s')))";
+
+
+    //-------------------ANNI ACCADEMICI----------------------//
+
+    public static String retrieveAccYear = "SELECT * FROM anni_accademici WHERE Nome='%s'";
 
 }

@@ -63,23 +63,26 @@
             <div class="login100-form-title" style="background-image: url(login/images/bg-01.jpg);">
 
                 <%
-                    String name = request.getParameter("aula");
-                    roomBean.setNome(name);  //@todo impostare questo nome per la table in modo che quando si verifica un errore viene ripristinato
+                    roomBean.setNome(request.getParameter("aula"));
                     Controller controller = new Controller();
 
                     if (request.getParameter("submit_prenotation") != null) {
 
-                        //roomBean.setNome(name);
-
                         String typePR;
 
-                        if (request.getParameter("typePR") == null && request.getParameter("altroPRtext") == null) {
+                        if (request.getParameter("typePR") == null && (request.getParameter("altroPRtext") == null
+                                || request.getParameter("altroPRtext") == "")) {
 
-                            String info = "alert('Inserire il tipo di prenotazione');";
-                            out.println("<script type=\"text/javascript\">");
-                            out.println(info);
-                            out.println("location='Secr_Prenotation.jsp';");
-                            out.println("</script>");
+                            //@Todo manca controllo dati inseriti ANCHE ALLA ALTRE!!!!!!!!!!
+                            %>
+
+                <script type="text/javascript">
+                    var msg = "<%="Completare tutti i campi"%>";
+                    alert(msg);
+                    location='Secr_Prenotation.jsp?aula=<%=roomBean.getNome()%>';
+                </script>
+
+                <%
                             return;
 
                         }
@@ -98,7 +101,7 @@
                         roomBean.setDatapr(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate());
                         roomBean.setTipopr(typePR);
 
-                        if (controller.newPrenotationSecretary(name, typePR, roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine())) {
+                        if (controller.newPrenotationSecretary(roomBean.getNome(), typePR, roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine())) {
 
                             String info = "alert('Prenotazione Effettuata con successo');";
                             out.println("<script type=\"text/javascript\">");
@@ -127,7 +130,7 @@
                     <table>
                         <thead>
                         <tr class="row100 head">
-                            <th class="cell100 column1">Nuova prenotazione per l' <%=request.getParameter("aula")%></th>
+                            <th class="cell100 column1">Nuova prenotazione per l' <%=roomBean.getNome()%></th>
                         </tr>
                         </thead>
                     </table>

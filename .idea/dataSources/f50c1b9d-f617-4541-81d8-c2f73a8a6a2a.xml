@@ -915,106 +915,192 @@
     <table id="230" parent="3" name="Aule">
       <Engine>InnoDB</Engine>
     </table>
-    <table id="231" parent="3" name="users">
+    <table id="231" parent="3" name="anni_accademici">
       <Engine>InnoDB</Engine>
     </table>
-    <column id="232" parent="230" name="nome">
+    <table id="232" parent="3" name="sessioni">
+      <Engine>InnoDB</Engine>
+    </table>
+    <table id="233" parent="3" name="users">
+      <Engine>InnoDB</Engine>
+    </table>
+    <view id="234" parent="3" name="comp">
+      <Comment>VIEW</Comment>
+    </view>
+    <column id="235" parent="230" name="nome">
       <Position>1</Position>
       <DataType>char(25)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="233" parent="230" name="tipopr">
+    <column id="236" parent="230" name="tipopr">
       <Position>2</Position>
       <DataType>char(25)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="234" parent="230" name="datapr">
+    <column id="237" parent="230" name="datapr">
       <Position>3</Position>
       <DataType>char(25)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="235" parent="230" name="inizio">
+    <column id="238" parent="230" name="inizio">
       <Position>4</Position>
       <DataType>time|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="236" parent="230" name="fine">
+    <column id="239" parent="230" name="fine">
       <Position>5</Position>
       <DataType>time|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="237" parent="230" name="fromp">
+    <column id="240" parent="230" name="fromp">
       <Position>6</Position>
       <DataType>char(25)|0</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="238" parent="230" name="ID">
+    <column id="241" parent="230" name="ID">
       <Position>7</Position>
       <DataType>int(11)|0</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="239" parent="230" name="Aule_nome_datapr_inizio_fine_pk">
+    <index id="242" parent="230" name="Aule_nome_datapr_inizio_fine_pk">
       <ColNames>nome
 datapr
 inizio
 fine</ColNames>
       <Unique>1</Unique>
     </index>
-    <key id="240" parent="230" name="PRIMARY">
+    <key id="243" parent="230" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>ID</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="241" parent="230" name="Aule_nome_datapr_inizio_fine_pk">
+    <key id="244" parent="230" name="Aule_nome_datapr_inizio_fine_pk">
       <ColNames>nome
 datapr
 inizio
 fine</ColNames>
       <UnderlyingIndexName>Aule_nome_datapr_inizio_fine_pk</UnderlyingIndexName>
     </key>
-    <column id="242" parent="231" name="Name">
+    <column id="245" parent="231" name="DataInizio">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="246" parent="231" name="DataFine">
+      <Position>2</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="247" parent="231" name="Nome">
+      <Position>3</Position>
+      <DataType>varchar(30)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <index id="248" parent="231" name="anni_accademici_DataInizio_pk">
+      <ColNames>DataInizio</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="249" parent="231" name="anni_accademici_DataFine_pk">
+      <ColNames>DataFine</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <index id="250" parent="231" name="anni_accademici_Nome_pk">
+      <ColNames>Nome</ColNames>
+      <Unique>1</Unique>
+    </index>
+    <key id="251" parent="231" name="anni_accademici_DataInizio_pk">
+      <ColNames>DataInizio</ColNames>
+      <UnderlyingIndexName>anni_accademici_DataInizio_pk</UnderlyingIndexName>
+    </key>
+    <key id="252" parent="231" name="anni_accademici_DataFine_pk">
+      <ColNames>DataFine</ColNames>
+      <UnderlyingIndexName>anni_accademici_DataFine_pk</UnderlyingIndexName>
+    </key>
+    <key id="253" parent="231" name="anni_accademici_Nome_pk">
+      <ColNames>Nome</ColNames>
+      <UnderlyingIndexName>anni_accademici_Nome_pk</UnderlyingIndexName>
+    </key>
+    <column id="254" parent="232" name="DataInizio">
+      <Position>1</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="255" parent="232" name="DataFine">
+      <Position>2</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="256" parent="232" name="NomeSess">
+      <Position>3</Position>
+      <DataType>varchar(15)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="257" parent="232" name="Tipo">
+      <Position>4</Position>
+      <DataType>varchar(10)|0</DataType>
+      <NotNull>1</NotNull>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <key id="258" parent="232" name="PRIMARY">
+      <NameSurrogate>1</NameSurrogate>
+      <ColNames>DataInizio
+DataFine
+NomeSess</ColNames>
+      <Primary>1</Primary>
+    </key>
+    <column id="259" parent="233" name="Name">
       <Position>1</Position>
       <DataType>varchar(25)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="243" parent="231" name="Surname">
+    <column id="260" parent="233" name="Surname">
       <Position>2</Position>
       <DataType>varchar(25)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="244" parent="231" name="Username">
+    <column id="261" parent="233" name="Username">
       <Position>3</Position>
       <DataType>varchar(25)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="245" parent="231" name="Password">
+    <column id="262" parent="233" name="Password">
       <Position>4</Position>
       <DataType>varchar(25)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="246" parent="231" name="Type">
+    <column id="263" parent="233" name="Type">
       <Position>5</Position>
       <DataType>varchar(25)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="247" parent="231" name="Email">
+    <column id="264" parent="233" name="Email">
       <Position>6</Position>
       <DataType>char(30)|0</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="248" parent="231" name="PRIMARY">
+    <key id="265" parent="233" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>Username</ColNames>
       <Primary>1</Primary>
     </key>
+    <column id="266" parent="234" name="SUBSTRING(nome, 6)">
+      <Position>1</Position>
+      <DataType>varchar(20)|0</DataType>
+    </column>
   </database-model>
 </dataSource>

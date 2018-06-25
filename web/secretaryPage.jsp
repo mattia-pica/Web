@@ -87,8 +87,6 @@
                         <%
                             if (request.getParameter("submit_search") != null){
 
-                                //@TODO aggiungere controllo sui formati dei dati inseriti nelle textfield
-
                                 Disponible_RoomBean r;
                                 String StartSearch = request.getParameter("start");
                                 String EndSearch = request.getParameter("end");
@@ -103,8 +101,6 @@
                                 }else {
 
                                     try {
-
-
 
                                     //String DateSearch = Date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
                                     LocalTime timeInizio = LocalTime.parse(StartSearch);
@@ -156,6 +152,16 @@
 
                             }
 
+                            if (request.getParameter("submit_annoAcc") != null){          //Nuovo anno accademico
+                                response.sendRedirect("New_Acc.jsp");
+
+                            }
+
+                            if (request.getParameter("submit_session") != null){          //Nuova sessione
+                                response.sendRedirect("New_Session_First.jsp");
+
+                            }
+
 
                         %>
                         </tbody>
@@ -203,6 +209,13 @@
                 <button class="login100-form-btn" type="submit" name="submit_DELETE" value="Delete">
                     Elimina Prenotazione
                 </button>
+                <button class="login100-form-btn" type="submit" name="submit_annoAcc" value="AnnoAcc">
+                    Nuovo Anno Accademico
+                </button>
+                <button class="login100-form-btn" type="submit" name="submit_session" value="Session">
+                    Nuova Sessione
+                </button>
+
 
             </div>
         </form>

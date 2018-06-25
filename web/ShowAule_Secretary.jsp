@@ -116,7 +116,6 @@
                         </tr>
 
                         <%
-                                //@TODO MANCA BOTTONE PER TORNARE INDIETRO
                             }
                         %>
                         </tbody>

@@ -127,10 +127,6 @@
                                     return;
                                 }
 
-
-
-                                String id = request.getParameter("ID");
-
                                 if (controller.delete(request.getParameter("ID"))){
                                     String info = "alert('Eliminata!');";
                                     out.println("<script type=\"text/javascript\">");
@@ -139,7 +135,7 @@
                                     out.println("</script>");
                                 }else {
 
-                                    String info = "alert('C'è stato un errore imprevisto, contattare la segreteria');";
+                                    String info = "alert('C'è stato un errore imprevisto');";
                                     out.println("<script type=\"text/javascript\">");
                                     out.println(info);
                                     out.println("location='Delete_Secretary.jsp';");

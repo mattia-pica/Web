@@ -1,13 +1,20 @@
 <%@ page import="Control.Controller" %>
 <%@ page import="Entity.Room" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="java.time.LocalTime" %><%--
+<%@ page import="java.time.LocalTime" %>
+<%@ page import="java.time.format.DateTimeParseException" %><%--
   Created by IntelliJ IDEA.
   User: mattia
   Date: 04/04/18
   Time: 12.46
   To change this template use File | Settings | File Templates.
 --%>
+
+<!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
+<jsp:useBean id="roomBean" class="Bean.RoomBean" scope="session"/>
+
+<!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
+<jsp:setProperty name="roomBean" property="*"/>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -64,13 +71,15 @@
                             <th class="cell100 column2">Start</th>
                             <th class="cell100 column2">End</th>
                             <th class="cell100 column2">Type</th>
+                            <th class="cell100 column2">ID</th>
+
                         </tr>
                         </thead>
                     </table>
                 </div>
 
                 <div class="table100-body js-pscroll" style="height:300px;overflow:auto;">
-                    <table id="table" >
+                    <table id="table" style="table-layout: fixed">
                         <tbody>
 
                         <%
@@ -96,76 +105,61 @@
 
                             if (request.getParameter("submit_mod") != null) {
 
-                                boolean Response = false;
-
-                                String ID;
-                                String typePR;
+                                String ID = request.getParameter("ID");
+                                /*String typePR;
                                 LocalTime startPR;
                                 LocalTime endPR;
-                                String date;
+                                String date;*/
 
-                                if (request.getParameter("typePR") == null) {
-
-                                    ID = request.getParameter("ID");
-                                    typePR = request.getParameter("altroPRtext");
-                                    String start = request.getParameter("startPR");
-                                    String end = request.getParameter("endPR");
-                                    date = request.getParameter("datePR");
-
-                                    if (ID.isEmpty() || start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
-
-                                        String info = "alert('Completare tutti i campi!');";
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println(info);
-                                        out.println("location='Modify_Prof.jsp';");
-                                        out.println("</script>");
-
-                                    } else {
-
-                                        startPR = LocalTime.parse(start);
-                                        endPR = LocalTime.parse(end);
-                                        Response = controller.modify(ID, startPR, endPR, date, typePR);
-                                    }
-                                } else {
-
-                                    ID = request.getParameter("ID");
-                                    typePR = request.getParameter("typePR");
-                                    String start = request.getParameter("startPR");
-                                    String end = request.getParameter("endPR");
-                                    date = request.getParameter("datePR");
-
-                                    if (ID.isEmpty() || start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
-
-                                        String info = "alert('Completare tutti i campi!');";
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println(info);
-                                        out.println("location='Modify_Prof.jsp';");
-                                        out.println("</script>");
-                                    } else {
-
-                                        startPR = LocalTime.parse(start);
-                                        endPR = LocalTime.parse(end);
-                                        Response = controller.modify(ID, startPR, endPR, date, typePR);
-                                    }
-                                }
-
-                                if (Response) {
-
-                                    out.println("<script type=\"text/javascript\">");
-                                    out.println("alert('Prenotazione Modificata');");
-                                    out.println("location='Modify_Prof.jsp';");
-                                    out.println("</script>");
-
-                                } else {
-
-                                    String info = "alert('Ci sono prenotazione già attive con i criteri inseriti!');";
+                                if (request.getParameter("startPR") == null || request.getParameter("ID") == null ||
+                                        request.getParameter("endPR") == null || request.getParameter("datePR") == null ||
+                                        (request.getParameter("typePR") == null && request.getParameter("altroPRtext") == null)) {
+                                    String info = "alert('Completare tutti i campi!');";
                                     out.println("<script type=\"text/javascript\">");
                                     out.println(info);
                                     out.println("location='Modify_Prof.jsp';");
                                     out.println("</script>");
+                                } else {
+
+                                    try {
+                                        roomBean.setID(request.getParameter("ID"));
+                                        roomBean.setInizio(LocalTime.parse(request.getParameter("startPR")));
+                                        roomBean.setFine(LocalTime.parse(request.getParameter("endPR")));
+                                        roomBean.setDatapr(request.getParameter("datePR"));
+                                    } catch (DateTimeParseException e1) {
+
+                                        String info = "alert('I campi inseriti non sono corretti');";
+                                        out.println("<script type=\"text/javascript\">");
+                                        out.println(info);
+                                        out.println("location='Modify_Prof.jsp';");
+                                        out.println("</script>");
+                                        return;
+                                    }
+
+                                    if (request.getParameter("typePR") == null) {
+                                        roomBean.setTipopr(request.getParameter("altroPRtext"));
+                                    } else {
+                                        roomBean.setTipopr(request.getParameter("typePR"));
+                                    }
+
+                                    if (controller.modify(roomBean.getID(), roomBean.getInizio(), roomBean.getFine(),
+                                            roomBean.getDatapr(), roomBean.getTipopr())) {
+
+                                        out.println("<script type=\"text/javascript\">");
+                                        out.println("alert('Prenotazione Modificata');");
+                                        out.println("location='profPage.jsp';");
+                                        out.println("</script>");
+
+                                    } else {
+
+                                        out.println("<script type=\"text/javascript\">");
+                                        out.println("alert('La modifica crea conflitti con le prenotazioni già esistenti');");
+                                        out.println("location='profPage.jsp';");
+                                        out.println("</script>");
+
+                                    }
                                 }
                             }
-
                         %>
                         </tbody>
                     </table>

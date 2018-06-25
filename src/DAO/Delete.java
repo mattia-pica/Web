@@ -69,6 +69,7 @@ public class Delete {
                 deleteInformation = "Signor " + user.getName() + " " + user.getSurname() + " la richiesta di eliminazione " +
                         "della sua prenotazione per l'" + nome + " nel giorno " + data + "dalle ore " + inizio +
                         " alle ore " + fine + " è stata effettuata con successo";
+
                 controller.deletedEmail(userBean.getEmail(), "Eliminazione Effettuata", deleteInformation);
                 return true;
             }
@@ -76,8 +77,6 @@ public class Delete {
                     "lei inserita per l'" + nome + " nel giorno " + data +
                     " dalle ore " + inizio + " alle ore " + fine + " è stata " +
                     " eliminata da " + user.getName() + " " + user.getSurname();
-
-            System.out.println(user.getMail() + "    " + userBean.getEmail());
 
             controller.deletedEmail(userBean.getEmail(), "Eliminazione Effettuata", deleteInformation);
 

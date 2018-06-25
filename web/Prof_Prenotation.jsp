@@ -51,25 +51,29 @@
             <div class="login100-form-title" style="background-image: url(login/images/bg-01.jpg);">
 
                 <%
-                    String name = request.getParameter("aula");
+                    //String name = request.getParameter("aula");
                     Controller controller = new Controller();
-
+                    roomBean.setNome(request.getParameter("aula"));
 
                     if (request.getParameter("submit_prenotation") != null){
 
-                        roomBean.setNome(name);
                         String typePR;
 
+                        if (request.getParameter("typePR") == null && (request.getParameter("altroPRtext") == null
+                        || request.getParameter("altroPRtext") == "")) {
 
-                        if (request.getParameter("typePR") == null && request.getParameter("altroPRtext") == null) {
+                            %>
 
-                            String info = "alert('Inserire il tipo di prenotazione');";
-                            out.println("<script type=\"text/javascript\">");
-                            out.println(info);
-                            out.println("location='Prof_Prenotation.jsp';");
-                            out.println("</script>");
+                <script type="text/javascript">
+                    var msg = "<%="OK"%>";
+                    alert(msg);
+                    location='Prof_Prenotation.jsp?aula=<%=roomBean.getNome()%>';
+                </script>
+
+                <%
+
+
                             return;
-
                         }
 
                         if (request.getParameter("typePR") == null) {
@@ -83,7 +87,7 @@
                         roomBean.setDatapr(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate());
                         roomBean.setTipopr(typePR);
 
-                        if (controller.newPrenotationProfessore(name, typePR, roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine())) {
+                        if (controller.newPrenotationProfessore(roomBean.getNome(), typePR, roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine())) {
 
                             String info = "alert('Prenotazione Effettuata con successo');";
                             out.println("<script type=\"text/javascript\">");
@@ -98,73 +102,6 @@
                             out.println("location='profPage.jsp';");
                             out.println("</script>");
                         }
-
-                        /*LocalTime startPR;
-                        LocalTime endPR;
-                        String date;
-
-                        if(request.getParameter("typePR") == null){
-
-                            typePR = request.getParameter("altroPRtext");
-                            String start = request.getParameter("startPR");
-                            String end = request.getParameter("endPR");
-                            date = request.getParameter("datePR");
-
-                            if (start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()){
-
-                                String info = "alert('Completare tutti i campi!');";
-                                out.println("<script type=\"text/javascript\">");
-                                out.println(info);
-                                out.println("location='Prof_Prenotation.jsp';");
-                                out.println("</script>");
-
-                            }else{
-
-                                startPR = LocalTime.parse(start);
-                                endPR = LocalTime.parse(end);
-                                Controller controller = new Controller();
-                                Response = controller.newPrenotationProfessore(name, typePR, date, startPR, endPR);
-                            }
-                        }else{
-
-                            typePR = request.getParameter("typePR");
-                            String start = request.getParameter("startPR");
-                            String end = request.getParameter("endPR");
-                            date = request.getParameter("datePR");
-
-                            if (start.isEmpty() || end.isEmpty() || typePR.isEmpty() || date.isEmpty()) {
-
-                                String info = "alert('Completare tutti i campi!');";
-                                out.println("<script type=\"text/javascript\">");
-                                out.println(info);
-                                out.println("location='Prof_Prenotation.jsp';");
-                                out.println("</script>");
-
-                            }else {
-
-                                startPR = LocalTime.parse(start);
-                                endPR = LocalTime.parse(end);
-                                Controller controller = new Controller();
-                                Response = controller.newPrenotationProfessore(name, typePR, date, startPR, endPR);
-                            }
-                        }
-
-                        if (Response) {
-
-                            String info = "alert('Prenotata " + name + "');";
-                            out.println("<script type=\"text/javascript\">");
-                            out.println(info);
-                            out.println("location='profPage.jsp';");
-                            out.println("</script>");
-
-                        }else {
-
-                            String info = "alert('Ci sono prenotazione già attive con i criteri inseriti!');";
-                            out.println("<script type=\"text/javascript\">");
-                            out.println(info);
-                            out.println("location='profPage.jsp';");
-                            out.println("</script>");
-                        }*/
                     }
 
                 %>
@@ -178,7 +115,7 @@
                     <table>
                         <thead>
                         <tr class="row100 head">
-                            <th class="cell100 column1">Nuova prenotazione per l' <%=request.getParameter("aula")%></th>
+                            <th class="cell100 column1">Nuova prenotazione per l' <%=roomBean.getNome()%></th>
                         </tr>
                         </thead>
                     </table>

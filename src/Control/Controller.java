@@ -1,5 +1,6 @@
 package Control;
 
+import Bean.Accademic_Year;
 import Bean.Disponible_RoomBean;
 import Bean.Prenotation_Bean;
 import Bean.RoomBean;
@@ -12,6 +13,7 @@ import Utils.UserSingleton;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Controller {
 
@@ -112,8 +114,6 @@ public class Controller {
 
     }
 
-
-
     //--------------CANCELLAZIONE PRENOTAZIONE----------//
 
     public boolean delete(String ID){
@@ -165,6 +165,30 @@ public class Controller {
         PrenotationBeanSingleton.getInstance().setPrenotation_bean(prenotation_bean);
 
 
+    }
+
+
+    //--------------------ANNI ACCADEMICI--------------------------//
+
+    public boolean newYear(String datainizio, String datafine){
+
+        NewAccYear newAccYear = new NewAccYear();
+
+        return newAccYear.newYaear(datainizio, datafine);
+    }
+
+    public ArrayList<Accademic_Year> showYears(){
+
+        Show_Acc_Year show_acc_year = new Show_Acc_Year();
+        return show_acc_year.show();
+
+    }
+
+    //-------------------SESSIONI-----------------------//
+
+    public boolean newSess(String datainizio, String datafine, String tipo, String accYear){
+        NewSess newSess = new NewSess();
+        return newSess.insertSess(datainizio, datafine, tipo, accYear);
     }
 
     /*public void createPrenotationBean(String nome, LocalTime inizio, LocalTime fine, String date, String tipo){
