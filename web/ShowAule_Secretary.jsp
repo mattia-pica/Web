@@ -144,29 +144,6 @@
 <!--===============================================================================================-->
 <script src="js/main.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<%--<script>
-    $('#textInput').click(function () {
-        $('input[name=typePR]').prop("checked", false);
 
-    });
-</script>--%>
-
-
-<%--QUANDO SI CLICCA SULLA TEXTFIELD ALTRO VENGONO DISATTIVATI I RADIO BUTTON--%>
-<%--<script>
-    $('#textInput').click(function () {
-        $('input[type=radio]').removeAttr("checked");
-
-    });
-</script>--%>
-<%--<script>
-
-    function f1(objButton){
-        alert(objButton.value);
-        return value;
-    }
-
-
-</script>--%>
 </body>
 </html>

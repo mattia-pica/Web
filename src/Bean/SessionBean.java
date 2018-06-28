@@ -1,10 +1,10 @@
 package Bean;
 
-public class Accademic_Year {
+public class SessionBean {
 
     private String dataInizio;
     private String dataFine;
-    private String nome;
+    private String tipo;
 
     public String getDataInizio() {
         return dataInizio;
@@ -22,11 +22,11 @@ public class Accademic_Year {
         this.dataFine = dataFine;
     }
 
-    public String getNome() {
-        return nome;
+    public String getTipo() {
+        return tipo;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 }

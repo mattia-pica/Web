@@ -2,22 +2,18 @@ todo Mancano:
 
     - Controllo sugli intervalli degli anni accademici inseriti
 
-    - Definizione date di una sessione:
-        . Selezionato l'anno accademico -> inserisci sessione (Inizio,fine, tipo (invernale, estiva, autunnale)).
-                    -Bisogna controllare che le date inserit per la sessione siano nell'intervallo dell'anno accademico considerato
-
     - Modifica anno accademico:
         . Seleziono anno accademico -> inserisco nuove date -> modifca
             -Se ci sono sessione a cavallo la modifca viene negata
-
-    - Modifica Sessione:
-        . Se c'è gia una sessione che va in conflitto con quelle date -> notifica -> annulla modifiche
-        . Se nella sessione modificata c'erano aule prenotate che ora sono "senza una sessione di appartenenza"
-            vengono modificate e vengono avvertiti gli utenti interessati
 
     - Visualizzazione storico prenotazioni:
 
         . L'utente vuole vedere le proprie prenotazioni in un Anno accademico
             - Seleziono anno accademico -> visualizzo prenotazione proprie dell'utente
 
+            todo TUTTO in italiano
+
+            todo Ricontrollare le classi dao dove si inviano mail a PIÙ UTENTI
+
+            todo Controllare la parte grafica (na sistemata)
 

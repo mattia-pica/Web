@@ -6,8 +6,6 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page import="Control.Controller" %>
-<%@ page import="java.time.LocalTime" %>
-<%@ page import="Bean.RoomBean" %>
 <%@ page import="Utils.PrenotationBeanSingleton" %>
 <%@ page import="java.time.format.DateTimeParseException" %>
 
@@ -15,13 +13,12 @@
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
 <jsp:useBean id="roomBean" class="Bean.RoomBean" scope="session"/>
+<jsp:useBean id="sessionBean" class="Bean.SessionBean" scope="session"/>
 
 
 <!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
 <jsp:setProperty name="roomBean" property="*"/>
-
-
-
+<jsp:setProperty name="sessionBean" property="*"/>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -71,9 +68,11 @@
                         String typePR;
 
                         if (request.getParameter("typePR") == null && (request.getParameter("altroPRtext") == null
-                                || request.getParameter("altroPRtext") == "")) {
+                                || request.getParameter("altroPRtext") == "" || request.getParameter("from") == null
+                        || request.getParameter("from") == "")) {
 
-                            //@Todo manca controllo dati inseriti ANCHE ALLA ALTRE!!!!!!!!!!
+                            //Non serve il controllo della data perchè è pre-impostata dal bean
+
                             %>
 
                 <script type="text/javascript">
@@ -81,45 +80,44 @@
                     alert(msg);
                     location='Secr_Prenotation.jsp?aula=<%=roomBean.getNome()%>';
                 </script>
-
                 <%
                             return;
 
-                        }
-                        if (request.getParameter("typePR") == null) {
-                            typePR = request.getParameter("altroPRtext");
-                        } else {
-                            typePR = request.getParameter("typePR");
-                        }
 
-                        /*LocalTime start = PrenotationBeanSingleton.getInstance().getPrenotation_bean().getInizio();
-                        LocalTime end = PrenotationBeanSingleton.getInstance().getPrenotation_bean().getFine();
-                        String date = PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate();*/
-
-                        roomBean.setInizio(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getInizio());
-                        roomBean.setFine(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getFine());
-                        roomBean.setDatapr(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate());
-                        roomBean.setTipopr(typePR);
-
-                        if (controller.newPrenotationSecretary(roomBean.getNome(), typePR, roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine())) {
-
-                            String info = "alert('Prenotazione Effettuata con successo');";
-                            out.println("<script type=\"text/javascript\">");
-                            out.println(info);
-                            out.println("location='secretaryPage.jsp';");
-                            out.println("</script>");
-
-                        } else {
-                            String info = "alert('Errore');";
-                            out.println("<script type=\"text/javascript\">");
-                            out.println(info);
-                            out.println("location='secretaryPage.jsp';");
-                            out.println("</script>");
-                        }
+                    }
+                    if (request.getParameter("typePR") == null) {
+                        typePR = request.getParameter("altroPRtext");
+                    } else {
+                        typePR = request.getParameter("typePR");
                     }
 
-                %>
+                    /*try {*/
 
+                    roomBean.setInizio(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getInizio());
+                    roomBean.setFine(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getFine());
+                    roomBean.setDatapr(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate());
+                    roomBean.setSessione(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getSessione());
+                    roomBean.setFromp(request.getParameter("from"));
+                    roomBean.setTipopr(typePR);
+
+                if (controller.newPrenotationSecretary(roomBean.getNome(), typePR, roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine(),roomBean.getSessione(), roomBean.getFromp())) {
+
+                    String info = "alert('Prenotazione Effettuata con successo');";
+                    out.println("<script type=\"text/javascript\">");
+                    out.println(info);
+                    out.println("location='secretaryPage.jsp';");
+                    out.println("</script>");
+
+                } else {
+                    String info = "alert('Il nome utente inserito non esiste');";
+                    out.println("<script type=\"text/javascript\">");
+                    out.println(info);
+                    out.println("location='secretaryPage.jsp';");
+                    out.println("</script>");
+                    }
+                }
+
+                %>
 
                 <span class="login100-form-title-1">
 						University of Tor Vergata
@@ -145,7 +143,6 @@
                 <span class="focus-input100"></span>
             </div>
 
-
             <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
                 <span class="label-input100">End</span>
                 <input class="input100" type="text" name="endPR" placeholder="<%=PrenotationBeanSingleton.getInstance().getPrenotation_bean().getFine()%>" disabled="disabled">
@@ -155,6 +152,16 @@
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Date">
                 <span class="label-input100">Date</span>
                 <input class="input100" type="text" name="datePR" placeholder="<%=PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate()%>" disabled="disabled">
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 validate-input m-b-18" data-validate ="Session">
+                <span class="label-input100">Sessione</span>
+                <input class="input100" type="text" name="datePR" placeholder="<%="Inizio: "+sessionBean.getDataInizio() + "    Fine: " + sessionBean.getDataFine() + "    Tipo: " + sessionBean.getTipo()%>" disabled="disabled">
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 validate-input m-b-18" data-validate ="From">
+                <span class="label-input100">A nome di</span>
+                <input class="input100" type="text" name="from" placeholder="Inserire nome professore">
                 <span class="focus-input100"></span>
             </div>
             <div class="wrap-input100 validate-input m-b-18">
@@ -167,7 +174,6 @@
                 <fieldset>
                     <span class="label-input100">Conferenza</span>
                     <input style="margin-top: 15px" type="radio" name="typePR" value="Conferenza"/>
-
                 </fieldset>
             </div>
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Altro">
@@ -175,6 +181,24 @@
                 <input class="input100" type="text" id="textInput" name="altroPRtext" placeholder="Altro">
                 <span class="focus-input100"></span>
             </div>
+            <%--<%
+                ArrayList<SessionBean> s = controller.showAllSessions();
+
+                for (int i = 0; i<s.size(); i++){%>
+
+            <div class="wrap-input100 validate-input m-b-18">
+                <fieldset>
+                    <span class="label-input100">&lt;%&ndash;QUA CI VA IL NOME DEL RADIOBUTTON&ndash;%&gt;</span>
+                    <input style="margin-top: 15px" id="r_<%=i%>" type="radio" name="sess" value="<%=s.get(i).getDataInizio()+","+s.get(i).getDataFine()%>"/><label for="r_<%=i%>"><%="Inizio: " + s.get(i).getDataInizio() + " Fine: " + s.get(i).getDataFine() + " Tipo: " + s.get(i).getTipo()%></label>
+
+                </fieldset>
+            </div>
+
+
+            <%
+                }
+            %>--%>
+
             <div class="container-login100-form-btn">
                 <div class="contact-right">
                     <input class="login100-form-btn" type="submit" name="submit_prenotation" value="Prenota">

@@ -1,9 +1,6 @@
 package Control;
 
-import Bean.Accademic_Year;
-import Bean.Disponible_RoomBean;
-import Bean.Prenotation_Bean;
-import Bean.RoomBean;
+import Bean.*;
 import DAO.*;
 import Entity.Room;
 import Entity.User;
@@ -13,7 +10,6 @@ import Utils.UserSingleton;
 
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Controller {
 
@@ -28,22 +24,13 @@ public class Controller {
     //------AULE DISPONIBILI-------------//
 
     public Disponible_RoomBean show(LocalTime timeInizio, LocalTime timeFine, String dateSearch) {
-        //ArrayList<Disponible_RoomBean> R;
         Disponible_RoomBean showDatabase = DisponibleRooms.show(timeInizio, timeFine, dateSearch);
         return showDatabase;
-    }
-
-    //-------PRENOTAZIONI ATTIVE----------//
-
-    public ArrayList<Room> active(){
-        ArrayList<Room> rooms = ActivePrenotation.show();
-        return rooms;
     }
 
     //-----------PRENOTAZIONI EFFETUATE SEGRETARIA----------------//
 
     public ArrayList<Room> show_s() {
-        //ArrayList<Disponible_RoomBean> R;
         ArrayList<Room> rooms = ShowDatabase_Secr.show_secr();
         return rooms;
     }
@@ -51,8 +38,7 @@ public class Controller {
     //--------------PRENOTAZIONI EFFETTUATE PROFESSORE---------------//
 
     public ArrayList<Room> showComplete_DB(){
-        ArrayList<Room> rooms = ShowCompleteDB.show_completeDB();
-        return rooms;
+        return ShowCompleteDB.show_completeDB();
     }
 
     //-------------MOSTRA TUTTE LE PRENOTAZIONI (SEGRETARIA)-----------//
@@ -70,29 +56,29 @@ public class Controller {
     }
 
     //----------------NUOVA PRENOTAZIONE PROFESSORE--------------//
+
     public boolean newPrenotationProfessore(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
-                                            LocalTime timeFinePrenota) {
+                                            LocalTime timeFinePrenota, String sessione) {
         Insert_Prof dbInsertProf = new Insert_Prof();
-        return dbInsertProf.insert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota);
+        return dbInsertProf.insert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, sessione);
     }
 
     //---------------------NUOVA PRENOTAZIONE SEGRETARIA-------------//
 
     public boolean newPrenotationSecretary(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
-                                           LocalTime timeFinePrenota){
+                                           LocalTime timeFinePrenota, String sessione, String from){
         Insert_Secretary insert_secretary = new Insert_Secretary();
-        return insert_secretary.insert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota);
+        return insert_secretary.insert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, sessione, from);
 
     }
 
     //------------------CANCELLA PRENOTAZIONI GIÀ ESISTENTI CHE DANNO CONFLITTO E POI INSERISCI LA NUOVA PRENOTAZIONE-------------//
 
     public boolean deleteThenInsert(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
-                                    LocalTime timeFinePrenota){
+                                    LocalTime timeFinePrenota,String sessione, String from){
 
         DeleteThenInsert deleteThenInsert = new DeleteThenInsert();
-        deleteThenInsert.deleteThenInsert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota);
-
+        deleteThenInsert.deleteThenInsert(nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, sessione, from);
         return true;
     }
 
@@ -140,10 +126,9 @@ public class Controller {
         return entryController.emptyController(name);
     }
 
+    //------------EMAIL DI NOTIFICA---------//
 
-    //------------EMAIL DI NOTIFICA CANCELLAZIONE PRENOTQZIONE---------//
-
-    public void deletedEmail(String dest, String object, String text){
+    public void sendEmail(String dest, String object, String text){
 
         SendMail sendMail = new SendMail();
         sendMail.inviaMail(dest, object, text);
@@ -159,36 +144,59 @@ public class Controller {
 
     //-----------------BEAN----------------------//
 
-    public void createPrenotationBean(LocalTime inizio, LocalTime fine, String date){
+    public void createPrenotationBean(LocalTime inizio, LocalTime fine, String date, String sessione){
 
-        Prenotation_Bean prenotation_bean = new Prenotation_Bean(inizio, fine, date);
+        Prenotation_Bean prenotation_bean = new Prenotation_Bean(inizio, fine, date, sessione);
         PrenotationBeanSingleton.getInstance().setPrenotation_bean(prenotation_bean);
 
-
     }
-
 
     //--------------------ANNI ACCADEMICI--------------------------//
 
     public boolean newYear(String datainizio, String datafine){
 
         NewAccYear newAccYear = new NewAccYear();
-
         return newAccYear.newYaear(datainizio, datafine);
     }
 
-    public ArrayList<Accademic_Year> showYears(){
+    //------------------MOSTRA ANNI ACCADEMICI---------------------//
+
+    public ArrayList<AccademicYearBean> showYears(){
 
         Show_Acc_Year show_acc_year = new Show_Acc_Year();
         return show_acc_year.show();
-
     }
 
     //-------------------SESSIONI-----------------------//
 
     public boolean newSess(String datainizio, String datafine, String tipo, String accYear){
         NewSess newSess = new NewSess();
-        return newSess.insertSess(datainizio, datafine, tipo, accYear);
+        String nome = datainizio+"/"+datafine;
+        return newSess.insertSess(datainizio, datafine, tipo, accYear, nome);
+    }
+
+    //-------------------MOSTRA TUTTE LE SESSIONI---------//
+
+    public ArrayList<SessionBean> showAllSessions(){
+
+        Show_Session show_session = new Show_Session();
+        return show_session.showAllSession();
+    }
+
+    //-------------------MODIFICA SESSIONE-----------------//
+
+    public boolean modifySession(String newinizio, String newfine, String session, String newTipo){
+
+        Modify_Session modify_session = new Modify_Session();
+        return modify_session.modify(newinizio, newfine, session, newTipo);
+    }
+
+    //-------------------TROVA SESSIONE PER PRENOTAZIONE IN BASE ALLA DATA DI PRENOTAZIONE I UN AULA--------------//
+
+    public SessionBean trovaSessione(String dataPrenotazione){
+
+        Find_Session find_session = new Find_Session();
+        return find_session.find(dataPrenotazione);
     }
 
     /*public void createPrenotationBean(String nome, LocalTime inizio, LocalTime fine, String date, String tipo){

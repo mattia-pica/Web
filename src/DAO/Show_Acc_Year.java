@@ -1,6 +1,6 @@
 package DAO;
 
-import Bean.Accademic_Year;
+import Bean.AccademicYearBean;
 import Utils.Query;
 
 import java.sql.Connection;
@@ -11,9 +11,9 @@ import java.util.ArrayList;
 
 public class Show_Acc_Year {
 
-    public ArrayList<Accademic_Year> show() {
+    public ArrayList<AccademicYearBean> show() {
 
-        ArrayList<Accademic_Year> year = new ArrayList<>();
+        ArrayList<AccademicYearBean> year = new ArrayList<>();
 
         try {
 
@@ -30,12 +30,12 @@ public class Show_Acc_Year {
 
             while (rs.next()) {
 
-                Accademic_Year accademic_year = new Accademic_Year();
+                AccademicYearBean accademic_yearBean = new AccademicYearBean();
 
-                accademic_year.setDataInizio(rs.getString("datainizio"));
-                accademic_year.setDataFine(rs.getString("datafine"));
-                accademic_year.setNome(rs.getString("nome"));
-                year.add(accademic_year);
+                accademic_yearBean.setDataInizio(rs.getString("datainizio"));
+                accademic_yearBean.setDataFine(rs.getString("datafine"));
+                accademic_yearBean.setNome(rs.getString("nome"));
+                year.add(accademic_yearBean);
 
             }
 

@@ -10,12 +10,17 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.time.LocalTime" %>
 <%@ page import="java.time.format.DateTimeParseException" %>
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="Bean.SessionBean" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
+<jsp:useBean id="sessionBean" class="Bean.SessionBean" scope="session"/>
 <jsp:useBean id="roomBean" class="Bean.RoomBean" scope="session"/>
 
 <!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
+<jsp:setProperty name="sessionBean" property="*"/>
 <jsp:setProperty name="roomBean" property="*"/>
 
 <!DOCTYPE html>
@@ -113,13 +118,14 @@
                             <th class="cell100 column2">Start</th>
                             <th class="cell100 column2">End</th>
                             <th class="cell100 column2">Type</th>
+                            <th class="cell100 column2">ID</th>
                         </tr>
                         </thead>
                     </table>
                 </div>
 
                 <div class="table100-body js-pscroll" style="height:300px;overflow:auto;">
-                    <table id="table" >
+                    <table id="table" style="table-layout: fixed">
                         <tbody>
 
                         <%
@@ -146,10 +152,6 @@
                             if (request.getParameter("submit_modify") != null) {
 
                                 String ID  = request.getParameter("ID");
-                                /*String typePR;
-                                LocalTime startPR;
-                                LocalTime endPR;
-                                String date;*/
 
                                 if (request.getParameter("startPR") == null || request.getParameter("ID") == null ||
                                         request.getParameter("endPR") == null || request.getParameter("datePR") == null ||
@@ -162,41 +164,62 @@
                                     out.println("</script>");
                                 }else {
 
+                                    Pattern p = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
+                                    if (!p.matcher(request.getParameter("datePR")).matches()){  //Controllo data
 
-                                    try {
-                                        roomBean.setID(request.getParameter("ID"));
-                                        roomBean.setInizio(LocalTime.parse(request.getParameter("startPR")));
-                                        roomBean.setFine(LocalTime.parse(request.getParameter("endPR")));
-                                        roomBean.setDatapr(request.getParameter("datePR"));
+                        %>
+                        <script type="text/javascript">
+                            var msg = "<%="Formato dai inseriti errato"%>";
+                            alert(msg);
+                            location='Modify_Secr.jsp';
+                        </script>
+                        <%
+                                return;
+                            }
+                            SessionBean s = controller.trovaSessione(request.getParameter("datePR"));
 
-                                    }catch (DateTimeParseException e){  //Controllo formato dei dati inseriti
+                            if (s.getDataInizio() == null){
+                                String info = "alert('La data inserita è fuori da ogni sessione');";
+                                out.println("<script type=\"text/javascript\">");
+                                out.println(info);
+                                out.println("location='Modify_Secr.jsp';");
+                                out.println("</script>");
+                                return;
+                            }
 
-                                        String info = "alert('I campi inseriti non sono corretti');";
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println(info);
-                                        out.println("location='Modify_Secr.jsp';");
-                                        out.println("</script>");
-                                        return;
+                            try {
 
-                                        //@Todo questo metodo di controllo dei dati funziona! Bisogna copiarlo negli altri casi d'uso
-                                    }
+                                roomBean.setID(request.getParameter("ID"));
+                                roomBean.setInizio(LocalTime.parse(request.getParameter("startPR")));
+                                roomBean.setFine(LocalTime.parse(request.getParameter("endPR")));
+                                roomBean.setDatapr(request.getParameter("datePR"));
 
+                            }catch (DateTimeParseException e){  //Controllo formato dei dati inseriti
 
-                                    if (request.getParameter("typePR") == null){
-                                        roomBean.setTipopr(request.getParameter("altroPRtext"));
-                                    }else {
-                                        roomBean.setTipopr(request.getParameter("typePR"));
-                                    }
+                                String info = "alert('I campi inseriti non sono corretti');";
+                                out.println("<script type=\"text/javascript\">");
+                                out.println(info);
+                                out.println("location='Modify_Secr.jsp';");
+                                out.println("</script>");
+                                return;
 
-                                    if (controller.modify(roomBean.getID(), roomBean.getInizio(), roomBean.getFine(),
-                                            roomBean.getDatapr(), roomBean.getTipopr())){
+                            }
 
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println("alert('Prenotazione Modificata');");
-                                        out.println("location='secretaryPage.jsp';");
-                                        out.println("</script>");
+                            if (request.getParameter("typePR") == null){
+                                roomBean.setTipopr(request.getParameter("altroPRtext"));
+                            }else {
+                                roomBean.setTipopr(request.getParameter("typePR"));
+                            }
 
-                                    }else { %>
+                            if (controller.modify(roomBean.getID(), roomBean.getInizio(), roomBean.getFine(),
+                                    roomBean.getDatapr(), roomBean.getTipopr())){
+
+                                out.println("<script type=\"text/javascript\">");
+                                out.println("alert('Prenotazione Modificata');");
+                                out.println("location='secretaryPage.jsp';");
+                                out.println("</script>");
+
+                            }else { %>
 
                         <script type="text/javascript">
                             showDiv();
@@ -204,38 +227,37 @@
 
                         <%
 
-                                    if (request.getParameter("submit_delete") != null ){
+                            if (request.getParameter("submit_delete") != null ){
 
-                                        if (controller.deleteThenUpdate(ID, roomBean.getInizio(),
-                                                roomBean.getFine(), roomBean.getDatapr(), roomBean.getTipopr())){
+                                if (controller.deleteThenUpdate(ID, roomBean.getInizio(),
+                                        roomBean.getFine(), roomBean.getDatapr(), roomBean.getTipopr())){
 
-                                            out.println("<script type=\"text/javascript\">");
-                                            out.println("alert('Prenotazione Modificata');");
-                                            out.println("location='secretaryPage.jsp';");
-                                            out.println("</script>");
+                                    out.println("<script type=\"text/javascript\">");
+                                    out.println("alert('Prenotazione Modificata');");
+                                    out.println("location='secretaryPage.jsp';");
+                                    out.println("</script>");
 
-                                        }else {
-                                            out.println("<script type=\"text/javascript\">");
-                                            out.println("alert('ERRORE');");
-                                            out.println("location='secretaryPage.jsp';");
-                                            out.println("</script>");
-                                        }
-
-                                    }
-                                        if(request.getParameter("submit_not_delete") != null){
-
-                                            out.println("<script type=\"text/javascript\">");
-                                            out.println("alert('Operazione annullata');");
-                                            out.println("location=secretaryPage.jsp';");
-                                            out.println("</script>");
-
-                                        }
-
-                                    }
-
+                                }else {
+                                    out.println("<script type=\"text/javascript\">");
+                                    out.println("alert('ERRORE');");
+                                    out.println("location='secretaryPage.jsp';");
+                                    out.println("</script>");
                                 }
 
                             }
+                                if(request.getParameter("submit_not_delete") != null) {
+
+                                    out.println("<script type=\"text/javascript\">");
+                                    out.println("alert('Operazione annullata');");
+                                    out.println("location=secretaryPage.jsp';");
+                                    out.println("</script>");
+
+                                }
+                            }
+                            }
+                            }
+
+
 
                         %>
                         </tbody>

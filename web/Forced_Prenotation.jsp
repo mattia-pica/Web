@@ -10,16 +10,18 @@
 <%@ page import="Bean.RoomBean" %>
 <%@ page import="Utils.PrenotationBeanSingleton" %>
 <%@ page import="java.time.format.DateTimeParseException" %>
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="Bean.SessionBean" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
 <jsp:useBean id="roomBean" class="Bean.RoomBean" scope="session"/>
-
+<jsp:useBean id="sessionBean" class="Bean.SessionBean" scope="session"/>
 
 <!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
 <jsp:setProperty name="roomBean" property="*"/>
-
+<jsp:setProperty name="sessionBean" property="*"/>
 
 
 
@@ -123,26 +125,37 @@
 
                         }else {
 
+                            Pattern p = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
+
+                            if (!p.matcher(request.getParameter("datePR")).matches()){  //Controllo data
+
+                %>
+                <script type="text/javascript">
+                    var msg = "<%="Formato dai inseriti errato"%>";
+                    alert(msg);
+                    location='Forced_Prenotation.jsp?aula=<%=roomBean.getNome()%>';
+                </script>
+                <%
+                                return;
+                            }
+
                             try {
                                 roomBean.setNome(request.getParameter("aula"));
                                 roomBean.setInizio(LocalTime.parse(request.getParameter("startPR")));
                                 roomBean.setFine(LocalTime.parse(request.getParameter("endPR")));
                                 roomBean.setDatapr(request.getParameter("datePR"));
+                                roomBean.setFromp(request.getParameter("from"));
 
                             }catch (DateTimeParseException e){ //Controllo formato dei dati inseriti
 
-                                String info = "alert('I campi inseriti non sono corretti');";
-                                out.println("<script type=\"text/javascript\">");
-                                out.println(info);
-                                out.println("location='secretaryPage.jsp';");
-                                out.println("</script>");
-                                return;
+                %>
+                <script type="text/javascript">
+                    var msg = "<%="Formato dai inseriti errato"%>";
+                    alert(msg);
+                    location='Forced_Prenotation.jsp?aula=<%=roomBean.getNome()%>';
+                </script>
+                <%
                             }
-
-                            /*roomBean.setNome("Aula " + request.getParameter("aula");
-                            roomBean.setInizio(LocalTime.parse(request.getParameter("startPR")));
-                            roomBean.setFine(LocalTime.parse(request.getParameter("endPR")));
-                            roomBean.setDatapr(request.getParameter("datePR"));*/
 
                             if (request.getParameter("typePR") == null){
                                 roomBean.setTipopr(request.getParameter("altroPRtext"));
@@ -150,10 +163,22 @@
                                 roomBean.setTipopr(request.getParameter("typePR"));
                             }
 
-                            Response = controller.newPrenotationSecretary(roomBean.getNome(), roomBean.getTipopr(),
-                                    roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine());
+                            SessionBean s = controller.trovaSessione(roomBean.getDatapr());
 
-                            if (Response){
+                            if (s.getDataInizio()==null){
+                                String info = "alert('La data inserita è fuori da ogni sessione');";
+                                out.println("<script type=\"text/javascript\">");
+                                out.println(info);
+                                out.println("location='secretaryPage.jsp';");
+                                out.println("</script>");
+                                return;
+                            }
+
+                            String sessione = s.getDataInizio()+"/"+s.getDataFine();
+                            roomBean.setSessione(sessione);
+
+                            if (controller.newPrenotationSecretary(roomBean.getNome(), roomBean.getTipopr(),
+                                    roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine(), roomBean.getSessione(), roomBean.getFromp())){
 
                                 String info = "alert('Prenotazione effettuata con successo!');";
                                 out.println("<script type=\"text/javascript\">");
@@ -174,7 +199,8 @@
                         if (request.getParameter("submit_delete") != null){
 
                             Response = controller.deleteThenInsert(roomBean.getNome(), roomBean.getTipopr(),
-                                    roomBean.getDatapr(),roomBean.getInizio(), roomBean.getFine());
+                                    roomBean.getDatapr(),roomBean.getInizio(), roomBean.getFine(),roomBean.getSessione(),
+                                    roomBean.getFromp());
 
                             if (Response){
 
@@ -184,6 +210,12 @@
                                 out.println("location='secretaryPage.jsp';");
                                 out.println("</script>");
 
+                            }else {
+                                String info = "alert('Il professore inserito non esiste');";
+                                out.println("<script type=\"text/javascript\">");
+                                out.println(info);
+                                out.println("location='secretaryPage.jsp';");
+                                out.println("</script>");
                             }
 
                         }
@@ -220,8 +252,11 @@
                 <input class="input100" type="text" name="startPR" placeholder="Start">
                 <span class="focus-input100"></span>
             </div>
-
-
+            <div class="wrap-input100 validate-input m-b-18" data-validate ="From">
+                <span class="label-input100">A nome di</span>
+                <input class="input100" type="text" name="from" placeholder="Inserire nome professore">
+                <span class="focus-input100"></span>
+            </div>
             <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
                 <span class="label-input100">End</span>
                 <input class="input100" type="text" name="endPR" placeholder="End">

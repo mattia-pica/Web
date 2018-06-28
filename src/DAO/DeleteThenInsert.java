@@ -1,5 +1,6 @@
 package DAO;
 
+import Control.Controller;
 import Entity.User;
 import Utils.Query;
 import Utils.SendMail;
@@ -15,9 +16,11 @@ import java.util.ArrayList;
 public class DeleteThenInsert {
 
     public boolean deleteThenInsert(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
-                                    LocalTime timeFinePrenota){
+                                    LocalTime timeFinePrenota, String sessione, String from){
 
         User user = UserSingleton.getInstance().getUser();
+
+        Controller controller = new Controller();
 
         Statement stmt = null;
         Connection conn = null;
@@ -30,22 +33,41 @@ public class DeleteThenInsert {
 
             SendMail sendMail = new SendMail();
 
+            String retrieveInformation = String.format(Query.retrieveUsername, from);
+
+            System.out.println(retrieveInformation);
+
+            ResultSet rs = stmt.executeQuery(retrieveInformation); //Controllo che lo username inserito esista nel DB;
+
+            ArrayList<String> info = new ArrayList<>();
+
+            if (!rs.wasNull()){
+
+                while (rs.next()){
+
+                    info.add(0,rs.getString("Name"));
+                    info.add(1,rs.getString("Surname"));
+                    info.add(2,rs.getString("Email"));
+                }
+
+            }else return false; //Il professore inserito non esiste
+
             //--------------TROVO GLI UTENTI A CUI SONO VERRANNO CANCELLATE LE PRENOTAZIONI-------------------//
 
             String us = String.format(Query.emailInfo_deleteThenInsert, dataPrenota, nameAula, timeInizioPrenota, timeInizioPrenota,
                     timeFinePrenota, timeFinePrenota, timeInizioPrenota, timeFinePrenota);
 
-            ResultSet rs = stmt.executeQuery(us);
+            ResultSet rs1 = stmt.executeQuery(us);
 
-            while (rs.next()){
+            while (rs1.next()){
 
-                String Nome = rs.getString("Name");
-                String Cognome = rs.getString("Surname");
-                String email = rs.getString("Email");
-                String nomeAula = rs.getString("nome");
-                String data = rs.getString("datapr");
-                String inizio = rs.getString("inizio");
-                String fine = rs.getString("fine");
+                String Nome = rs1.getString("Name");
+                String Cognome = rs1.getString("Surname");
+                String email = rs1.getString("Email");
+                String nomeAula = rs1.getString("nome");
+                String data = rs1.getString("datapr");
+                String inizio = rs1.getString("inizio");
+                String fine = rs1.getString("fine");
 
                 String testo = "Signor " + Nome + " " + Cognome + " la prenotazione da " +
                         "lei inserita per l'" + nomeAula + " nel giorno " + data +
@@ -53,10 +75,7 @@ public class DeleteThenInsert {
                         " eliminata. Rivolgersi alla segreteria per maggiori informazioni";
 
 
-                if (!(Nome + Cognome).equals(user.getUsername())){
-                    sendMail.inviaMail(email, "Prenotazione Eliminata", testo);
-
-                }
+                controller.sendEmail(email,"Prenotazione Eliminata", testo);
             }
 
 
@@ -81,7 +100,7 @@ public class DeleteThenInsert {
 
             //----------------INSERIMENTO PRENOTAZIONE SEGRETARIA-----------------------//
 
-            String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername());
+            String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername(),from, sessione);
             stmt.executeUpdate(insertSecretary);
 
             stmt.close();

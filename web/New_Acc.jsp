@@ -7,19 +7,8 @@
 --%>
 
 <%@ page import="Control.Controller" %>
-<%@ page import="java.time.LocalTime" %>
-<%@ page import="Bean.Disponible_RoomBean" %>
-<%@ page import="java.time.format.DateTimeParseException" %>
-<%@ page import="java.util.Date" %>
-<%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="java.text.ParseException" %>
 <%@ page import="java.util.regex.Pattern" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-<!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
-
-
-<!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
 
 <!DOCTYPE html>
 <html lang="en">
@@ -85,15 +74,15 @@
 
                             if(request.getParameter("submit_open") != null){  //Apri nuovo anno accademico
 
-                                Pattern p = Pattern.compile("\\d{2}(/)\\d{2}(/)\\d{4}");
+                                Pattern p = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
 
                                 if (p.matcher(request.getParameter("dataInizio")).matches() &&
                                         p.matcher(request.getParameter("dataFine")).matches()){
 
                                     //Controllo che tra l'inizio e la fine passi un anno
 
-                                    if ((Integer.parseInt(request.getParameter("dataInizio").substring(6)) !=
-                                            (Integer.parseInt(request.getParameter("dataFine").substring(6)) - 1))){
+                                    if ((Integer.parseInt(request.getParameter("dataInizio").substring(0,4)) !=
+                                            (Integer.parseInt(request.getParameter("dataFine").substring(0,4)) - 1))){
 
                                         String info = "alert('Date inserite errate');";
                                         out.println("<script type=\"text/javascript\">");
@@ -102,7 +91,6 @@
                                         out.println("</script>");
                                         return;
                                     }
-
 
                                     if (controller.newYear(request.getParameter("dataInizio"), request.getParameter("dataFine"))){
 
@@ -124,7 +112,6 @@
                                     return;
 
                                 }
-
                             }
 
                         %>
@@ -175,14 +162,6 @@
 <!--===============================================================================================-->
 <script src="js/main.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-<%--QUANDO SI CLICCA SULLA TEXTFIELD 'ALTRO' VENGONO DISATTIVATI I RADIO BUTTON--%>
-<script>
-    $('#textInput').click(function () {
-        $('input[type=radio]').removeAttr("checked");
-
-    });
-</script>
 
 </body>
 </html>

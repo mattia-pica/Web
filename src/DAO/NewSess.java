@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 public class NewSess {
 
-    public boolean insertSess(String datainizio, String datafine, String tipo, String accYear){
+    public boolean insertSess(String datainizio, String datafine, String tipo, String accYear, String nome){
 
         Statement stmt = null;
         Connection conn = null;
@@ -39,9 +39,19 @@ public class NewSess {
 
             }
 
+            String controlSessionQuery = String.format(Query.sessionControl, annoInizio, datainizio, annoFine, datainizio, annoInizio, datafine, annoFine, datafine);
 
+            ResultSet rs = stmt.executeQuery(controlSessionQuery);
 
+            System.out.println(controlSessionQuery);
 
+            if (!rs.next()){
+                return false; //La sessione inserita non sta nell'intervallo di date dell'anno accademico selezionato
+            }
+
+            String insertSession = String.format(Query.insertSession, datainizio, datafine, tipo, nome);
+
+            stmt.executeUpdate(insertSession);
 
             stmt.close();
 

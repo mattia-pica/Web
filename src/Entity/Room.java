@@ -9,6 +9,15 @@ public class Room {
     private String inizio;
     private String fine;
     private String fromp;
+    private String sessione;
+
+    public String getSessione() {
+        return sessione;
+    }
+
+    public void setSessione(String sessione) {
+        this.sessione = sessione;
+    }
 
     public int getID() {
         return ID;

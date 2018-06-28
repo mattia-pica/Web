@@ -9,22 +9,15 @@
 <%@ page import="java.time.LocalTime" %>
 <%@ page import="Bean.Disponible_RoomBean" %>
 <%@ page import="java.time.format.DateTimeParseException" %>
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="Bean.SessionBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
-
+<jsp:useBean id="sessionBean" class="Bean.SessionBean" scope="session"/>
 
 <!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
-
-<%
-    Controller controller = new Controller();
-
-    if(request.getParameter("submit_show_aule_secr") != null){  //Mostra prenotazioni segretaria
-
-        response.sendRedirect("ShowAule_Secretary.jsp");
-
-    }
-%>
+<jsp:setProperty name="sessionBean" property="*"/>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -85,12 +78,15 @@
                         <tbody>
 
                         <%
+                            Controller controller = new Controller();
+
                             if (request.getParameter("submit_search") != null){
 
                                 Disponible_RoomBean r;
                                 String StartSearch = request.getParameter("start");
                                 String EndSearch = request.getParameter("end");
                                 String DateSearch = request.getParameter("data");
+
                                 if (StartSearch.isEmpty() || EndSearch.isEmpty() || DateSearch.isEmpty()) {
 
                                     String info = "alert('Completare tutti i campi!');";
@@ -100,36 +96,67 @@
                                     out.println("</script>");
                                 }else {
 
-                                    try {
+                                    Pattern p = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
+                                    //Pattern.compile("\\d{4}(/)\\d{2}(/)\\d{2}")
+                                    if (p.matcher(request.getParameter("data")).matches()){
+                                        try {
 
-                                    //String DateSearch = Date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-                                    LocalTime timeInizio = LocalTime.parse(StartSearch);
-                                    LocalTime timeFine = LocalTime.parse(EndSearch);
-                                    r = controller.show(timeInizio, timeFine, DateSearch);
+                                        //String DateSearch = Date.format(String.valueOf(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+                                        LocalTime timeInizio = LocalTime.parse(StartSearch);
+                                        LocalTime timeFine = LocalTime.parse(EndSearch);
+                                        r = controller.show(timeInizio, timeFine, DateSearch);
 
-                                    if (r.getNome().isEmpty()){
-                                        String info = "alert('Non ci sono aule prenotabili');";
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println(info);
-                                        out.println("location='secretaryPage.jsp';");
-                                        out.println("</script>");
-                                        return;
-                                    }
 
-                                    controller.createPrenotationBean(timeInizio, timeFine, DateSearch);
-                                    for (int i = 0; i < r.getNome().size(); i++){%>
-                                    <tr><td><%=r.getNome().get(i)%></td><td><button class="login100-form-btn" name="" type="submit" onclick="window.location.href='/Secr_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button>
-
-                        <%
+                                        if (r.getNome().isEmpty()){
+                                            String info = "alert('Non ci sono aule prenotabili');";
+                                            out.println("<script type=\"text/javascript\">");
+                                            out.println(info);
+                                            out.println("location='secretaryPage.jsp';");
+                                            out.println("</script>");
+                                            return;
                                         }
-                                    }catch (DateTimeParseException e){
 
-                                        String info = "alert('Dati di ricerca errati!');";
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println(info);
-                                        out.println("location='secretaryPage.jsp';");
-                                        out.println("</script>");
+                                        SessionBean s = controller.trovaSessione(DateSearch);
 
+                                        if (s.getDataInizio() == null){
+                                            String info = "alert('La data inserita è fuori da ogni sessione');";
+                                            out.println("<script type=\"text/javascript\">");
+                                            out.println(info);
+                                            out.println("location='secretaryPage.jsp';");
+                                            out.println("</script>");
+                                            return;
+                                        }
+                                        sessionBean.setDataInizio(s.getDataInizio());
+                                        sessionBean.setDataFine(s.getDataFine());
+                                        sessionBean.setTipo(s.getTipo());
+
+                                        String sessione = sessionBean.getDataInizio()+"/"+sessionBean.getDataFine();
+
+                                        controller.createPrenotationBean(timeInizio, timeFine, DateSearch,sessione);
+                                        for (int i = 0; i < r.getNome().size(); i++){%>
+                                        <tr><td><%=r.getNome().get(i)%></td><td><button class="login100-form-btn" name="" type="submit" onclick="window.location.href='/Secr_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button>
+
+                            <%
+                                            }
+
+                                            }catch (DateTimeParseException e){
+
+                                            String info = "alert('Formato dati inseriti errato');";
+                                            out.println("<script type=\"text/javascript\">");
+                                            out.println(info);
+                                            out.println("location='secretaryPage.jsp';");
+                                            out.println("</script>");
+                                            return;
+
+                                            }
+                                    }else {
+
+                                        String info = "alert('Formato data inseriti errato');";
+                                            out.println("<script type=\"text/javascript\">");
+                                            out.println(info);
+                                            out.println("location='secretaryPage.jsp';");
+                                            out.println("</script>");
+                                            return;
                                     }
                                 }
                             }
@@ -162,6 +189,14 @@
 
                             }
 
+                            if(request.getParameter("submit_ModSession") != null){        //Modifica Sessione
+                                response.sendRedirect("Show_Session_Secr.jsp");
+                            }
+
+                            if(request.getParameter("submit_show_aule_secr") != null){    //Mostra prenotazioni segretaria
+                                response.sendRedirect("ShowAule_Secretary.jsp");
+
+                            }
 
                         %>
                         </tbody>
@@ -214,6 +249,9 @@
                 </button>
                 <button class="login100-form-btn" type="submit" name="submit_session" value="Session">
                     Nuova Sessione
+                </button>
+                <button class="login100-form-btn" type="submit" name="submit_ModSession" value="ModSession">
+                    Modifica Sessione
                 </button>
 
 

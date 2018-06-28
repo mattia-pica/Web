@@ -1,16 +1,19 @@
 <%@ page import="Control.Controller" %>
 <%@ page import="java.time.LocalTime" %>
 <%@ page import="Bean.Disponible_RoomBean" %>
-
-<%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page import="java.util.Enumeration" %>
 <%@ page import="java.time.format.DateTimeParseException" %>
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="Bean.SessionBean" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
-
+<jsp:useBean id="sessionBean" class="Bean.SessionBean" scope="session"/>
+<jsp:useBean id="roomBean" class="Bean.RoomBean" scope="session"/>
 
 <!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
+<jsp:setProperty name="sessionBean" property="*"/>
+<jsp:setProperty name="roomBean" property="*"/>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -71,6 +74,7 @@
                             <tbody>
 
                             <%
+                                Controller controller = new Controller();
                                 if (request.getParameter("submit_search") != null){
 
                                     Disponible_RoomBean r;
@@ -84,41 +88,70 @@
                                         out.println(info);
                                         out.println("location='profPage.jsp';");
                                         out.println("</script>");
-                                    }
-
-                                    try {
-                                        LocalTime timeInizio = LocalTime.parse(StartSearch);
-                                        LocalTime timeFine = LocalTime.parse(EndSearch);
-
-
-                                    Controller controller = new Controller();
-                                    r = controller.show(timeInizio, timeFine, DateSearch);
-                                    if (r.getNome().isEmpty()){
-                                        String info = "alert('Non ci sono aule prenotabili');";
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println(info);
-                                        out.println("location='profPage.jsp';");
-                                        out.println("</script>");
                                         return;
                                     }
-                                    controller.createPrenotationBean(timeInizio, timeFine, DateSearch);
-                                    for (int i = 0; i < r.getNome().size(); i++ ){%>
-                            <tr><td><%=r.getNome().get(i)%></td><td><button class="login100-form-btn" name="" type="submit" type="submit" onclick="window.location.href='/Prof_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td></tr>
 
-                            <%
-                                    }
-                                    }catch (DateTimeParseException e){
+                                    Pattern p = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
+                                    if (p.matcher(request.getParameter("data")).matches()){
 
-                                        String info = "alert('Dati ricerca errati!');";
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println(info);
-                                        out.println("location='profPage.jsp';");
-                                        out.println("</script>");
+                                        try {
 
-                                    }
+                                            LocalTime timeInizio = LocalTime.parse(StartSearch);
+                                            LocalTime timeFine = LocalTime.parse(EndSearch);
+                                            r = controller.show(timeInizio, timeFine, DateSearch);
+
+                                            if (r.getNome().isEmpty()){
+                                                String info = "alert('Non ci sono aule prenotabili');";
+                                                out.println("<script type=\"text/javascript\">");
+                                                out.println(info);
+                                                out.println("location='profPage.jsp';");
+                                                out.println("</script>");
+                                                return;
+                                            }
+                                            SessionBean s = controller.trovaSessione(DateSearch);
+
+                                            if (s.getDataInizio() == null){
+                                                String info = "alert('La data inserita è fuori da ogni sessione');";
+                                                out.println("<script type=\"text/javascript\">");
+                                                out.println(info);
+                                                out.println("location='profPage.jsp';");
+                                                out.println("</script>");
+                                                return;
+                                            }
+
+                                            sessionBean.setDataInizio(s.getDataInizio());
+                                            sessionBean.setDataFine(s.getDataFine());
+                                            sessionBean.setTipo(s.getTipo());
+
+                                            String sessione = sessionBean.getDataInizio()+"/"+sessionBean.getDataFine();
+
+                                            controller.createPrenotationBean(timeInizio, timeFine, DateSearch, sessione);
+                                        for (int i = 0; i < r.getNome().size(); i++ ){%>
+                                <tr><td><%=r.getNome().get(i)%></td><td><button class="login100-form-btn" name="" type="submit" type="submit" onclick="window.location.href='/Prof_Prenotation.jsp?aula=<%=r.getNome().get(i)%>'">Prenota <%=r.getNome().get(i)%></button></td></tr>
+
+                                <%
+                                        }
+
+                                        }catch (DateTimeParseException e){
+
+                                            String info = "alert('Dati ricerca errati!');";
+                                            out.println("<script type=\"text/javascript\">");
+                                            out.println(info);
+                                            out.println("location='profPage.jsp';");
+                                            out.println("</script>");
+                                            return;
+
+                                        }
+                                }else {
+                                            String info = "alert('Formato data errato');";
+                                            out.println("<script type=\"text/javascript\">");
+                                            out.println(info);
+                                            out.println("location='profPage.jsp';");
+                                            out.println("</script>");
+
+                                        }
                                 }
                                 if(request.getParameter("submit_show") != null){  // Prenotazioni Professore
-
                                     response.sendRedirect("ShowAule_Professore.jsp");
                                 }
 
@@ -132,7 +165,10 @@
 
                                 if (request.getParameter("submit_delete") != null){ //Elimina Prenotazione
                                     response.sendRedirect("Delete_Prof.jsp");
+                                }
 
+                                if (request.getParameter("submit_sess") != null){
+                                    response.sendRedirect("Show_Session_Prof.jsp");
                                 }
 
                             %>
@@ -149,28 +185,28 @@
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Data">
                 <span class="label-input100">Data</span>
-                <input class="input100" type="text" name="data" placeholder="Enter Room's data in format dd/MM/yyyy">
+                <input class="input100" type="text" name="data" placeholder="Formato data yyyy-MM-dd">
                 <span class="focus-input100"></span>
             </div>
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Start">
                 <span class="label-input100">Start</span>
-                <input class="input100" type="text" name="start" placeholder="Enter Room's start hour">
+                <input class="input100" type="text" name="start" placeholder="Ora d'inizio">
                 <span class="focus-input100"></span>
             </div>
 
             <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
                 <span class="label-input100">End</span>
-                <input class="input100" type="text" name="end" placeholder="Enter Room's end hour">
+                <input class="input100" type="text" name="end" placeholder="Ora fine">
                 <span class="focus-input100"></span>
             </div>
             <div class="container-login100-form-btn">
                 <button class="login100-form-btn" type="submit" name="submit_search" value="Search">
                     Cerca
                 </button>
-                    <button class="login100-form-btn" type="submit" name="submit_show" value="Show">
-                        Mie Prenotazioni
-                    </button>
+                <button class="login100-form-btn" type="submit" name="submit_show" value="Show">
+                    Mie Prenotazioni
+                </button>
                 <button class="login100-form-btn" type="submit" name="submit_modify" value="Modify">
                     Modifica Prenotazione
                 </button>
@@ -180,6 +216,10 @@
                 <button class="login100-form-btn" type="submit" name="submit_delete" value="Delete">
                     Elimina Prenotazione
                 </button>
+                <button class="login100-form-btn" type="submit" name="submit_sess" value="Delete">
+                    Visualizza Sessioni
+                </button>
+
 
             </div>
 

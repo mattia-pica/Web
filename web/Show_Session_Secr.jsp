@@ -1,22 +1,25 @@
 <%--
   Created by IntelliJ IDEA.
   User: mattia
-  Date: 23/06/18
-  Time: 16.52
+  Date: 25/06/18
+  Time: 18.16
   To change this template use File | Settings | File Templates.
 --%>
-
 <%@ page import="Control.Controller" %>
+<%@ page import="Entity.Room" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="Bean.AccademicYearBean" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.time.LocalTime" %>
+<%@ page import="java.time.format.DateTimeParseException" %>
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="Bean.SessionBean" %>
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
-<jsp:useBean id="accademiYear" class="Bean.AccademicYearBean" scope="session"/>
-
+<jsp:useBean id="roomBean" class="Bean.RoomBean" scope="session"/>
 
 <!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
-<jsp:setProperty name="accademiYear" property="*"/>
+<jsp:setProperty name="roomBean" property="*"/>
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -66,41 +69,38 @@
                     <table>
                         <thead>
                         <tr class="row100 head">
-                            <th class="cell100 column2">Nome</th>
                             <th class="cell100 column2">Data Inizio</th>
                             <th class="cell100 column2">Data Fine</th>
+                            <th class="cell100 column2">Tipo</th>
                             <th class="cell100 column2"></th>
                         </tr>
                         </thead>
                     </table>
                 </div>
 
-                <div class="table100-body js-pscroll" style="overflow:auto;">
+                <div class="table100-body js-pscroll" style="height:300px;overflow:auto;">
                     <table id="table" style="table-layout: fixed">
                         <tbody>
 
                         <%
-
                             Controller controller = new Controller();
-                            ArrayList<AccademicYearBean> y = controller.showYears();
+                            ArrayList<SessionBean> s = controller.showAllSessions();
 
-                            for (AccademicYearBean aY : y) {%>
+                            for (SessionBean sB : s){%>
 
-                        <tr>
-                            <td><%=aY.getNome()%></td>
-                            <td><%=aY.getDataInizio()%></td>
-                            <td><%=aY.getDataFine()%></td>
-                            <td>
-                            <button class="login100-form-btn" name="" type="submit"
-                                    onclick="window.location.href='/New_Session_Second.jsp?anno=<%=aY.getNome()%>'">
-                                Inserisci Sessione
-                            </button>
-                            </td>
-                        </tr>
-
-                                <%
+                            <tr>
+                                <td><%=sB.getDataInizio()%></td>
+                                <td><%=sB.getDataFine()%></td>
+                                <td><%=sB.getTipo()%></td>
+                                <td>
+                                    <button class="login100-form-btn" name="" type="submit"
+                                            onclick="window.location.href='/Modify_Session.jsp?sessione=<%=sB.getDataInizio() + "," + sB.getDataFine()%>'">
+                                        Modifica
+                                    </button>
+                                </td>
+                            </tr>
+                        <%
                             }
-
                         %>
                         </tbody>
                     </table>
@@ -127,14 +127,6 @@
 <!--===============================================================================================-->
 <script src="js/main.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-
-<%--QUANDO SI CLICCA SULLA TEXTFIELD 'ALTRO' VENGONO DISATTIVATI I RADIO BUTTON--%>
-<script>
-    $('#textInput').click(function () {
-        $('input[type=radio]').removeAttr("checked");
-
-    });
-</script>
 
 </body>
 </html>

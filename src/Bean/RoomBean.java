@@ -11,17 +11,15 @@ public class RoomBean {
     private LocalTime fine;
     private String fromp;
     private String ID;
+    private String sessione;
 
+    public String getSessione() {
+        return sessione;
+    }
 
-
-    /*public RoomBean(String nome, String tipopr, String datapr, String inizio, String fine, String fromp) {
-        this.nome = "";
-        this.tipopr = "";
-        this.datapr = "";
-        this.inizio = "";
-        this.fine = "";
-        this.fromp = "";
-    }*/
+    public void setSessione(String sessione) {
+        this.sessione = sessione;
+    }
 
     public String getNome() {
         return nome;

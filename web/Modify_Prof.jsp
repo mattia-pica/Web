@@ -2,7 +2,9 @@
 <%@ page import="Entity.Room" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.time.LocalTime" %>
-<%@ page import="java.time.format.DateTimeParseException" %><%--
+<%@ page import="java.time.format.DateTimeParseException" %>
+<%@ page import="java.util.regex.Pattern" %>
+<%@ page import="Bean.SessionBean" %><%--
   Created by IntelliJ IDEA.
   User: mattia
   Date: 04/04/18
@@ -11,9 +13,11 @@
 --%>
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
+<jsp:useBean id="sessionBean" class="Bean.SessionBean" scope="session"/>
 <jsp:useBean id="roomBean" class="Bean.RoomBean" scope="session"/>
 
 <!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
+<jsp:setProperty name="sessionBean" property="*"/>
 <jsp:setProperty name="roomBean" property="*"/>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -72,7 +76,6 @@
                             <th class="cell100 column2">End</th>
                             <th class="cell100 column2">Type</th>
                             <th class="cell100 column2">ID</th>
-
                         </tr>
                         </thead>
                     </table>
@@ -85,6 +88,14 @@
                         <%
                             Controller controller = new Controller();
                             ArrayList<Room> r = controller.showComplete_DB();
+                            if (r.isEmpty()){
+                                String info = "alert('Non ci sono aule prenotabili');";
+                                out.println("<script type=\"text/javascript\">");
+                                out.println(info);
+                                out.println("location='profPage.jsp';");
+                                out.println("</script>");
+                                return;
+                            }
                             for (Room aR : r) {%>
                         <tr>
                             <td><%=aR.getNome()%>
@@ -105,12 +116,6 @@
 
                             if (request.getParameter("submit_mod") != null) {
 
-                                String ID = request.getParameter("ID");
-                                /*String typePR;
-                                LocalTime startPR;
-                                LocalTime endPR;
-                                String date;*/
-
                                 if (request.getParameter("startPR") == null || request.getParameter("ID") == null ||
                                         request.getParameter("endPR") == null || request.getParameter("datePR") == null ||
                                         (request.getParameter("typePR") == null && request.getParameter("altroPRtext") == null)) {
@@ -119,21 +124,36 @@
                                     out.println(info);
                                     out.println("location='Modify_Prof.jsp';");
                                     out.println("</script>");
+
                                 } else {
 
-                                    try {
-                                        roomBean.setID(request.getParameter("ID"));
-                                        roomBean.setInizio(LocalTime.parse(request.getParameter("startPR")));
-                                        roomBean.setFine(LocalTime.parse(request.getParameter("endPR")));
-                                        roomBean.setDatapr(request.getParameter("datePR"));
-                                    } catch (DateTimeParseException e1) {
+                                    Pattern p = Pattern.compile("\\d{4}-\\d{2}-\\d{2}");
+                                    if (p.matcher(request.getParameter("datePR")).matches()) {
 
-                                        String info = "alert('I campi inseriti non sono corretti');";
-                                        out.println("<script type=\"text/javascript\">");
-                                        out.println(info);
-                                        out.println("location='Modify_Prof.jsp';");
-                                        out.println("</script>");
-                                        return;
+                                        SessionBean s = controller.trovaSessione(request.getParameter("datePR"));
+
+                                        if (s.getDataInizio() == null){
+                                            String info = "alert('La data inserita è fuori da ogni sessione');";
+                                            out.println("<script type=\"text/javascript\">");
+                                            out.println(info);
+                                            out.println("location='Modify_Prof.jsp';");
+                                            out.println("</script>");
+                                            return;
+                                        }
+                                        try {
+                                            roomBean.setID(request.getParameter("ID"));
+                                            roomBean.setInizio(LocalTime.parse(request.getParameter("startPR")));
+                                            roomBean.setFine(LocalTime.parse(request.getParameter("endPR")));
+                                            roomBean.setDatapr(request.getParameter("datePR"));
+                                        } catch (DateTimeParseException e1) {
+
+                                            String info = "alert('I campi inseriti non sono corretti');";
+                                            out.println("<script type=\"text/javascript\">");
+                                            out.println(info);
+                                            out.println("location='Modify_Prof.jsp';");
+                                            out.println("</script>");
+                                            return;
+                                        }
                                     }
 
                                     if (request.getParameter("typePR") == null) {
@@ -156,7 +176,6 @@
                                         out.println("alert('La modifica crea conflitti con le prenotazioni già esistenti');");
                                         out.println("location='profPage.jsp';");
                                         out.println("</script>");
-
                                     }
                                 }
                             }
@@ -202,8 +221,7 @@
             <div class="wrap-input100 validate-input m-b-18">
                 <fieldset>
                     <span class="label-input100">Conferenza</span>
-                    <input  style="margin-top: 15px" type="radio" name="typePR"  value="Conferenza"/>
-
+                    <input  style="margin-top: 15px" type="radio" name="typePR" value="Conferenza"/>
                 </fieldset>
             </div>
             <div class="wrap-input100 validate-input m-b-18" data-validate ="Altro">

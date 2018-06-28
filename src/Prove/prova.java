@@ -26,9 +26,34 @@ public class prova {
         }
 */
 
-        String r = "22/02/2018";
+        /*String r = "22/02/2018";
 
-        System.out.println(r.substring(3,5));
+        System.out.println(r.substring(3,5));*/
+
+        /*String s = "2018-09-12";
+        System.out.println(s.substring(0,4));*/
+
+        /*SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String dateInString = "2018-09-23";
+
+        try {
+
+            Date date = formatter.parse(dateInString);
+            //System.out.println(date);
+            System.out.println(formatter.format(date));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }*/
+
+        String s = "2018-02-01,2018-03-01,Autunnale";
+        String[] n = s.split(",");
+        String p1 = n[0];
+        String p2 = n[1];
+        String p3 = n[2];
+
+        System.out.println("Inizio: " + p1 + " Fine: " +  p2 + " Tipo: " +  p3);
+
         /*Pattern p = Pattern.compile("\\d{2}(/)\\d{2}(/)\\d{4}");
 
         //Pattern p = Pattern.compile("\\d{2}-\\d{2}-\\d{4}");

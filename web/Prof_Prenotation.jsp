@@ -6,10 +6,13 @@
 
 <!-- Si dichiara la variabile loginBean e istanzia un oggetto LoginBean -->
 <jsp:useBean id="roomBean" class="Bean.RoomBean" scope="session"/>
+<jsp:useBean id="sessionBean" class="Bean.SessionBean" scope="session"/>
 
 
 <!-- Mappa automaticamente tutti gli attributi dell'oggetto loginBean e le proprietà JSP -->
 <jsp:setProperty name="roomBean" property="*"/>
+<jsp:setProperty name="sessionBean" property="*"/>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,7 +54,6 @@
             <div class="login100-form-title" style="background-image: url(login/images/bg-01.jpg);">
 
                 <%
-                    //String name = request.getParameter("aula");
                     Controller controller = new Controller();
                     roomBean.setNome(request.getParameter("aula"));
 
@@ -65,14 +67,12 @@
                             %>
 
                 <script type="text/javascript">
-                    var msg = "<%="OK"%>";
+                    var msg = "<%="Completare tutti i campi"%>";
                     alert(msg);
                     location='Prof_Prenotation.jsp?aula=<%=roomBean.getNome()%>';
                 </script>
 
                 <%
-
-
                             return;
                         }
 
@@ -85,9 +85,10 @@
                         roomBean.setInizio(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getInizio());
                         roomBean.setFine(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getFine());
                         roomBean.setDatapr(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate());
+                        roomBean.setSessione(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getSessione());
                         roomBean.setTipopr(typePR);
 
-                        if (controller.newPrenotationProfessore(roomBean.getNome(), typePR, roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine())) {
+                        if (controller.newPrenotationProfessore(roomBean.getNome(), typePR, roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine(), roomBean.getSessione())) {
 
                             String info = "alert('Prenotazione Effettuata con successo');";
                             out.println("<script type=\"text/javascript\">");
@@ -142,6 +143,10 @@
                 <input class="input100" type="text" name="datePR" placeholder="<%=PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate()%>" disabled="disabled">
                 <span class="focus-input100"></span>
             </div>
+            <div class="wrap-input100 validate-input m-b-18" data-validate ="Session">
+                <span class="label-input100">Sessione</span>
+                <input class="input100" type="text" name="datePR" placeholder="<%="Inizio: "+sessionBean.getDataInizio() + "    Fine: " + sessionBean.getDataFine() + "    Tipo: " + sessionBean.getTipo()%>" disabled="disabled">
+                <span class="focus-input100"></span>
             <div class="wrap-input100 validate-input m-b-18">
                 <fieldset>
                     <span class="label-input100">Esame</span>
@@ -164,6 +169,7 @@
                 <div class="contact-right">
                     <input class="login100-form-btn" type="submit" name="submit_prenotation" value="Prenota">
                 </div>
+            </div>
             </div>
         </form>
     </div>

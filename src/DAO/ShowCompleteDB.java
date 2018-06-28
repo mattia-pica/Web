@@ -19,7 +19,6 @@ public class ShowCompleteDB {
 
         ArrayList<Room> rooms = new ArrayList<>();
 
-
         try {
 
             Class.forName("com.mysql.jdbc.Driver");
@@ -38,6 +37,7 @@ public class ShowCompleteDB {
                 room.setDatapr(rs.getString("datapr"));
                 room.setInizio(rs.getString("inizio"));
                 room.setFine(rs.getString("fine"));
+                room.setSessione(rs.getString("sessione"));
                 room.setID(rs.getInt("ID"));
 
                 rooms.add(room);

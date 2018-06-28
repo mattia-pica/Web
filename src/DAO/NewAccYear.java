@@ -21,7 +21,7 @@ public class NewAccYear {
 
             stmt = conn.createStatement();
 
-            String nome = datainizio.substring(6)+"/"+datafine.substring(6);
+            String nome = datainizio.substring(0,4)+"/"+datafine.substring(0,4);
 
             String query = String.format(Query.newAccYear, datainizio, datafine, nome);
 
