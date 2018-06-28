@@ -171,6 +171,12 @@
                                     response.sendRedirect("Show_Session_Prof.jsp");
                                 }
 
+                                if (request.getParameter("submit_storic") != null){
+                                    response.sendRedirect("StoricoPrenotazioni_first.jsp");
+                                }
+
+
+
                             %>
 
 
@@ -218,6 +224,9 @@
                 </button>
                 <button class="login100-form-btn" type="submit" name="submit_sess" value="Delete">
                     Visualizza Sessioni
+                </button>
+                <button class="login100-form-btn" type="submit" name="submit_storic" value="Delete">
+                    Storico
                 </button>
 
 

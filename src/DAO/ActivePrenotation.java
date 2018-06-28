@@ -39,7 +39,6 @@ public class ActivePrenotation {
 
             String query = String.format(Query.activePrenotation, user.getUsername(), date);
 
-
             ResultSet rs = stmt.executeQuery(query);
             while (rs.next()) {
 

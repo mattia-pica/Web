@@ -135,6 +135,13 @@ public class Controller {
 
     }
 
+    //------------------------asdfasdfsdfasdfsf----------------------//
+
+    public ArrayList<Room> storico(String datainizio, String datafine){
+        PrenotationInAccademicYear p = new PrenotationInAccademicYear();
+        return p.show(datainizio, datafine);
+    }
+
     //--------------------CREAZIONE SINGLETON--------------------//
 
     public void createSingleton(User u){

@@ -66,6 +66,8 @@ public class Query {
 
     public static String retrieveAccYear = "SELECT * FROM anni_accademici WHERE Nome='%s'";
 
+    public static String prenotationInAccYear = "SELECT * FROM Aule WHERE (fromp='%s' AND (datapr > '%s' AND datapr < '%s'))";
+
     //--------------------SESSIONI----------------------------//
 
     public static String sessionControl = "SELECT Nome FROM anni_accademici WHERE (('%s' <= '%s' AND '%s' >= '%s')" +
