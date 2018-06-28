@@ -15,5 +15,7 @@ todo Mancano:
 
             todo Ricontrollare le classi dao dove si inviano mail a PIÙ UTENTI
 
-            todo Controllare la parte grafica (na sistemata)
+            todo Controllare la parte grafica (mancano 1-2 jsp)
+
+            todo C'è da capire se bisogna aggiungere altre entity
 

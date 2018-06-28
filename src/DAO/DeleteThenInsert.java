@@ -31,8 +31,6 @@ public class DeleteThenInsert {
             conn = DriverManager.getConnection(Query.DB_URL, Query.USER, Query.PASS);
             stmt = conn.createStatement();
 
-            SendMail sendMail = new SendMail();
-
             String retrieveInformation = String.format(Query.retrieveUsername, from);
 
             System.out.println(retrieveInformation);
