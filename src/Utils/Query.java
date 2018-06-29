@@ -57,9 +57,14 @@ public class Query {
 
     public static String allRooms = "SELECT nome FROM dbEsame.Aule";
 
-    public static String disponibleRooms = "SELECT DISTINCT nome FROM dbEsame.Aule WHERE nome NOT IN (" +
+    /*public static String disponibleRooms = "SELECT DISTINCT nome FROM dbEsame.Aule WHERE nome NOT IN (" +
             "SELECT nome FROM dbEsame.Aule WHERE datapr='%s' AND ((inizio<='%s' AND fine>='%s') OR (fine>='%s' AND " +
-            "inizio<='%s') OR (inizio>='%s' AND fine <='%s')))";
+            "inizio<='%s') OR (inizio>='%s' AND fine <='%s')))";*/
+
+    public static String disponibleRooms = "SELECT DISTINCT Aule.nome FROM Aule JOIN caratteristiche c ON Aule.nome = c.Nome " +
+            "WHERE (microfono='%s' AND lavagna='%s' AND lavelettronica='%s' AND proiettore='%s' AND ethernet='%s' AND " +
+            "presa='%s' AND posti>='%s') AND Aule.nome NOT IN (SELECT nome FROM dbEsame.Aule WHERE (datapr='%s' AND " +
+            "(inizio<='%s' AND fine>='%s') OR (fine>='%s' AND inizio<='%s') OR (inizio>='%s' AND fine <='%s')));";
 
 
     //-------------------ANNI ACCADEMICI----------------------//

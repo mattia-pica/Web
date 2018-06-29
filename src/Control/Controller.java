@@ -23,8 +23,9 @@ public class Controller {
 
     //------AULE DISPONIBILI-------------//
 
-    public Disponible_RoomBean show(LocalTime timeInizio, LocalTime timeFine, String dateSearch) {
-        Disponible_RoomBean showDatabase = DisponibleRooms.show(timeInizio, timeFine, dateSearch);
+    public Disponible_RoomBean show(LocalTime timeInizio, LocalTime timeFine, String dateSearch, String microfono,
+                                    String proiettore, String lavagna, String lavElettronica, String ethernet, String presa, int posti) {
+        Disponible_RoomBean showDatabase = DisponibleRooms.show(timeInizio, timeFine, dateSearch, microfono, proiettore, lavagna, lavElettronica, ethernet, presa, posti);
         return showDatabase;
     }
 

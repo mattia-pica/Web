@@ -2,18 +2,19 @@ todo Mancano:
 
     - Controllo sugli intervalli degli anni accademici inseriti
 
-    - Visualizzazione storico prenotazioni:
 
-        . L'utente vuole vedere le proprie prenotazioni in un Anno accademico
-            - Seleziono anno accademico -> visualizzo prenotazione proprie dell'utente
+    - Visualizzazione prenotazioni attive totali
 
-            todo TUTTO in italiano
 
-            todo Ricontrollare le classi dao dove si inviano mail a PIÙ UTENTI
+    VARIE:
 
-            todo Controllare la parte grafica (mancano 1-2 jsp)
+    todo TUTTO in italiano
 
-            todo C'è da capire se bisogna aggiungere altre entity
+    todo Ricontrollare le classi dao dove si inviano mail a PIÙ UTENTI
 
-            todo Controllare che non si possa inserire una sessione al di fuori di un anno accademico
+    todo Controllare la parte grafica (mancano 1-2 jsp)
+
+    todo C'è da capire se bisogna aggiungere altre entity
+
+    todo Controllare che non si possa inserire una sessione al di fuori di un anno accademico
 

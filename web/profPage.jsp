@@ -77,6 +77,43 @@
                                 Controller controller = new Controller();
                                 if (request.getParameter("submit_search") != null){
 
+                                    String microfono = "no";
+                                    String proiettore = "no";
+                                    String lavagna = "no";
+                                    String lavElettronica = "no";
+                                    String ethernet = "no";
+                                    String presa = "no";
+                                    int posti = 0;
+
+
+                                    if (request.getParameter("mic") != null) microfono = request.getParameter("mic");
+
+                                    if (request.getParameter("proiett") != null) proiettore = request.getParameter("proiett");
+
+                                    if (request.getParameter("lav") != null) lavagna = request.getParameter("lav");
+
+                                    if (request.getParameter("inter") != null) lavElettronica = request.getParameter("inter");
+
+                                    if (request.getParameter("eth") != null) ethernet = request.getParameter("eth");
+
+                                    if (request.getParameter("prese") != null) presa = request.getParameter("prese");
+
+                                    if (request.getParameter("posti") != null) {
+
+                                        try {
+                                            posti = Integer.parseInt(request.getParameter("posti"));
+
+                                        }catch (NumberFormatException e){
+                                            String info = "alert('Inserire un numero di posti valido');";
+                                            out.println("<script type=\"text/javascript\">");
+                                            out.println(info);
+                                            out.println("location='profPage.jsp';");
+                                            out.println("</script>");
+                                            return;
+                                        }
+                                    }
+
+
                                     Disponible_RoomBean r;
                                     String StartSearch = request.getParameter("start");
                                     String EndSearch = request.getParameter("end");
@@ -98,7 +135,7 @@
 
                                             LocalTime timeInizio = LocalTime.parse(StartSearch);
                                             LocalTime timeFine = LocalTime.parse(EndSearch);
-                                            r = controller.show(timeInizio, timeFine, DateSearch);
+                                            r = controller.show(timeInizio, timeFine, DateSearch, microfono, proiettore, lavagna, lavElettronica, ethernet, presa, posti);
 
                                             if (r.getNome().isEmpty()){
                                                 String info = "alert('Non ci sono aule prenotabili');";
@@ -108,6 +145,7 @@
                                                 out.println("</script>");
                                                 return;
                                             }
+
                                             SessionBean s = controller.trovaSessione(DateSearch);
 
                                             if (s.getDataInizio() == null){
@@ -204,6 +242,49 @@
             <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
                 <span class="label-input100">End</span>
                 <input class="input100" type="text" name="end" placeholder="Ora fine">
+                <span class="focus-input100"></span>
+            </div>
+
+            <div class="wrap-input100 validate-input m-b-18" data-validate ="nPosti">
+                <span class="label-input100">Numero Posti</span>
+                <input class="input100" type="text" name="posti" placeholder="Numero minimo di posti">
+                <span class="focus-input100"></span>
+            </div>
+
+            <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
+                <span class="label-input100">Proiettore</span>
+                </br>
+                <input type="checkbox" value="si" name="proiett" placeholder="Ora fine">
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
+                <span class="label-input100">Microfono</span>
+                </br>
+                <input type="checkbox" value="si" name="mic" placeholder="Ora fine">
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
+                <span class="label-input100">Lavagna</span>
+                </br>
+                <input type="checkbox" value="si" name="lav" placeholder="Ora fine">
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
+                <span class="label-input100">Lav.Interattiva</span>
+                </br>
+                <input type="checkbox" value="si" name="inter" placeholder="Ora fine">
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
+                <span class="label-input100">Cavo Ethernet</span>
+                </br>
+                <input type="checkbox" value="si" name="eth" placeholder="Ora fine">
+                <span class="focus-input100"></span>
+            </div>
+            <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
+                <span class="label-input100">Prese Individuali</span>
+                </br>
+                <input type="checkbox" value="si" name="prese" placeholder="Ora fine">
                 <span class="focus-input100"></span>
             </div>
             <div class="container-login100-form-btn">

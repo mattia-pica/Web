@@ -12,7 +12,8 @@ import java.util.ArrayList;
 
 public class DisponibleRooms {
 
-    public static Disponible_RoomBean show(LocalTime timeInizio, LocalTime timeFine, String dateSearch){
+    public static Disponible_RoomBean show(LocalTime timeInizio, LocalTime timeFine, String dateSearch, String microfono,
+                                           String proiettore, String lavagna, String lavElettronica, String ethernet, String presa, int posti){
 
         java.sql.Statement stmt = null;
         Connection conn = null;
@@ -31,7 +32,11 @@ public class DisponibleRooms {
                     +dateSearch+"' AND ((inizio<='"+timeInizio+"' AND fine>='"+timeInizio+"') "+"OR (fine>='"+timeFine
                     +"' AND inizio<='"+timeFine+"') "+"OR (inizio>='"+timeInizio+"' AND fine<='"+timeFine+"')))";*/
 
-            String query = String.format(Query.disponibleRooms, dateSearch, timeInizio, timeInizio, timeFine, timeFine, timeInizio, timeFine);
+            String query = String.format(Query.disponibleRooms, microfono, lavagna, lavElettronica,
+                    proiettore, ethernet, presa, posti, dateSearch, timeInizio, timeInizio, timeFine, timeFine, timeInizio, timeFine);
+
+            System.out.println("\n" + query);
+
             ResultSet rs = stmt.executeQuery(query);
 
             ArrayList<String> rooms = new ArrayList<>();
