@@ -198,6 +198,10 @@
 
                             }
 
+                            if (request.getParameter("submit_ModAccYear") != null){
+                                response.sendRedirect("Modify_AccYear_first.jsp");
+                            }
+
                         %>
                         </tbody>
                     </table>
@@ -252,6 +256,9 @@
                 </button>
                 <button class="login100-form-btn" type="submit" name="submit_ModSession" value="ModSession">
                     Modifica Sessione
+                </button>
+                <button class="login100-form-btn" type="submit" name="submit_ModAccYear" value="ModAccYear">
+                    Modifica Anno Accademico
                 </button>
 
 

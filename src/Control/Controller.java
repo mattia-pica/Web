@@ -140,6 +140,7 @@ public class Controller {
     public ArrayList<Room> storico(String datainizio, String datafine){
         PrenotationInAccademicYear p = new PrenotationInAccademicYear();
         return p.show(datainizio, datafine);
+
     }
 
     //--------------------CREAZIONE SINGLETON--------------------//
@@ -147,6 +148,7 @@ public class Controller {
     public void createSingleton(User u){
         UserSingleton singleton = UserSingleton.getInstance();
         singleton.setUser(u);
+
     }
 
     //-----------------BEAN----------------------//
@@ -188,6 +190,14 @@ public class Controller {
 
         Show_Session show_session = new Show_Session();
         return show_session.showAllSession();
+    }
+
+    //-------------------MODIFICA ANNO ACCADEMICO-----------//
+
+    public boolean modAccYear(String newInizio, String newFine){
+
+        Modify_AccYear modify_accYear = new Modify_AccYear();
+        return modify_accYear.modify(newInizio, newFine);
     }
 
     //-------------------MODIFICA SESSIONE-----------------//

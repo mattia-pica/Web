@@ -46,11 +46,15 @@ public class prova {
             e.printStackTrace();
         }*/
 
-        String s = "2018-02-01,2018-03-01";
+        /*String s = "2018-02-01,2018-03-01";
         String[] n = s.split(",");
         String p1 = n[0];
         String p2 = n[1];
-        System.out.println("Inizio: " + p1 + " Fine: " +  p2);
+        System.out.println("Inizio: " + p1 + " Fine: " +  p2);*/
+
+        String s = "2018-02-01";
+
+        System.out.println(s.substring(0,4));
 
         /*Pattern p = Pattern.compile("\\d{2}(/)\\d{2}(/)\\d{4}");
 
