@@ -2,11 +2,12 @@ todo Mancano:
 
     - Controllo sugli intervalli degli anni accademici inseriti
 
-
     - Visualizzazione prenotazioni attive totali
 
 
     VARIE:
+
+    todo Controllata generale ai casi d'uso uno per uno
 
     todo TUTTO in italiano
 

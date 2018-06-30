@@ -142,7 +142,6 @@
                                         LocalTime timeFine = LocalTime.parse(EndSearch);
                                         r = controller.show(timeInizio, timeFine, DateSearch, microfono, proiettore, lavagna, lavElettronica, ethernet, presa, posti);
 
-
                                         if (r.getNome().isEmpty()){
                                             String info = "alert('Non ci sono aule prenotabili');";
                                             out.println("<script type=\"text/javascript\">");

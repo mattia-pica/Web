@@ -161,43 +161,51 @@
             </div>
             <div class="wrap-input100 validate-input m-b-18" data-validate ="From">
                 <span class="label-input100">A nome di</span>
-                <input class="input100" type="text" name="from" placeholder="Inserire nome professore">
+                <input class="input100" type="text" id="fromText" name="from" placeholder="Inserire nome professore">
                 <span class="focus-input100"></span>
             </div>
             <div class="wrap-input100 validate-input m-b-18">
                 <fieldset>
                     <span class="label-input100">Esame</span>
-                    <input style="margin-top: 15px" type="radio" name="typePR" value="Esame"/>
+                    <input style="margin-top: 15px" onclick="document.getElementById('fromText').disabled = false;" type="radio" name="typePR" value="Esame"/>
                 </fieldset>
             </div>
             <div class="wrap-input100 validate-input m-b-18">
                 <fieldset>
                     <span class="label-input100">Conferenza</span>
-                    <input style="margin-top: 15px" type="radio" name="typePR" value="Conferenza"/>
+                    <input style="margin-top: 15px" onclick="document.getElementById('fromText').disabled = false;" type="radio" name="typePR" value="Conferenza"/>
                 </fieldset>
             </div>
-            <div class="wrap-input100 validate-input m-b-18" data-validate ="Altro">
+            <div class="wrap-input100 validate-input m-b-18">
+                <fieldset>
+                    <span class="label-input100">Test d'ingresso</span>
+                    <input style="margin-top: 15px" <%--onclick="document.getElementById('fromText').disabled = true;"--%> onclick="ClearFields();" type="radio" name="typePR" value="Test"/>
+                </fieldset>
+            </div>
+            <div class="wrap-input100 validate-input m-b-18">
+                <fieldset>
+                    <span class="label-input100">Seduta di laurea</span>
+                    <input style="margin-top: 15px" <%--onclick="document.getElementById('fromText').disabled = true;"--%> onclick="ClearFields();" type="radio" name="typePR" value="Seduta"/>
+                </fieldset>
+            </div>
+
+
+        <%--<div class="wrap-input100 validate-input m-b-18" data-validate ="Altro">
                 <span class="label-input100">Altro</span>
                 <input class="input100" type="text" id="textInput" name="altroPRtext" placeholder="Altro">
                 <span class="focus-input100"></span>
-            </div>
-            <%--<%
-                ArrayList<SessionBean> s = controller.showAllSessions();
-
-                for (int i = 0; i<s.size(); i++){%>
-
-            <div class="wrap-input100 validate-input m-b-18">
-                <fieldset>
-                    <span class="label-input100">&lt;%&ndash;QUA CI VA IL NOME DEL RADIOBUTTON&ndash;%&gt;</span>
-                    <input style="margin-top: 15px" id="r_<%=i%>" type="radio" name="sess" value="<%=s.get(i).getDataInizio()+","+s.get(i).getDataFine()%>"/><label for="r_<%=i%>"><%="Inizio: " + s.get(i).getDataInizio() + " Fine: " + s.get(i).getDataFine() + " Tipo: " + s.get(i).getTipo()%></label>
-
-                </fieldset>
-            </div>
+            </div>--%>
 
 
-            <%
-                }
-            %>--%>
+            <%--<div class="wrap-input100 validate-input m-b-18" data-validate ="Altro">
+                <span class="label-input100">Altro</span>
+                <select name="siti" >
+                    <option value="http://www.html.it" selected="selected">www.html.it</option>
+                    <option value="http://freephp.html.it">frephp.html.it</option>
+                    <option value="http://freasp.html.it">freasp.html.it</option>
+                </select>
+                <span class="focus-input100"></span>
+            </div>--%>
 
             <div class="container-login100-form-btn">
                 <div class="contact-right">
@@ -226,14 +234,22 @@
 <script src="js/main.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
+<%--Serve per svuotare e disabilitare la textfield quando si selezionano il radio button seduta di laurea o test d'ingresso--%>
+<script>
+    function ClearFields() {
 
-<%--QUANDO SI CLICCA SULLA TEXTFIELD ALTRO VENGONO DISATTIVATI I RADIO BUTTON--%>
+        document.getElementById("fromText").value = "";
+        document.getElementById('fromText').disabled = true;
+    }
+</script>
+
+<%--QUANDO SI CLICCA SULLA TEXTFIELD ALTRO VENGONO DISATTIVATI I RADIO BUTTON
 <script>
     $('#textInput').click(function () {
         $('input[type=radio]').removeAttr("checked");
 
     });
-</script>
+</script>--%>
 
 </body>
 </html>

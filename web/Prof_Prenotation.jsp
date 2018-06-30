@@ -1,5 +1,4 @@
 <%@ page import="Control.Controller" %>
-<%@ page import="java.time.LocalTime" %>
 <%@ page import="Utils.PrenotationBeanSingleton" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -59,8 +58,6 @@
 
                     if (request.getParameter("submit_prenotation") != null){
 
-                        String typePR;
-
                         if (request.getParameter("typePR") == null && (request.getParameter("altroPRtext") == null
                         || request.getParameter("altroPRtext") == "")) {
 
@@ -76,19 +73,13 @@
                             return;
                         }
 
-                        if (request.getParameter("typePR") == null) {
-                            typePR = request.getParameter("altroPRtext");
-                        } else {
-                            typePR = request.getParameter("typePR");
-                        }
-
                         roomBean.setInizio(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getInizio());
                         roomBean.setFine(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getFine());
                         roomBean.setDatapr(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate());
                         roomBean.setSessione(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getSessione());
-                        roomBean.setTipopr(typePR);
+                        roomBean.setTipopr(request.getParameter("typePR"));
 
-                        if (controller.newPrenotationProfessore(roomBean.getNome(), typePR, roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine(), roomBean.getSessione())) {
+                        if (controller.newPrenotationProfessore(roomBean.getNome(), request.getParameter("typePR"), roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine(), roomBean.getSessione())) {
 
                             String info = "alert('Prenotazione Effettuata con successo');";
                             out.println("<script type=\"text/javascript\">");
@@ -131,7 +122,6 @@
                 <span class="focus-input100"></span>
             </div>
 
-
             <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
                 <span class="label-input100">End</span>
                 <input class="input100" type="text" name="endPR" placeholder="<%=PrenotationBeanSingleton.getInstance().getPrenotation_bean().getFine()%>" disabled="disabled">
@@ -159,11 +149,6 @@
                     <input  style="margin-top: 15px" type="radio" name="typePR"  value="Conferenza"/>
 
                 </fieldset>
-            </div>
-            <div class="wrap-input100 validate-input m-b-18" data-validate ="Altro">
-                <span class="label-input100">Altro</span>
-                <input class="input100" type="text" id="textInput" name="altroPRtext" placeholder="Altro">
-                <span class="focus-input100"></span>
             </div>
             <div class="container-login100-form-btn">
                 <div class="contact-right">
