@@ -83,7 +83,7 @@ public class Modify_Session {
 
             for (int i = 0; i < id.size(); i++) {
 
-                String deleteOutOfSession = String.format(Query.deleteOutOfSession, id.get(i));
+                String deleteOutOfSession = String.format(Query.delete, id.get(i));
 
                 stmt.executeUpdate(deleteOutOfSession);
 

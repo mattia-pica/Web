@@ -8,6 +8,7 @@
 <%@ page import="Control.Controller" %>
 <%@ page import="Utils.PrenotationBeanSingleton" %>
 <%@ page import="java.time.format.DateTimeParseException" %>
+<%@ page import="Utils.UserSingleton" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -65,13 +66,11 @@
 
                     if (request.getParameter("submit_prenotation") != null) {
 
-                        String typePR;
+                        if (request.getParameter("typePR").equals("Esame") || request.getParameter("typePR").equals("Conferenza")){
 
-                        if (request.getParameter("typePR") == null && (request.getParameter("altroPRtext") == null
-                                || request.getParameter("altroPRtext") == "" || request.getParameter("from") == null
-                        || request.getParameter("from") == "")) {
+                        if (request.getParameter("from") == null || request.getParameter("from").equals("")) {
 
-                            //Non serve il controllo della data perchè è pre-impostata dal bean
+                            //Non serve il controllo della data perchè è pre-impostata dal bean ed è stato fato alla pagina prima (secretraryPage.jsp)
 
                             %>
 
@@ -82,38 +81,60 @@
                 </script>
                 <%
                             return;
+                    }else {
+                                roomBean.setInizio(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getInizio());
+                                roomBean.setFine(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getFine());
+                                roomBean.setDatapr(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate());
+                                roomBean.setSessione(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getSessione());
+                                roomBean.setFromp(request.getParameter("from"));
+                                roomBean.setTipopr(request.getParameter("typePR"));
+
+                                if (controller.newPrenotationSecretary(roomBean.getNome(), roomBean.getTipopr(),
+                                        roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine(),
+                                        roomBean.getSessione(), roomBean.getFromp())) {
+
+                                    String info = "alert('Prenotazione Effettuata con successo');";
+                                    out.println("<script type=\"text/javascript\">");
+                                    out.println(info);
+                                    out.println("location='secretaryPage.jsp';");
+                                    out.println("</script>");
+
+                                } else {
+                                    String info = "alert('Il nome utente inserito non esiste');";
+                                    out.println("<script type=\"text/javascript\">");
+                                    out.println(info);
+                                    out.println("location='secretaryPage.jsp';");
+                                    out.println("</script>");
+                                }
+                            }
+
+                            }
+
+                    if (request.getParameter("typePR").equals("Test") || request.getParameter("typePR").equals("Seduta")) {
 
 
-                    }
-                    if (request.getParameter("typePR") == null) {
-                        typePR = request.getParameter("altroPRtext");
-                    } else {
-                        typePR = request.getParameter("typePR");
-                    }
+                        roomBean.setInizio(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getInizio());
+                        roomBean.setFine(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getFine());
+                        roomBean.setDatapr(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate());
+                        roomBean.setSessione(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getSessione());
+                        roomBean.setFromp(UserSingleton.getInstance().getUser().getUsername());
+                        roomBean.setTipopr(request.getParameter("typePR"));
 
-                    /*try {*/
+                        if (controller.newPrenotationSecretary(roomBean.getNome(), request.getParameter("typePR"), roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine(), roomBean.getSessione(), roomBean.getFromp())) {
 
-                    roomBean.setInizio(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getInizio());
-                    roomBean.setFine(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getFine());
-                    roomBean.setDatapr(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getDate());
-                    roomBean.setSessione(PrenotationBeanSingleton.getInstance().getPrenotation_bean().getSessione());
-                    roomBean.setFromp(request.getParameter("from"));
-                    roomBean.setTipopr(typePR);
+                            String info = "alert('Prenotazione Effettuata con successo');";
+                            out.println("<script type=\"text/javascript\">");
+                            out.println(info);
+                            out.println("location='secretaryPage.jsp';");
+                            out.println("</script>");
 
-                if (controller.newPrenotationSecretary(roomBean.getNome(), typePR, roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine(),roomBean.getSessione(), roomBean.getFromp())) {
-
-                    String info = "alert('Prenotazione Effettuata con successo');";
-                    out.println("<script type=\"text/javascript\">");
-                    out.println(info);
-                    out.println("location='secretaryPage.jsp';");
-                    out.println("</script>");
-
-                } else {
-                    String info = "alert('Il nome utente inserito non esiste');";
-                    out.println("<script type=\"text/javascript\">");
-                    out.println(info);
-                    out.println("location='secretaryPage.jsp';");
-                    out.println("</script>");
+                        } else {
+                            String info = "alert('Il nome utente inserito non esiste');";
+                            out.println("<script type=\"text/javascript\">");
+                            out.println(info);
+                            out.println("location='secretaryPage.jsp';");
+                            out.println("</script>");
+                        }
                     }
                 }
 
@@ -179,13 +200,13 @@
             <div class="wrap-input100 validate-input m-b-18">
                 <fieldset>
                     <span class="label-input100">Test d'ingresso</span>
-                    <input style="margin-top: 15px" <%--onclick="document.getElementById('fromText').disabled = true;"--%> onclick="ClearFields();" type="radio" name="typePR" value="Test"/>
+                    <input style="margin-top: 15px" onclick="ClearFields();" type="radio" name="typePR" value="Test"/>
                 </fieldset>
             </div>
             <div class="wrap-input100 validate-input m-b-18">
                 <fieldset>
                     <span class="label-input100">Seduta di laurea</span>
-                    <input style="margin-top: 15px" <%--onclick="document.getElementById('fromText').disabled = true;"--%> onclick="ClearFields();" type="radio" name="typePR" value="Seduta"/>
+                    <input style="margin-top: 15px" onclick="ClearFields();" type="radio" name="typePR" value="Seduta"/>
                 </fieldset>
             </div>
 

@@ -8,11 +8,19 @@ public class Query {
 
     //-----------------SEGRETARIA-----------------//
 
-    public static String delete_deleteThenUpdate = "DELETE FROM dbEsame.Aule WHERE ((datapr='%s' AND ID!='%s') AND " +
-            "((inizio<='%s' AND fine>='%s') OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";
+    /*public static String delete_deleteThenUpdate = "DELETE FROM dbEsame.Aule WHERE ((datapr='%s' AND ID!='%s') AND " +
+            "((inizio<='%s' AND fine>='%s') OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";*/
 
-    public static String deleteSecretary = "DELETE FROM dbEsame.Aule WHERE ((datapr='%s' AND nome='%s') AND " +
-            "((inizio<='%s' AND fine>='%s') OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";
+    public static String delete_deleteThenUpdate = "UPDATE dbEsame.Aule SET tipopr=NULL, datapr=NULL, inizio=NULL, " +
+            "fine=NULL, fromp=NULL, sessione=NULL  WHERE ((datapr='%s' AND ID!='%s') AND ((inizio<='%s' AND fine>='%s') " +
+            "OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";
+
+    /*public static String deleteSecretary = "DELETE FROM dbEsame.Aule WHERE ((datapr='%s' AND nome='%s') AND " +
+            "((inizio<='%s' AND fine>='%s') OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";*/
+
+    public static String deleteSecretary = "UPDATE dbEsame.Aule SET tipopr=NULL, datapr=NULL, inizio=NULL, fine=NULL, " +
+            "fromp=NULL, sessione=NULL WHERE ((datapr='%s' AND nome='%s') AND ((inizio<='%s' AND fine>='%s') OR " +
+            "(inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";
 
     public static String emailInfo_deleteThenInsert = "SELECT DISTINCT Name,Surname,Email,nome,datapr,inizio,fine FROM users JOIN Aule ON fromp=Username WHERE " +
             "((datapr='%s' AND nome='%s') AND ((inizio<='%s' AND fine>='%s') OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine<='%s')));";
@@ -27,7 +35,9 @@ public class Query {
 
     public static String login = "SELECT * FROM dbEsame.users WHERE Username='%s' AND Password='%s';";
 
-    public static String delete = "DELETE FROM dbEsame.Aule WHERE ID = '%s';";
+    //public static String delete = "DELETE FROM dbEsame.Aule WHERE ID = '%s';";
+
+    public static String delete = "UPDATE dbEsame.Aule SET tipopr=NULL, datapr=NULL, inizio=NULL, fine=NULL, fromp=NULL, sessione=NULL WHERE ID='%s';";
 
     public static String completeDB = "SELECT * FROM dbEsame.Aule WHERE fromp='%s';";
 
@@ -66,6 +76,10 @@ public class Query {
             "presa='%s' AND posti>='%s') AND Aule.nome NOT IN (SELECT nome FROM dbEsame.Aule WHERE (datapr='%s' AND " +
             "(inizio<='%s' AND fine>='%s') OR (fine>='%s' AND inizio<='%s') OR (inizio>='%s' AND fine <='%s')));";
 
+    public static String disponibleRooms_Secretary = "SELECT DISTINCT nome FROM dbEsame.Aule WHERE nome NOT IN (" +
+            "SELECT nome FROM dbEsame.Aule WHERE datapr='%s' AND ((inizio<='%s' AND fine>='%s') OR (fine>='%s' AND " +
+            "inizio<='%s') OR (inizio>='%s' AND fine <='%s')))";
+
 
     //-------------------ANNI ACCADEMICI----------------------//
 
@@ -91,7 +105,7 @@ public class Query {
 
     public static String prenotationOutOfSession = "SELECT ID FROM dbEsame.Aule WHERE sessione='%s'";
 
-    public static String deleteOutOfSession = "DELETE FROM dbEsame.Aule WHERE ID='%s'";
+    //public static String deleteOutOfSession = "DELETE FROM dbEsame.Aule WHERE ID='%s'";
 
     public static String modifySession = "UPDATE sessioni SET DataInizio='%s', DataFine='%s', Tipo='%s', nome='%s' WHERE nome='%s'";
 

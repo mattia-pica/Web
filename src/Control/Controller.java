@@ -21,11 +21,18 @@ public class Controller {
         return u;
     }
 
-    //------AULE DISPONIBILI-------------//
+    //------AULE DISPONIBILI PROFESSORE-------------//
 
     public Disponible_RoomBean show(LocalTime timeInizio, LocalTime timeFine, String dateSearch, String microfono,
                                     String proiettore, String lavagna, String lavElettronica, String ethernet, String presa, int posti) {
-        Disponible_RoomBean showDatabase = DisponibleRooms.show(timeInizio, timeFine, dateSearch, microfono, proiettore, lavagna, lavElettronica, ethernet, presa, posti);
+        Disponible_RoomBean showDatabase = DisponibleRooms_Prof.show(timeInizio, timeFine, dateSearch, microfono, proiettore, lavagna, lavElettronica, ethernet, presa, posti);
+        return showDatabase;
+    }
+
+    //------AULE DIPONIBILI SEGRETARIA--------------//
+
+    public Disponible_RoomBean show_Secretary(LocalTime timeInizio, LocalTime timeFine, String dateSearch) {
+        Disponible_RoomBean showDatabase = DisponibleRooms_Secr.show_Secretary(timeInizio, timeFine, dateSearch);
         return showDatabase;
     }
 

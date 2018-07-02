@@ -10,10 +10,9 @@ import java.sql.SQLException;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-public class DisponibleRooms {
+public class DisponibleRooms_Secr {
 
-    public static Disponible_RoomBean show(LocalTime timeInizio, LocalTime timeFine, String dateSearch, String microfono,
-                                           String proiettore, String lavagna, String lavElettronica, String ethernet, String presa, int posti){
+    public static Disponible_RoomBean show_Secretary(LocalTime timeInizio, LocalTime timeFine, String dateSearch){
 
         java.sql.Statement stmt = null;
         Connection conn = null;
@@ -32,8 +31,7 @@ public class DisponibleRooms {
                     +dateSearch+"' AND ((inizio<='"+timeInizio+"' AND fine>='"+timeInizio+"') "+"OR (fine>='"+timeFine
                     +"' AND inizio<='"+timeFine+"') "+"OR (inizio>='"+timeInizio+"' AND fine<='"+timeFine+"')))";*/
 
-            String query = String.format(Query.disponibleRooms, microfono, lavagna, lavElettronica,
-                    proiettore, ethernet, presa, posti, dateSearch, timeInizio, timeInizio, timeFine, timeFine, timeInizio, timeFine);
+            String query = String.format(Query.disponibleRooms_Secretary, dateSearch, timeInizio, timeInizio, timeFine, timeFine, timeInizio, timeFine);
 
             System.out.println("\n" + query);
 
@@ -41,7 +39,7 @@ public class DisponibleRooms {
 
             ArrayList<String> rooms = new ArrayList<>();
             while (rs.next()){
-               rooms.add(rs.getString(1));
+                rooms.add(rs.getString(1));
             }
 
             disponible_roomBean = new Disponible_RoomBean(rooms);
@@ -65,6 +63,4 @@ public class DisponibleRooms {
 
         return disponible_roomBean;
     }
-
-    }
-
+}
