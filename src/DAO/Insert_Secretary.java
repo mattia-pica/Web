@@ -17,7 +17,6 @@ public class Insert_Secretary {
     public boolean insert(String nameAula, String tipoPrenota, String dataPrenota, LocalTime timeInizioPrenota,
                           LocalTime timeFinePrenota, String sessione, String from){
 
-        User user = UserSingleton.getInstance().getUser();
         Controller controller = new Controller();
 
         try {
@@ -30,6 +29,12 @@ public class Insert_Secretary {
             conn = DriverManager.getConnection(Query.DB_URL, Query.USER, Query.PASS);
 
             stmt = conn.createStatement();
+
+            if (!controller.duplicateControl(nameAula, dataPrenota, timeInizioPrenota, timeFinePrenota)){
+
+                return false;
+
+            }
 
             String retrieveInformation = String.format(Query.retrieveUsername, from);
 

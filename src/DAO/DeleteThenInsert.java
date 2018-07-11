@@ -91,14 +91,12 @@ public class DeleteThenInsert {
 
             System.out.println(deleteSecretary);
 
-            //@TODO questa query è stata modificata rispetto alla Stand-Alone BISONGA MODIFCARLA IN ESSA!!!
-
 
             stmt.executeUpdate(deleteSecretary);
 
             //----------------INSERIMENTO PRENOTAZIONE SEGRETARIA-----------------------//
 
-            String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, user.getUsername(),from, sessione);
+            String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota,from, sessione);
             stmt.executeUpdate(insertSecretary);
 
             stmt.close();

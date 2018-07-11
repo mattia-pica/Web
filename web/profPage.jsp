@@ -205,11 +205,11 @@
                                     response.sendRedirect("Delete_Prof.jsp");
                                 }
 
-                                if (request.getParameter("submit_sess") != null){
+                                if (request.getParameter("submit_sess") != null){   //Visualizza Sessioni
                                     response.sendRedirect("Show_Session_Prof.jsp");
                                 }
 
-                                if (request.getParameter("submit_storic") != null){
+                                if (request.getParameter("submit_storic") != null){ //Storico Prenotazioni
                                     response.sendRedirect("StoricoPrenotazioni_first.jsp");
                                 }
 
@@ -309,8 +309,6 @@
                 <button class="login100-form-btn" type="submit" name="submit_storic" value="Delete">
                     Storico
                 </button>
-
-
             </div>
 
         </form>
@@ -350,26 +348,5 @@
     });
 </script>
 
-<%--<script>
-
-    function f1(objButton){
-        alert(objButton.value);
-        return value;
-    }
-
-
-</script>--%>
-<%--<script>$
-    ("#table tr").click(function(){
-        $(this).addClass('selected').siblings().removeClass('selected');
-        var value=$(this).find('td:first').html();
-        console.log(value)
-        //alert(value);
-    });
-
-    /*$('.ok').on('click', function(e){
-        alert($("#table tr.selected td:first").html());
-    });*/
-</script>--%>
 </body>
 </html>

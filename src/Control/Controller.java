@@ -225,15 +225,11 @@ public class Controller {
     }
 
     /*public void createPrenotationBean(String nome, LocalTime inizio, LocalTime fine, String date, String tipo){
-
         Prenotation_Bean prenotation_bean = new Prenotation_Bean(nome, inizio, fine, date, tipo);
-
     }*/
 
     /*public void createPrenotationSingleton(String nome, LocalTime inizio, LocalTime fine, String date, String tipo){
-
         Prenotation_Bean prenotation_bean = new Prenotation_Bean(nome, inizio, fine, date, tipo);
         PrenotationBeanSingleton.getInstance().setPrenotation_bean(prenotation_bean);
-
     }*/
 }

@@ -2,7 +2,6 @@ package Entity;
 
 public class Room {
 
-
     private String nome;
     private String tipopr;
     private String datapr;

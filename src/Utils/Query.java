@@ -15,12 +15,12 @@ public class Query {
             "fine=NULL, fromp=NULL, sessione=NULL  WHERE ((datapr='%s' AND ID!='%s') AND ((inizio<='%s' AND fine>='%s') " +
             "OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";
 
-    /*public static String deleteSecretary = "DELETE FROM dbEsame.Aule WHERE ((datapr='%s' AND nome='%s') AND " +
-            "((inizio<='%s' AND fine>='%s') OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";*/
+    public static String deleteSecretary = "DELETE FROM dbEsame.Aule WHERE ((datapr='%s' AND nome='%s') AND " +
+            "((inizio<='%s' AND fine>='%s') OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";
 
-    public static String deleteSecretary = "UPDATE dbEsame.Aule SET tipopr=NULL, datapr=NULL, inizio=NULL, fine=NULL, " +
+    /*public static String deleteSecretary = "UPDATE dbEsame.Aule SET tipopr=NULL, datapr=NULL, inizio=NULL, fine=NULL, " +
             "fromp=NULL, sessione=NULL WHERE ((datapr='%s' AND nome='%s') AND ((inizio<='%s' AND fine>='%s') OR " +
-            "(inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";
+            "(inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";*/
 
     public static String emailInfo_deleteThenInsert = "SELECT DISTINCT Name,Surname,Email,nome,datapr,inizio,fine FROM users JOIN Aule ON fromp=Username WHERE " +
             "((datapr='%s' AND nome='%s') AND ((inizio<='%s' AND fine>='%s') OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine<='%s')));";
