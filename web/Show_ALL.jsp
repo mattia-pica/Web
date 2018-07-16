@@ -107,7 +107,7 @@
                 </div>
 
                 <div class="table100-body js-pscroll" style="height:300px;overflow:auto;">
-                    <table id="table" >
+                    <table id="table" style="table-layout: fixed">
                         <tbody>
 
                         <%
