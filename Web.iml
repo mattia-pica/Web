@@ -16,8 +16,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="javax.annotation" level="project" />
-    <orderEntry type="library" name="java-mail-1.4.4" level="project" />
-    <orderEntry type="library" name="activation" level="project" />
+    <orderEntry type="library" exported="" name="javax.annotation" level="project" />
+    <orderEntry type="library" exported="" name="java-mail-1.4.4" level="project" />
+    <orderEntry type="library" exported="" name="activation" level="project" />
+    <orderEntry type="library" name="mysql-connector-java-5.1.45-bin" level="project" />
+    <orderEntry type="library" exported="" name="mysql-connector-java-5.1.46-bin" level="project" />
+    <orderEntry type="library" exported="" name="mysql-connector-java-5.1.46" level="project" />
   </component>
 </module>

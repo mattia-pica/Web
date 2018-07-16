@@ -70,6 +70,9 @@ public class Insert_Secretary {
                 String del = String.format(Query.deleteEmpty, nameAula);
                 stmt.executeUpdate(del);
 
+
+            }
+
                 String insertSecretary = String.format(Query.insert, nameAula, tipoPrenota, dataPrenota, timeInizioPrenota, timeFinePrenota, from,sessione);
 
                 stmt.executeUpdate(insertSecretary);
@@ -83,11 +86,11 @@ public class Insert_Secretary {
                 controller.sendEmail(info.get(2), "Prenotazione effettuata", PrenotationInfo);
                 stmt.close();
                 return true;
-            }
+
         }catch (Exception e){
             e.printStackTrace();
             return false;
         }
-        return true;
     }
+
 }

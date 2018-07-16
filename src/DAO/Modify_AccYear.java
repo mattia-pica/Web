@@ -9,7 +9,7 @@ import java.sql.Statement;
 
 public class Modify_AccYear {
 
-    public boolean modify(String newInizio, String newFine){
+    public boolean modify(String newInizio, String newFine, String oldInizio, String oldFine){
 
         try {
 
@@ -34,7 +34,7 @@ public class Modify_AccYear {
 
             String nome = newInizio.substring(0,4)+"/"+newFine.substring(0,4);
 
-            String modify = String.format(Query.modifyAccYear, newInizio, newFine, nome);
+            String modify = String.format(Query.modifyAccYear, newInizio, newFine, nome, oldInizio.substring(0,4)+"/"+oldFine.substring(0,4));
 
             stmt.executeUpdate(modify);
 

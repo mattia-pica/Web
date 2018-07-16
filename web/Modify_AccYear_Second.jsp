@@ -109,7 +109,7 @@
                             if (p.matcher(request.getParameter("newInizio")).matches() &&
                                     p.matcher(request.getParameter("newFine")).matches()){
 
-                                if (controller.modAccYear(request.getParameter("newInizio"), request.getParameter("newFine"))){
+                                if (controller.modAccYear(request.getParameter("newInizio"), request.getParameter("newFine"), accYear.getDataInizio(), accYear.getDataFine())){
 
                                     String info = "alert('Modifica Effettuata');";
                                     out.println("<script type=\"text/javascript\">");

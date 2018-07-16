@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class ShowDatabase_Secr {
 
-    public static ArrayList<Room> show_secr() {
+    public ArrayList<Room> show_secr() {
 
         ArrayList<Room> Classrooms = new ArrayList<>();
 

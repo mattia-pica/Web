@@ -10,11 +10,11 @@ import java.util.logging.Logger;
 public class DB_Connection {
 
     static Connection conn_Aule;
-    public Connection connect_Aule() {
+    public Connection connect_Aule() { //copia quel cazzo di
 
         final String url = "jdbc:mysql://localhost:3306/dbEsame";
         final String user = "root";
-        final String password = "trottola12";
+        final String password = "password";
 
             try {
                 Class.forName("com.mysql.jdbc.Driver");
@@ -23,7 +23,8 @@ public class DB_Connection {
             } catch (Exception e) {
                 Logger.getLogger(DB_Connection.class.getName()).log(Level.SEVERE, null, e);
             }
-            return conn_Aule;  //NEL VIDEO retun null, ma così da problemi il controller che riceve null e non può andare avanti!
+            //NEL VIDEO retun null, ma così da problemi il controller che riceve null e non può andare avanti!
+            return conn_Aule;
     }
 
 

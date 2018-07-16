@@ -11,6 +11,10 @@ public class Query {
     /*public static String delete_deleteThenUpdate = "DELETE FROM dbEsame.Aule WHERE ((datapr='%s' AND ID!='%s') AND " +
             "((inizio<='%s' AND fine>='%s') OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";*/
 
+    /*public static String delete_deleteThenUpdate = "UPDATE dbEsame.Aule SET tipopr=NULL, datapr=NULL, inizio=NULL, " +
+            "fine=NULL, fromp=NULL, sessione=NULL  WHERE ((datapr='%s' AND ID!='%s') AND ((inizio<='%s' AND fine>='%s') " +
+            "OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";*/
+
     public static String delete_deleteThenUpdate = "UPDATE dbEsame.Aule SET tipopr=NULL, datapr=NULL, inizio=NULL, " +
             "fine=NULL, fromp=NULL, sessione=NULL  WHERE ((datapr='%s' AND ID!='%s') AND ((inizio<='%s' AND fine>='%s') " +
             "OR (inizio<='%s' AND fine>='%s') OR (inizio>='%s' AND fine <='%s')))";
@@ -90,7 +94,10 @@ public class Query {
 
     public static String prenotationInAccYear = "SELECT * FROM Aule WHERE (fromp='%s' AND (datapr > '%s' AND datapr < '%s'))";
 
-    public static String modifyAccYear_control = "SELECT nome FROM sessioni WHERE (DataInizio < '%s' OR DataFine > '%s')";
+    /*public static String modifyAccYear_control = "SELECT nome FROM sessioni WHERE (DataInizio < '%s' OR DataFine > '%s')";*/
+
+    public static String modifyAccYear_control = "SELECT nome FROM sessioni WHERE ((DataInizio > '%s' AND DataInizio < '%s')"+
+            "AND (DataFine < '%s' AND DataFine > '%s'))";
 
     public static String modifyAccYear = "UPDATE anni_accademici SET DataInizio='%s', DataFine='%s', Nome='%s'";
 

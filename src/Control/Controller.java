@@ -39,7 +39,7 @@ public class Controller {
     //-----------PRENOTAZIONI EFFETUATE SEGRETARIA----------------//
 
     public ArrayList<Room> show_s() {
-        ArrayList<Room> rooms = ShowDatabase_Secr.show_secr();
+        ArrayList<Room> rooms = new ShowDatabase_Secr().show_secr();
         return rooms;
     }
 
@@ -202,10 +202,10 @@ public class Controller {
 
     //-------------------MODIFICA ANNO ACCADEMICO-----------//
 
-    public boolean modAccYear(String newInizio, String newFine){
+    public boolean modAccYear(String newInizio, String newFine, String oldInizio, String oldFine){
 
         Modify_AccYear modify_accYear = new Modify_AccYear();
-        return modify_accYear.modify(newInizio, newFine);
+        return modify_accYear.modify(newInizio, newFine, oldInizio, oldFine);
     }
 
     //-------------------MODIFICA SESSIONE-----------------//

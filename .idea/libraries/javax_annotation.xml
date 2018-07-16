@@ -16,7 +16,6 @@
       <root url="jar://$PROJECT_DIR$/lib/jersey-container-servlet-core.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jersey-container-servlet.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/jersey-server.jar!/" />
-      <root url="jar://$PROJECT_DIR$/lib/mysql-connector-java-5.1.45-bin.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

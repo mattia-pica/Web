@@ -11,8 +11,10 @@
           <element id="library" level="application" name="java-mail-1.4.4" />
           <element id="library" level="project" name="java-mail-1.4.4" />
           <element id="library" level="project" name="activation" />
+          <element id="library" level="project" name="mysql-connector-java-5.1.45-bin" />
         </element>
       </element>
+      <element id="library" level="project" name="mysql-connector-java-5.1.45-bin" />
     </root>
   </artifact>
 </component>
