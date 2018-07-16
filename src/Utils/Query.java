@@ -96,8 +96,10 @@ public class Query {
 
     /*public static String modifyAccYear_control = "SELECT nome FROM sessioni WHERE (DataInizio < '%s' OR DataFine > '%s')";*/
 
-    public static String modifyAccYear_control = "SELECT nome FROM sessioni WHERE ((DataInizio > '%s' AND DataInizio < '%s')"+
-            "AND (DataFine < '%s' AND DataFine > '%s'))";
+    /*public static String modifyAccYear_control = "SELECT nome FROM sessioni WHERE ((DataInizio > '%s' AND DataInizio < '%s')"+
+            "AND (DataFine < '%s' AND DataFine > '%s'))";*/
+
+    public static String modifyAccYear_control = "SELECT nome FROM sessioni WHERE ((DataInizio > '%s' AND DataInizio < '%s') OR (DataFine < '%s' AND DataFine > '%s'))";
 
     public static String modifyAccYear = "UPDATE anni_accademici SET DataInizio='%s', DataFine='%s', Nome='%s'";
 
