@@ -37,7 +37,10 @@ public class Query {
 
     //public static String delete = "DELETE FROM dbEsame.Aule WHERE ID = '%s';";
 
-    public static String delete = "UPDATE dbEsame.Aule SET tipopr=NULL, datapr=NULL, inizio=NULL, fine=NULL, fromp=NULL, sessione=NULL WHERE ID='%s';";
+    //public static String delete = "UPDATE dbEsame.Aule SET tipopr=NULL, datapr=NULL, inizio=NULL, fine=NULL, fromp=NULL, sessione=NULL WHERE ID='%s';";
+
+    public static String delete = "DELETE FROM dbEsame.Aule WHERE ID='%s';";
+
 
     public static String completeDB = "SELECT * FROM dbEsame.Aule WHERE fromp='%s';";
 

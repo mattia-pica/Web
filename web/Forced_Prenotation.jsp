@@ -12,6 +12,7 @@
 <%@ page import="java.time.format.DateTimeParseException" %>
 <%@ page import="java.util.regex.Pattern" %>
 <%@ page import="Bean.SessionBean" %>
+<%@ page import="Utils.UserSingleton" %>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
@@ -114,14 +115,16 @@
                     if (request.getParameter("submit_prenotation") != null){
 
                         if (request.getParameter("startPR") == null ||
-                                request.getParameter("endPR") == null || request.getParameter("datePR") == null ||
-                                (request.getParameter("typePR")  == null && request.getParameter("altroPRtext") == null)){
+                                request.getParameter("endPR") == null || request.getParameter("datePR") == null ){
 
-                            String info = "alert('Completare tutti i campi!');";
-                            out.println("<script type=\"text/javascript\">");
-                            out.println(info);
-                            out.println("location='Forced_Prenotation.jsp';");
-                            out.println("</script>");
+                %>
+                <script type="text/javascript">
+                    var msg = "<%="Completare tutti i campi"%>";
+                    alert(msg);
+                    location='Forced_Prenotation.jsp?aula=<%=roomBean.getNome()%>';
+                </script>
+                <%
+                    return;
 
                         }else {
 
@@ -155,13 +158,37 @@
                     location='Forced_Prenotation.jsp?aula=<%=roomBean.getNome()%>';
                 </script>
                 <%
+                                return;
                             }
 
-                            if (request.getParameter("typePR") == null){
+                            /*if (request.getParameter("typePR") == null){
                                 roomBean.setTipopr(request.getParameter("altroPRtext"));
                             }else {
                                 roomBean.setTipopr(request.getParameter("typePR"));
+                            }*/
+
+
+
+                    if ((request.getParameter("typePR").equals("Esame") || request.getParameter("typePR").equals("Conferenza")) && request.getParameter("fromText") == null){
+
+                %>
+                <script type="text/javascript">
+                    var msg = "<%="Inserire nome professore"%>";
+                    alert(msg);
+                    location='Forced_Prenotation.jsp?aula=<%=roomBean.getNome()%>';
+                </script>
+                <%
+                        return;
+
+                    }else {
+
+                            if (request.getParameter("typePR").equals("Test") || request.getParameter("typePR").equals("Seduta")){
+                                roomBean.setTipopr(request.getParameter("typePR"));
+                                roomBean.setFromp(UserSingleton.getInstance().getUser().getUsername());
+
                             }
+
+                            //roomBean.setTipopr(request.getParameter(""));
 
                             SessionBean s = controller.trovaSessione(roomBean.getDatapr());
 
@@ -192,7 +219,7 @@
                     showDiv();
                 </script>
                 <%
-                               }
+                                }
                             }
                         }
 
@@ -227,6 +254,9 @@
                             out.println("</script>");
 
                         }
+                        }
+
+
 
                                 %>
                 <span class="login100-form-title-1">
@@ -254,7 +284,7 @@
             </div>
             <div class="wrap-input100 validate-input m-b-18" data-validate ="From">
                 <span class="label-input100">A nome di</span>
-                <input class="input100" type="text" name="from" placeholder="Inserire nome professore">
+                <input class="input100" type="text" id="fromText" name="from" placeholder="Inserire nome professore">
                 <span class="focus-input100"></span>
             </div>
             <div class="wrap-input100 validate-input m-b-18" data-validate ="End">
@@ -268,7 +298,7 @@
                 <input class="input100" type="text" name="datePR" placeholder="Date">
                 <span class="focus-input100"></span>
             </div>
-            <div class="wrap-input100 validate-input m-b-18">
+            <%--<div class="wrap-input100 validate-input m-b-18">
                 <fieldset>
                     <span class="label-input100">Esame</span>
                     <input style="margin-top: 15px" type="radio" name="typePR" value="Esame"/>
@@ -280,12 +310,36 @@
                     <input style="margin-top: 15px" type="radio" name="typePR" value="Conferenza"/>
 
                 </fieldset>
+            </div>--%>
+            <div class="wrap-input100 validate-input m-b-18">
+                <fieldset>
+                    <span class="label-input100">Esame</span>
+                    <input style="margin-top: 15px" onclick="document.getElementById('fromText').disabled = false;" type="radio" name="typePR" value="Esame"/>
+                </fieldset>
             </div>
-            <div class="wrap-input100 validate-input m-b-18" data-validate ="Altro">
+            <div class="wrap-input100 validate-input m-b-18">
+                <fieldset>
+                    <span class="label-input100">Conferenza</span>
+                    <input style="margin-top: 15px" onclick="document.getElementById('fromText').disabled = false;" type="radio" name="typePR" value="Conferenza"/>
+                </fieldset>
+            </div>
+            <div class="wrap-input100 validate-input m-b-18">
+                <fieldset>
+                    <span class="label-input100">Test d'ingresso</span>
+                    <input style="margin-top: 15px" onclick="ClearFields();" type="radio" name="typePR" value="Test"/>
+                </fieldset>
+            </div>
+            <div class="wrap-input100 validate-input m-b-18">
+                <fieldset>
+                    <span class="label-input100">Seduta di laurea</span>
+                    <input style="margin-top: 15px" onclick="ClearFields();" type="radio" name="typePR" value="Seduta"/>
+                </fieldset>
+            </div>
+            <%--<div class="wrap-input100 validate-input m-b-18" data-validate ="Altro">
                 <span class="label-input100">Altro</span>
                 <input class="input100" type="text" id="textInput" name="altroPRtext" placeholder="Altro">
                 <span class="focus-input100"></span>
-            </div>
+            </div>--%>
             <div class="container-login100-form-btn">
                 <div class="contact-right">
                     <input class="login100-form-btn" type="submit" name="submit_prenotation" value="Prenota">
@@ -315,11 +369,19 @@
 
 
 <%--QUANDO SI CLICCA SULLA TEXTFIELD ALTRO VENGONO DISATTIVATI I RADIO BUTTON--%>
-<script>
+<%--<script>
     $('#textInput').click(function () {
         $('input[type=radio]').removeAttr("checked");
 
     });
+</script>--%>
+
+<script>
+    function ClearFields() {
+
+        document.getElementById("fromText").value = "";
+        document.getElementById('fromText').disabled = true;
+    }
 </script>
 
 </body>

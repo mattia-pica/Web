@@ -49,6 +49,8 @@ public class Delete {
 
             String sql = String.format(Query.delete, ID);   //Cancello l'aula, la query non è una DELETE ma un UPDATE perchè se uso DELETE cancello l'aula dal DB
                                                             //invece la prenotazione va "svuotata" in modo che l'aula rimane nel DB ed è possibile prenotarla di nuovo
+
+            //@TODO DA CONTROLLARE
             String classInformation = String.format(Query.classInformation, ID);
 
             ResultSet info = stmt.executeQuery(classInformation); //Recupero i dati dell'aula eliminata

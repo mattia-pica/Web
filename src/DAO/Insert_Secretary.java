@@ -44,7 +44,12 @@ public class Insert_Secretary {
 
             ArrayList<String> info = new ArrayList<>();
 
+            //-------------Recupero dati dell'utente per cui è stata inserita la prenotazione----------------//
+
+
             if (!rs.wasNull()){
+
+                
 
                 while (rs.next()){
 
@@ -73,7 +78,6 @@ public class Insert_Secretary {
                         " dalle ore " + timeInizioPrenota + " alle ore " + timeFinePrenota + " è stata " +
                         " inserita con successo dalla segreteria! ";
 
-                //-------------Recupero dati dell'utente per cui è stata inserita la prenotazione----------------//
 
 
                 controller.sendEmail(info.get(2), "Prenotazione effettuata", PrenotationInfo);

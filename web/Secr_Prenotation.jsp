@@ -120,7 +120,8 @@
                         roomBean.setFromp(UserSingleton.getInstance().getUser().getUsername());
                         roomBean.setTipopr(request.getParameter("typePR"));
 
-                        if (controller.newPrenotationSecretary(roomBean.getNome(), request.getParameter("typePR"), roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine(), roomBean.getSessione(), roomBean.getFromp())) {
+                        if (controller.newPrenotationSecretary(roomBean.getNome(), request.getParameter("typePR"),
+                                roomBean.getDatapr(), roomBean.getInizio(), roomBean.getFine(), roomBean.getSessione(), roomBean.getFromp())) {
 
                             String info = "alert('Prenotazione Effettuata con successo');";
                             out.println("<script type=\"text/javascript\">");
